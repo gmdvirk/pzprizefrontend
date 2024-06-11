@@ -157,12 +157,6 @@ const ProductTable = ({ products, setProducts,userdata }) => {
       key: 'username',
       ...getColumnSearchProps('username'),
     },
-    {
-      title: 'Role',
-      dataIndex: 'role',
-      key: 'role',
-      ...getColumnSearchProps('role'),
-    },
     // {
     //     title: 'Username',
     //     dataIndex: 'username',
@@ -198,7 +192,7 @@ borderRadius: 10,
 background: COLORS.primarygradient,
 color: "white"
           }} onClick={() => handleDetail(record)}>Detail</Button>
-      {/* <Button
+      <Button
             icon={<DeleteFilled />}
             style={{
               borderRadius: 10,
@@ -208,7 +202,7 @@ color: "white"
             onClick={() => showDeleteConfirmationModal(record)}
           >
             Archive
-          </Button> */}
+          </Button>
     
         </Space>
       ),

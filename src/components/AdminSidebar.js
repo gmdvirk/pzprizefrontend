@@ -236,7 +236,7 @@ const SidebarDrawer = (props) => {
           </Menu.Item>
           {
            ( (props.userdata.role==="superadmin"))&&
-          <Menu.Item key="hostel" icon={<CalendarOutlined />} style={{ color: selectedMenuKey === 'hostel' ? 'white' : 'black', background: selectedMenuKey === 'hostel' ? COLORS.primarygradient: 'white',width:"100%" }}>
+          <Menu.Item key="admindraws" icon={<CalendarOutlined />} style={{ color: selectedMenuKey === 'admindraws' ? 'white' : 'black', background: selectedMenuKey === 'admindraws' ? COLORS.primarygradient: 'white',width:"100%" }}>
           Draw Time
           </Menu.Item>}
             {

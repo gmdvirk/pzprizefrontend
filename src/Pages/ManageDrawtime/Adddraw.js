@@ -81,47 +81,73 @@ const AddProductForm = ({ setProducts,products}) => {
        <Row gutter={16}>
        
       <Col xs={24} sm={8}>
-      <Form.Item name="username" label="Username" rules={[{ required: true, message: 'Please enter a username' }]}>
-        <Input placeholder="Enter Username" />
+      <Form.Item name="title" label="Title" rules={[{ required: true, message: 'Please enter a title' }]}>
+        <Input placeholder="Enter Title" />
       </Form.Item>
       </Col>
       <Col xs={24} sm={8}>
-      <Form.Item name="name" label="Name" rules={[{ required: true, message: 'Please enter a name' }]}>
-        <Input placeholder="Enter name" />
+      <Form.Item name="date" label="Date" rules={[{ required: true, message: 'Please enter a name' }]}>
+        <Input placeholder="Enter date" />
       </Form.Item>
       </Col>
       <Col xs={24} sm={8}>
-      <Form.Item name="address" label="Customer Address" rules={[{ required: true, message: 'Please enter customer address' }]}>
-        <Input placeholder="Enter Customer Address" />
+      <Form.Item name="time" label="Time" rules={[{ required: true, message: 'Please enter time' }]}>
+        <Input placeholder="Enter time" />
       </Form.Item>
       </Col>
       </Row>
       <Row gutter={16}>
       
       <Col xs={24} sm={8}>
-      <Form.Item name="password" label="password" rules={[{ required: true, message: 'Please enter password' }]}>
-        <Input placeholder="Enter password" />
+      <Form.Item name="onedigita" label="One digit First" rules={[{ required: true, message: 'Please enter a number' }]}>
+        <Input type='number' placeholder="Enter one digit first" />
       </Form.Item>
       </Col>
       <Col xs={24} sm={8}>
-      <Form.Item name="contact" label="Contact" rules={[{ required: true, message: 'Please enter contact' }]}>
-        <Input placeholder="Enter contact" />
+      <Form.Item name="onedigitb" label="One digit Second" rules={[{ required: true, message: 'Please enter a number' }]}>
+        <Input type='number' placeholder="Enter one digit second" />
       </Form.Item>
       </Col>
       <Col xs={24} sm={8}>
-      <Form.Item
-      label={"Status"}
-                    name={ 'blocked'}
-                      rules={[{ required: true, message: 'Please select Status' }]}
-                      className="flex-item"
-                      fieldKey={ 'blocked'}
-                    >
-                      <Select placeholder="Select Status type" >
-                        <Option value={true}>Active</Option>
-                        <Option value={false}>Deactive</Option>
-                      </Select>
-                    </Form.Item>
-                    </Col>
+      <Form.Item name="twodigita" label="Two digit First" rules={[{ required: true, message: 'Please enter a number' }]}>
+        <Input type='number' placeholder="Enter two digit first" />
+      </Form.Item>
+      </Col>
+      <Col xs={24} sm={8}>
+      <Form.Item name="twodigitb" label="Two digit Second" rules={[{ required: true, message: 'Please enter a number' }]}>
+        <Input type='number' placeholder="Enter two digit second" />
+      </Form.Item>
+      </Col>
+      <Col xs={24} sm={8}>
+      <Form.Item name="threedigita" label="Three digit First" rules={[{ required: true, message: 'Please enter a number' }]}>
+        <Input type='number' placeholder="Enter three digit first" />
+      </Form.Item>
+      </Col>
+      <Col xs={24} sm={8}>
+      <Form.Item name="threedigitb" label="Three digit Second" rules={[{ required: true, message: 'Please enter a number' }]}>
+        <Input type='number' placeholder="Enter three digit second" />
+      </Form.Item>
+      </Col>
+      <Col xs={24} sm={8}>
+      <Form.Item name="fourdigita" label="Four digit First" rules={[{ required: true, message: 'Please enter a number' }]}>
+        <Input type='number' placeholder="Enter four digit first" />
+      </Form.Item>
+      </Col>
+      <Col xs={24} sm={8}>
+      <Form.Item name="fourdigitb" label="Four digit Second" rules={[{ required: true, message: 'Please enter a number' }]}>
+        <Input type='number' placeholder="Enter four digit second" />
+      </Form.Item>
+      </Col>
+      <Col xs={24} sm={8}>
+      <Form.Item name="fivedigita" label="Five digit First" rules={[{ required: true, message: 'Please enter a number' }]}>
+        <Input type='number' placeholder="Enter five digit first" />
+      </Form.Item>
+      </Col>
+      <Col xs={24} sm={8}>
+      <Form.Item name="fivedigitb" label="Five digit Second" rules={[{ required: true, message: 'Please enter a number' }]}>
+        <Input type='number' placeholder="Enter five digit second" />
+      </Form.Item>
+      </Col>
      </Row>
     <Form.Item>
       <Button   style={{
@@ -131,7 +157,7 @@ const AddProductForm = ({ setProducts,products}) => {
                       }}
                       icon={<SaveFilled/>}
                       htmlType="submit">
-        Save Distributor
+        Add Draw
       </Button>
     </Form.Item>
 

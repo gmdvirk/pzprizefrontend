@@ -3,12 +3,9 @@ import React ,{useEffect,useState}from 'react';
 import { Tabs,Card,Spin } from 'antd';
 import AdminSideBar from "../components/AdminSidebar"
 import { useMedia } from 'react-use';
-import AllUsers from './ManageDistributors/Alldistributors'
-import AddUserForm from './ManageDistributors/Adddistributors';
-import { db } from '../firebase-config';
-import { getDocs,collection,doc,getDoc } from 'firebase/firestore';
+import AllUsers from './ManageDrawtime/Alldraws'
+import AddUserForm from './ManageDrawtime/Adddraw';
 import { useNavigate } from 'react-router';
-import { auth } from '../firebase-config1';
 
 import Noaccesspage from "./NoAccess"
 
@@ -29,7 +26,7 @@ const navigate=useNavigate();
   };
   const Alltabs=[
     {
-        label:"All Distributors",
+        label:"All Draws",
         key:"alldistributors",
         children: <AllUsers
         userdata={userdata}
@@ -38,7 +35,7 @@ const navigate=useNavigate();
         />
     },
     {
-        label:"Add Distributor",
+        label:"Add Draw",
         key:"adddistributors",
         children: <AddUserForm
         userdata={userdata}
@@ -90,50 +87,7 @@ const navigate=useNavigate();
     listener()
   }, []);
 
-  const getAllEmployees=async()=>{
-    try{
-      const userinfo = await listener();
-  
-      if (userinfo) {
-        const result = getSubstringBeforeAtSymbol(userinfo.email);
-        const q = doc(db, "Users", result);
-        const querySnapshot = await getDoc(q);
-  
-        if (querySnapshot.exists()) {
-          if(querySnapshot.data().newpassword===""){
-            if((querySnapshot.data().role==="admin")){
-              setUserdata(querySnapshot.data());
-            }else{
-              setNoaccess(true)
-            }
-          }
-          else{
-            await auth.signOut();
-          }
-        
-        } else {
-          await auth.signOut();
-        }
-      } else {
-        navigate("/login");
-      }
-        const empref=collection(db,"Users");
-        const querySnapshot=await getDocs(empref)
-        let tempemplyees=[]
-        querySnapshot.forEach((element,index)=>{
-          if(element.data().role!=="admin"){
-            tempemplyees.push(element.data())
-          }
-        })
-        setEmployees(tempemplyees)
-        setLoading(false)
-        }catch(error){
-            alert(error.message)
-        }
-  }
-//   useEffect(() => {
-//     getAllEmployees()
-//   }, []);
+
   const sidebarStyle = {
     color: 'white',
     width: '260px',
@@ -182,7 +136,7 @@ marginBottom:20,
       <div style={contentStyle}>
 
      <Card
-      title="Distributors"
+      title="Drawtime"
       style={{ boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)' }}
     >
      <Tabs

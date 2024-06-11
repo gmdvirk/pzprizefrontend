@@ -2,7 +2,7 @@ import { CiCircleFilled, CloseCircleFilled, DeleteFilled, EditFilled, InfoCircle
 import React, { useState, useRef } from 'react';
 import Highlighter from 'react-highlight-words';
 import { Button, Input, Space, Table ,Modal,Spin} from 'antd';
-import AddUserForm from './Editdistributor';
+import AddUserForm from './Editdraw';
 import COLORS from '../../colors';
 
 
@@ -157,12 +157,6 @@ const ProductTable = ({ products, setProducts,userdata }) => {
       key: 'username',
       ...getColumnSearchProps('username'),
     },
-    {
-      title: 'Role',
-      dataIndex: 'role',
-      key: 'role',
-      ...getColumnSearchProps('role'),
-    },
     // {
     //     title: 'Username',
     //     dataIndex: 'username',
@@ -198,7 +192,7 @@ borderRadius: 10,
 background: COLORS.primarygradient,
 color: "white"
           }} onClick={() => handleDetail(record)}>Detail</Button>
-      {/* <Button
+      <Button
             icon={<DeleteFilled />}
             style={{
               borderRadius: 10,
@@ -208,7 +202,7 @@ color: "white"
             onClick={() => showDeleteConfirmationModal(record)}
           >
             Archive
-          </Button> */}
+          </Button>
     
         </Space>
       ),
