@@ -34,8 +34,8 @@ const EditProductForm = (props) => {
         
         return;
       }
-      const response = await fetch('http://localhost:3001/draw/editdraw', {
-        method: 'PATCH',
+      const response = await fetch('http://localhost:3001/user/edituser', {
+        method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
           token: token,
@@ -82,89 +82,38 @@ const EditProductForm = (props) => {
         <div className="content" />
           </Spin>
       </div>):
-    <Form form={form} onFinish={onFinish} layout="vertical">
+     <Form form={form} onFinish={onFinish} layout="vertical">
     <Row gutter={16}>
-    
-   <Col xs={24} sm={8}>
-   <Form.Item name="title" label="Title" rules={[{ required: true, message: 'Please enter a title' }]}>
-     <Input placeholder="Enter Title" />
-   </Form.Item>
-   </Col>
-   <Col xs={24} sm={8}>
-   <Form.Item name="date" label="Date" rules={[{ required: true, message: 'Please enter a date' }]}>
-     <Input type='date' placeholder="Enter date" />
-   </Form.Item>
-   </Col>
-   <Col xs={24} sm={8}>
-   <Form.Item name="time" label="Time" rules={[{ required: true, message: 'Please enter time' }]}>
-     <Input type="time" placeholder="Enter time" />
-   </Form.Item>
-   </Col>
-   </Row>
-   <Row gutter={16}>
-   
-   <Col xs={24} sm={8}>
-   <Form.Item name="onedigita" label="One digit First" rules={[{ required: true, message: 'Please enter a number' }]}>
-     <Input type='number' placeholder="Enter one digit first" />
-   </Form.Item>
-   </Col>
-   <Col xs={24} sm={8}>
-   <Form.Item name="onedigitb" label="One digit Second" rules={[{ required: true, message: 'Please enter a number' }]}>
-     <Input type='number' placeholder="Enter one digit second" />
-   </Form.Item>
-   </Col>
-   <Col xs={24} sm={8}>
-   <Form.Item name="twodigita" label="Two digit First" rules={[{ required: true, message: 'Please enter a number' }]}>
-     <Input type='number' placeholder="Enter two digit first" />
-   </Form.Item>
-   </Col>
-   <Col xs={24} sm={8}>
-   <Form.Item name="twodigitb" label="Two digit Second" rules={[{ required: true, message: 'Please enter a number' }]}>
-     <Input type='number' placeholder="Enter two digit second" />
-   </Form.Item>
-   </Col>
-   <Col xs={24} sm={8}>
-   <Form.Item name="threedigita" label="Three digit First" rules={[{ required: true, message: 'Please enter a number' }]}>
-     <Input type='number' placeholder="Enter three digit first" />
-   </Form.Item>
-   </Col>
-   <Col xs={24} sm={8}>
-   <Form.Item name="threedigitb" label="Three digit Second" rules={[{ required: true, message: 'Please enter a number' }]}>
-     <Input type='number' placeholder="Enter three digit second" />
-   </Form.Item>
-   </Col>
-   <Col xs={24} sm={8}>
-   <Form.Item name="fourdigita" label="Four digit First" rules={[{ required: true, message: 'Please enter a number' }]}>
-     <Input type='number' placeholder="Enter four digit first" />
-   </Form.Item>
-   </Col>
-   <Col xs={24} sm={8}>
-   <Form.Item name="fourdigitb" label="Four digit Second" rules={[{ required: true, message: 'Please enter a number' }]}>
-     <Input type='number' placeholder="Enter four digit second" />
-   </Form.Item>
-   </Col>
-   <Col xs={24} sm={8}>
-   <Form.Item name="fivedigita" label="Five digit First" rules={[{ required: true, message: 'Please enter a number' }]}>
-     <Input type='number' placeholder="Enter five digit first" />
-   </Form.Item>
-   </Col>
-   <Col xs={24} sm={8}>
-   <Form.Item name="fivedigitb" label="Five digit Second" rules={[{ required: true, message: 'Please enter a number' }]}>
-     <Input type='number' placeholder="Enter five digit second" />
-   </Form.Item>
-   </Col>
-  </Row>
- <Form.Item>
-   <Button   style={{
-         borderRadius:10,
-             background: COLORS.primarygradient,
-             color:"white"
-                   }}
-                   icon={<SaveFilled/>}
-                   htmlType="submit">
-     Save Draw
-   </Button>
- </Form.Item>
+       
+       {/* <Col xs={24} sm={8}>
+       <Form.Item name="username" label="Username" rules={[{ required: true, message: 'Please enter a username' }]}>
+         <Input placeholder="Enter Username" />
+       </Form.Item>
+       </Col> */}
+       <Col xs={24} sm={8}>
+       <Form.Item name="comission" label="Comission" rules={[{ required: true, message: 'Please enter a comission' }]}>
+         <Input placeholder="Enter comission" />
+       </Form.Item>
+       </Col>
+       <Col xs={24} sm={8}>
+       <Form.Item name="pcpercentage" label="Pc percentage" rules={[{ required: true, message: 'Please enter Pc percentage' }]}>
+         <Input placeholder="Enter Pc percentage" />
+       </Form.Item>
+       </Col>
+       
+       </Row>
+     
+  <Form.Item>
+    <Button   style={{
+          borderRadius:10,
+              background: COLORS.primarygradient,
+              color:"white"
+                    }}
+                    icon={<SaveFilled/>}
+                    htmlType="submit">
+      Save Changes
+    </Button>
+  </Form.Item>
 
     {/* Success Modal */}
   <Modal

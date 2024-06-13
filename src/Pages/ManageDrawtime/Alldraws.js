@@ -140,35 +140,90 @@ const ProductTable = ({ products, setProducts,userdata }) => {
   });
   const columns = [
     {
-      title: 'Name',
-      dataIndex: 'name',
-      key: 'name',
-      ...getColumnSearchProps('name'),
+      title: 'Title',
+      dataIndex: 'title',
+      key: 'title',
+      ...getColumnSearchProps('title'),
     },
     {
-      title: 'Contact',
-      dataIndex: 'contact',
-      key: 'contact',
-      ...getColumnSearchProps('contact'),
+      title: 'Date',
+      dataIndex: 'date',
+      key: 'date',
+      ...getColumnSearchProps('date'),
     },
     {
-      title: 'Username',
-      dataIndex: 'username',
-      key: 'username',
-      ...getColumnSearchProps('username'),
+      title: 'Time',
+      dataIndex: 'time',
+      key: 'time',
+      ...getColumnSearchProps('time'),
     },
-    // {
-    //     title: 'Username',
-    //     dataIndex: 'username',
-    //     key: 'username',
-    //     ...getColumnSearchProps('username'),
-    //   },
-    // {
-    //   title: 'Security Deposit',
-    //   dataIndex: 'security',
-    //   key: 'security',
-    //   sorter: (a, b) => a.security - b.security,
-    // },
+    {
+      title: 'Status',
+      dataIndex: 'status',
+      key: 'status',
+      ...getColumnSearchProps('status'),
+    },
+    {
+      title: 'One Digit (A)',
+      dataIndex: 'onedigita',
+      key: 'onedigita',
+      ...getColumnSearchProps('onedigita'),
+    },
+    {
+      title: 'One Digit (B)',
+      dataIndex: 'onedigitb',
+      key: 'onedigitb',
+      ...getColumnSearchProps('onedigitb'),
+    },
+    {
+      title: 'Two Digit (A)',
+      dataIndex: 'twodigita',
+      key: 'twodigita',
+      ...getColumnSearchProps('twodigita'),
+    },
+    {
+      title: 'Two Digit (B)',
+      dataIndex: 'twodigitb',
+      key: 'twodigitb',
+      ...getColumnSearchProps('twodigitb'),
+    },
+    {
+      title: 'Three Digit (A)',
+      dataIndex: 'threedigita',
+      key: 'threedigita',
+      ...getColumnSearchProps('threedigita'),
+    },
+    {
+      title: 'Three Digit (B)',
+      dataIndex: 'threedigitb',
+      key: 'threedigitb',
+      ...getColumnSearchProps('threedigitb'),
+    },
+    {
+      title: 'Four Digit (A)',
+      dataIndex: 'fourdigita',
+      key: 'fourdigita',
+      ...getColumnSearchProps('fourdigita'),
+    },
+    {
+      title: 'Four Digit (B)',
+      dataIndex: 'fourdigitb',
+      key: 'fourdigitb',
+      ...getColumnSearchProps('fourdigitb'),
+    },
+    {
+      title: 'Five Digit (A)',
+      dataIndex: 'fivedigita',
+      key: 'fivedigita',
+      ...getColumnSearchProps('fivedigita'),
+    },
+    {
+      title: 'Five Digit (B)',
+      dataIndex: 'fivedigitb',
+      key: 'fivedigitb',
+      ...getColumnSearchProps('fivedigitb'),
+    },
+   
     {
       title: 'Actions',
       key: 'actions',
@@ -184,25 +239,25 @@ color: "white"
           }} onClick={() => handleEdit(record)}>
             Edit
           </Button>
-       <Button
+      {record.status==="deactive"&& <Button
           icon={<InfoCircleFilled/>}
           style={{
 
 borderRadius: 10,
 background: COLORS.primarygradient,
 color: "white"
-          }} onClick={() => handleDetail(record)}>Detail</Button>
-      <Button
-            icon={<DeleteFilled />}
+          }} onClick={() => handleDetail(record)}>Activate</Button>}
+      {record.status==="active"&&<Button
+            icon={<InfoCircleFilled />}
             style={{
               borderRadius: 10,
               background: COLORS.deletegradient,
               color: 'white',
             }}
-            onClick={() => showDeleteConfirmationModal(record)}
+            onClick={() => handleDetail1(record)}
           >
-            Archive
-          </Button>
+            Deactivate
+          </Button>}
     
         </Space>
       ),
@@ -214,9 +269,81 @@ color: "white"
     setVisible(true);
   };
 
-  const handleDetail = (record) => {
-    setSelectedProduct(record);
-    setVisibleDetail(true);
+  const handleDetail = async(record) => {
+    setLoading(true)
+    try {
+      const token = localStorage.getItem('token');
+      
+      if (!token) {
+        console.error('Token not found in local storage');
+        
+        return;
+      }
+      const response = await fetch('http://localhost:3001/draw/activatedraw', {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+          token: token,
+        },
+        body: JSON.stringify({
+          _id:record._id
+        }),
+      });
+      if (response.ok) {
+        const userData = await response.json();
+        let tempobj={...record,status:"active"};
+        let temp=[...products];
+        const index=temp.findIndex((obj)=>obj._id===record._id);
+        temp[index]={...tempobj}
+        setProducts(temp)
+      } else {
+        const userData = await response.json();
+        alert(userData.Message)
+      }
+
+    }catch(error){
+      alert(error.message)
+    }
+
+    setLoading(false)
+  };
+  const handleDetail1 = async(record) => {
+    setLoading(true)
+    try {
+      const token = localStorage.getItem('token');
+      
+      if (!token) {
+        console.error('Token not found in local storage');
+        
+        return;
+      }
+      const response = await fetch('http://localhost:3001/draw/deactivatedraw', {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+          token: token,
+        },
+        body: JSON.stringify({
+          _id:record._id
+        }),
+      });
+      if (response.ok) {
+        const userData = await response.json();
+        let tempobj={...record,status:"deactive"};
+        let temp=[...products];
+        const index=temp.findIndex((obj)=>obj._id===record._id);
+        temp[index]={...tempobj}
+        setProducts(temp)
+      } else {
+        const userData = await response.json();
+        alert(userData.Message)
+      }
+
+    }catch(error){
+      alert(error.message)
+    }
+
+    setLoading(false)
   };
 
   const handleClose = () => {

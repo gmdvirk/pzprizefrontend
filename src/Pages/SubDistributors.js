@@ -3,8 +3,8 @@ import React ,{useEffect,useState}from 'react';
 import { Tabs,Card,Spin } from 'antd';
 import AdminSideBar from "../components/AdminSidebar"
 import { useMedia } from 'react-use';
-import AllUsers from './ManageDistributors/Alldistributors'
-import AddUserForm from './ManageDistributors/Adddistributors';
+import AllUsers from './ManageSubdistributors/Allsubdistributors'
+import AddUserForm from './ManageSubdistributors/Addsubdistributors';
 import { db } from '../firebase-config';
 import { getDocs,collection,doc,getDoc } from 'firebase/firestore';
 import { useNavigate } from 'react-router';

@@ -2,7 +2,7 @@ import { CiCircleFilled, CloseCircleFilled, DeleteFilled, EditFilled, InfoCircle
 import React, { useState, useRef } from 'react';
 import Highlighter from 'react-highlight-words';
 import { Button, Input, Space, Table ,Modal,Spin} from 'antd';
-import AddUserForm from './Editsubdistributor';
+import AddUserForm from './Editresults';
 import COLORS from '../../colors';
 
 
@@ -139,36 +139,57 @@ const ProductTable = ({ products, setProducts,userdata }) => {
       ),
   });
   const columns = [
+   
     {
-      title: 'Name',
-      dataIndex: 'name',
-      key: 'name',
-      ...getColumnSearchProps('name'),
+      title: 'Date',
+      dataIndex: 'date',
+      key: 'date',
+      ...getColumnSearchProps('date'),
     },
     {
-      title: 'Contact',
-      dataIndex: 'contact',
-      key: 'contact',
-      ...getColumnSearchProps('contact'),
+      title: 'Time',
+      dataIndex: 'time',
+      key: 'time',
+      ...getColumnSearchProps('time'),
     },
     {
-      title: 'Username',
-      dataIndex: 'username',
-      key: 'username',
-      ...getColumnSearchProps('username'),
+      title: 'Firstprize',
+      dataIndex: 'firstprize',
+      key: 'firstprize',
+      ...getColumnSearchProps('firstprize'),
     },
-    // {
-    //     title: 'Username',
-    //     dataIndex: 'username',
-    //     key: 'username',
-    //     ...getColumnSearchProps('username'),
-    //   },
-    // {
-    //   title: 'Security Deposit',
-    //   dataIndex: 'security',
-    //   key: 'security',
-    //   sorter: (a, b) => a.security - b.security,
-    // },
+    {
+      title: 'Secondprize1',
+      dataIndex: 'secondprize1',
+      key: 'secondprize1',
+      ...getColumnSearchProps('secondprize1'),
+    },
+    {
+      title: 'Secondprize2',
+      dataIndex: 'secondprize2',
+      key: 'secondprize2',
+      ...getColumnSearchProps('secondprize2'),
+    },
+    {
+      title: 'Secondprize3',
+      dataIndex: 'secondprize3',
+      key: 'secondprize3',
+      ...getColumnSearchProps('secondprize3'),
+    },
+    {
+      title: 'Secondprize4',
+      dataIndex: 'secondprize4',
+      key: 'secondprize4',
+      ...getColumnSearchProps('secondprize4'),
+    },
+    {
+      title: 'Secondprize5',
+      dataIndex: 'secondprize5',
+      key: '5',
+      ...getColumnSearchProps('secondprize5'),
+    },
+    
+   
     {
       title: 'Actions',
       key: 'actions',
@@ -184,25 +205,7 @@ color: "white"
           }} onClick={() => handleEdit(record)}>
             Edit
           </Button>
-       <Button
-          icon={<InfoCircleFilled/>}
-          style={{
-
-borderRadius: 10,
-background: COLORS.primarygradient,
-color: "white"
-          }} onClick={() => handleDetail(record)}>Detail</Button>
-      <Button
-            icon={<DeleteFilled />}
-            style={{
-              borderRadius: 10,
-              background: COLORS.deletegradient,
-              color: 'white',
-            }}
-            onClick={() => showDeleteConfirmationModal(record)}
-          >
-            Archive
-          </Button>
+   
     
         </Space>
       ),
@@ -214,10 +217,6 @@ color: "white"
     setVisible(true);
   };
 
-  const handleDetail = (record) => {
-    setSelectedProduct(record);
-    setVisibleDetail(true);
-  };
 
   const handleClose = () => {
     setVisibleDetail(false);
@@ -242,34 +241,10 @@ color: "white"
       />
       </>}
       </div>
-      {/* <Modal title="Customer Details" visible={visibledetail} onCancel={handleClose} footer={null}>
-        {selectedProduct && (
-         <div>
-         <p>Name: {selectedProduct.customer}</p>
-         <p>CNIC: {selectedProduct.customerCNIC}</p>
-    <p>Contact: {selectedProduct.customerContact}</p>
-    <p>Flat Code: {selectedProduct.roomcode}</p>
-    <p>Dealdate: {selectedProduct.dealdate}</p>
-    <p>Address: {selectedProduct.customerAddress}</p>
-    <p>Additional details: {selectedProduct.additionalDetails}</p>
     
-    {selectedProduct.guaranters.map((obj,index)=>{
-      return(
-        <>
-        <h4>Guaranter : {index+1}</h4>
-        <p>Name :{obj.guaranterName}</p>
-        <p>CNIC :{obj.guaranterCnic}</p>
-        <p>Contact :{obj.guaranterContact}</p>
-        <p>Address :{obj.guaranterAddress}</p>
-        </>
-      )
-    })}
-  </div>
-        )}
-      </Modal> */}
 
       <Modal
-        title="Edit Customer"
+        title="Edit Draw Results"
         visible={visible}
         onCancel={() => setVisible(false)}
         footer={null}

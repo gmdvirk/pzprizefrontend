@@ -3,8 +3,11 @@ import React ,{useEffect,useState}from 'react';
 import { Tabs,Card,Spin } from 'antd';
 import AdminSideBar from "../components/AdminSidebar"
 import { useMedia } from 'react-use';
-import AllUsers from './ManageDrawtime/Alldraws'
-import AddUserForm from './ManageDrawtime/Adddraw';
+import BillSheet from './ManageReports/BillSheet'
+import Distributorssale from './ManageReports/Distributorssale';
+import Limitcutting from "./ManageReports/Limitcutting"
+import TotalSale from "./ManageReports/TotalSale"
+import TotalHaddlimitSale from "./ManageReports/TotalHaddLimitSale"
 import { useNavigate } from 'react-router';
 
 import Noaccesspage from "./NoAccess"
@@ -26,22 +29,48 @@ const navigate=useNavigate();
   };
   const Alltabs=[
     {
-        label:"All Draws",
+        label:"Total Sale",
         key:"alldistributors",
-        children: <AllUsers
+        children: <TotalSale
         userdata={userdata}
         products={employees}
         setProducts={setEmployees}
         />
     },
     {
-        label:"Add Draw",
-        key:"adddistributors",
-        children: <AddUserForm
+        label:"Total Hadd Limit",
+        key:"Total",
+        children: <TotalHaddlimitSale
+        userdata={userdata}
+        products={employees}
+        setProducts={setEmployees}/>
+    },
+    {
+        label:"Distributors Sale",
+        key:"Distributors",
+        children: <Distributorssale
+        userdata={userdata}
+        products={employees}
+        setProducts={setEmployees}/>
+    },
+    {
+        label:"Limit Cutting",
+        key:"limitcut",
+        children: <Limitcutting
+        userdata={userdata}
+        products={employees}
+        setProducts={setEmployees}/>
+    },
+    {
+        label:"Bill Sheet",
+        key:"bill sheet",
+        children: <BillSheet
         userdata={userdata}
         products={employees}
         setProducts={setEmployees}/>
     }
+
+
   ]
   function getSubstringBeforeAtSymbol(email) {
     const atIndex = email.indexOf('@');
@@ -123,7 +152,7 @@ const navigate=useNavigate();
     <div style={!isMobile?mainStyle:{}}>
     <div style={!isMobile?layoutStyle:{}}>
     <div style={!isMobile?sidebarStyle:{}}>
-    <AdminSideBar label={"admindraws"} userdata={userdata}/>
+    <AdminSideBar label={"reports"} userdata={userdata}/>
     </div>
       <div style={{
 
@@ -136,7 +165,7 @@ marginBottom:20,
       <div style={contentStyle}>
 
      <Card
-      title="Drawtime"
+      title="Reports"
       style={{ boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)' }}
     >
      <Tabs

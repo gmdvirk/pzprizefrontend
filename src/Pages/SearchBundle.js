@@ -3,9 +3,12 @@ import React ,{useEffect,useState}from 'react';
 import { Tabs,Card,Spin } from 'antd';
 import AdminSideBar from "../components/AdminSidebar"
 import { useMedia } from 'react-use';
-import AllUsers from './ManageDrawtime/Alldraws'
-import AddUserForm from './ManageDrawtime/Adddraw';
+import AllUsers from './ManageDistributors/Alldistributors'
+import AddUserForm from './ManageSearchBundle/Searchbundle';
+import { db } from '../firebase-config';
+import { getDocs,collection,doc,getDoc } from 'firebase/firestore';
 import { useNavigate } from 'react-router';
+import { auth } from '../firebase-config1';
 
 import Noaccesspage from "./NoAccess"
 
@@ -26,7 +29,7 @@ const navigate=useNavigate();
   };
   const Alltabs=[
     {
-        label:"All Draws",
+        label:"All Distributors",
         key:"alldistributors",
         children: <AllUsers
         userdata={userdata}
@@ -35,7 +38,7 @@ const navigate=useNavigate();
         />
     },
     {
-        label:"Add Draw",
+        label:"Add Distributor",
         key:"adddistributors",
         children: <AddUserForm
         userdata={userdata}
@@ -66,7 +69,7 @@ const navigate=useNavigate();
     if (response.ok) {
       const userData = await response.json();
       setUserdata(userData.data)
-      const response1 = await fetch(`http://localhost:3001/draw/`, {
+      const response1 = await fetch(`http://localhost:3001/user/`, {
         method: 'GET',
         headers: {
           token: `${token}`,
@@ -87,7 +90,50 @@ const navigate=useNavigate();
     listener()
   }, []);
 
-
+  const getAllEmployees=async()=>{
+    try{
+      const userinfo = await listener();
+  
+      if (userinfo) {
+        const result = getSubstringBeforeAtSymbol(userinfo.email);
+        const q = doc(db, "Users", result);
+        const querySnapshot = await getDoc(q);
+  
+        if (querySnapshot.exists()) {
+          if(querySnapshot.data().newpassword===""){
+            if((querySnapshot.data().role==="admin")){
+              setUserdata(querySnapshot.data());
+            }else{
+              setNoaccess(true)
+            }
+          }
+          else{
+            await auth.signOut();
+          }
+        
+        } else {
+          await auth.signOut();
+        }
+      } else {
+        navigate("/login");
+      }
+        const empref=collection(db,"Users");
+        const querySnapshot=await getDocs(empref)
+        let tempemplyees=[]
+        querySnapshot.forEach((element,index)=>{
+          if(element.data().role!=="admin"){
+            tempemplyees.push(element.data())
+          }
+        })
+        setEmployees(tempemplyees)
+        setLoading(false)
+        }catch(error){
+            alert(error.message)
+        }
+  }
+//   useEffect(() => {
+//     getAllEmployees()
+//   }, []);
   const sidebarStyle = {
     color: 'white',
     width: '260px',
@@ -123,7 +169,7 @@ const navigate=useNavigate();
     <div style={!isMobile?mainStyle:{}}>
     <div style={!isMobile?layoutStyle:{}}>
     <div style={!isMobile?sidebarStyle:{}}>
-    <AdminSideBar label={"admindraws"} userdata={userdata}/>
+    <AdminSideBar label={"searchbundle"} userdata={userdata}/>
     </div>
       <div style={{
 
@@ -136,10 +182,10 @@ marginBottom:20,
       <div style={contentStyle}>
 
      <Card
-      title="Drawtime"
+      title="Search Bundle"
       style={{ boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)' }}
     >
-     <Tabs
+     {/* <Tabs
     onChange={onChange}
     type="card"
     items={Alltabs.map((element, i) => {
@@ -149,7 +195,11 @@ marginBottom:20,
         children: element.children,
       };
     })}
-  />
+  /> */}
+  <AddUserForm
+        userdata={userdata}
+        products={employees}
+        setProducts={setEmployees}/>
   </Card>
 
  </div>

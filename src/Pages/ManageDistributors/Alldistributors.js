@@ -1,9 +1,15 @@
-import { CiCircleFilled, CloseCircleFilled, DeleteFilled, EditFilled, InfoCircleFilled, LockFilled, SearchOutlined } from '@ant-design/icons';
+import { CiCircleFilled, CloseCircleFilled, DeleteFilled, DollarCircleFilled, EditFilled, InfoCircleFilled, LockFilled, SearchOutlined } from '@ant-design/icons';
 import React, { useState, useRef } from 'react';
 import Highlighter from 'react-highlight-words';
-import { Button, Input, Space, Table ,Modal,Spin} from 'antd';
+import { Button, Input, Space,Select,Tabs, Table ,Modal,Spin} from 'antd';
 import AddUserForm from './Editdistributor';
+import EditComission from "./Editcomission"
+import Editprize from "./EditPrize"
+import EditLimit from "./EditLimit"
+import Editpurchase from "./Editpurchase"
 import COLORS from '../../colors';
+const { Option } = Select;
+const { TabPane } = Tabs;
 
 
 const ProductTable = ({ products, setProducts,userdata }) => {
@@ -198,17 +204,17 @@ borderRadius: 10,
 background: COLORS.primarygradient,
 color: "white"
           }} onClick={() => handleDetail(record)}>Detail</Button>
-      {/* <Button
-            icon={<DeleteFilled />}
+      <Button
+            icon={<DollarCircleFilled />}
             style={{
               borderRadius: 10,
-              background: COLORS.deletegradient,
+              background: COLORS.detailgradient,
               color: 'white',
             }}
             onClick={() => showDeleteConfirmationModal(record)}
           >
-            Archive
-          </Button> */}
+            Payment
+          </Button>
     
         </Space>
       ),
@@ -229,6 +235,73 @@ color: "white"
     setVisibleDetail(false);
     setSelectedProduct(null);
   };
+  const renderProductSelection = () => {
+    const renderGeneral = () => (
+      <AddUserForm
+          initialValues={selectedProduct}
+          userdata={userdata}
+          onCancel={() => setVisible(false)}
+          setProducts={setProducts}
+          products={products}
+        />
+    );
+    const renderLimit = () => (
+      <EditLimit
+      initialValues={selectedProduct}
+      userdata={userdata}
+      onCancel={() => setVisible(false)}
+      setProducts={setProducts}
+      products={products}
+    />
+    );
+    const renderComission = () => (
+      <EditComission
+      initialValues={selectedProduct}
+      userdata={userdata}
+      onCancel={() => setVisible(false)}
+      setProducts={setProducts}
+      products={products}
+    />
+  );
+    const renderPrize = () => (
+      <Editprize
+      initialValues={selectedProduct}
+      userdata={userdata}
+      onCancel={() => setVisible(false)}
+      setProducts={setProducts}
+      products={products}
+    />
+  );
+    const renderPusrchase = () => (
+      <Editpurchase
+      initialValues={selectedProduct}
+      userdata={userdata}
+      onCancel={() => setVisible(false)}
+      setProducts={setProducts}
+      products={products}
+    />
+    );
+    return (
+      <Tabs defaultActiveKey="mobile" type="card">
+      <TabPane tab="Comission Settings" key="comission">
+        {renderComission()}
+      </TabPane>
+      <TabPane tab="Limit Cutting" key="limit">
+        {renderLimit()}
+      </TabPane>
+      <TabPane tab="General Info" key="general">
+        {renderGeneral()}
+      </TabPane>
+      <TabPane tab="Prize Setting" key="prize">
+        {renderPrize()}
+      </TabPane>
+      <TabPane tab="Purchase Limit" key="purchase">
+        {renderPusrchase()}
+      </TabPane>
+    </Tabs>
+    );
+  };
+  
 
   return (
     <>
@@ -282,17 +355,18 @@ color: "white"
         width={800}
       >
         {/* Assuming the EditProducts component is properly implemented */}
-        <AddUserForm
+        {/* <AddUserForm
           initialValues={selectedProduct}
           userdata={userdata}
           onCancel={() => setVisible(false)}
           setProducts={setProducts}
           products={products}
-        />
+        /> */}
+        {renderProductSelection()}
       </Modal>
 
       <Modal
-        title="Confirm Deletion"
+        title="Payment"
         visible={deleteConfirmationVisible}
         onOk={handleDeleteConfirmationOk}
         onCancel={handleDeleteConfirmationCancel}
@@ -308,23 +382,10 @@ color: "white"
             }}
           >
             Cancel
-          </Button>,
-          <Button
-            key="delete"
-            type="danger"
-            onClick={handleDeleteConfirmationOk}
-            icon={<DeleteFilled />}
-            style={{
-              borderRadius: 10,
-              background: COLORS.deletegradient,
-              color: 'white',
-            }}
-          >
-            Delete
-          </Button>,
+          </Button>
         ]}
       >
-        <p>Are you sure you want to delete this customer?</p>
+        
       </Modal>
 
     </>

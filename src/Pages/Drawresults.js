@@ -3,8 +3,7 @@ import React ,{useEffect,useState}from 'react';
 import { Tabs,Card,Spin } from 'antd';
 import AdminSideBar from "../components/AdminSidebar"
 import { useMedia } from 'react-use';
-import AllUsers from './ManageDrawtime/Alldraws'
-import AddUserForm from './ManageDrawtime/Adddraw';
+import AllUsers from './ManageDrawresults/Allresults'
 import { useNavigate } from 'react-router';
 
 import Noaccesspage from "./NoAccess"
@@ -33,14 +32,6 @@ const navigate=useNavigate();
         products={employees}
         setProducts={setEmployees}
         />
-    },
-    {
-        label:"Add Draw",
-        key:"adddistributors",
-        children: <AddUserForm
-        userdata={userdata}
-        products={employees}
-        setProducts={setEmployees}/>
     }
   ]
   function getSubstringBeforeAtSymbol(email) {
@@ -123,7 +114,7 @@ const navigate=useNavigate();
     <div style={!isMobile?mainStyle:{}}>
     <div style={!isMobile?layoutStyle:{}}>
     <div style={!isMobile?sidebarStyle:{}}>
-    <AdminSideBar label={"admindraws"} userdata={userdata}/>
+    <AdminSideBar label={"Drawresults"} userdata={userdata}/>
     </div>
       <div style={{
 
@@ -136,10 +127,10 @@ marginBottom:20,
       <div style={contentStyle}>
 
      <Card
-      title="Drawtime"
+      title="Draw Results"
       style={{ boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)' }}
     >
-     <Tabs
+     {/* <Tabs
     onChange={onChange}
     type="card"
     items={Alltabs.map((element, i) => {
@@ -149,7 +140,12 @@ marginBottom:20,
         children: element.children,
       };
     })}
-  />
+  /> */}
+   <AllUsers
+        userdata={userdata}
+        products={employees}
+        setProducts={setEmployees}
+        />
   </Card>
 
  </div>
