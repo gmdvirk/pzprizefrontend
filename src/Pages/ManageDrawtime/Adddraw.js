@@ -11,6 +11,9 @@ const AddProductForm = ({ setProducts,products}) => {
   const [form] = Form.useForm();
   const [successModalVisible, setSuccessModalVisible] = useState(false);
   const [errorModalVisible, setErrorModalVisible] = useState(false);
+  
+  const [message, setMessage] = useState("");
+  const [errormessage, setErrorMessage] = useState("");
   const [loading, setLoading] = useState(false);
  
   const onFinish = async (values) => {
@@ -41,13 +44,17 @@ const AddProductForm = ({ setProducts,products}) => {
         temp.push(tempobj)
         setProducts(temp)
         form.resetFields();
+        setMessage("Successfully Updated")
+        setSuccessModalVisible(true)
       } else {
         const userData = await response.json();
-        alert(userData.Message)
+        setErrorMessage(userData.Message)
+        setErrorModalVisible(true)
       }
 
     }catch(error){
-      alert(error.message)
+      setErrorMessage(error.message)
+        setErrorModalVisible(true)
     }
 
     setLoading(false)
@@ -188,7 +195,7 @@ const AddProductForm = ({ setProducts,products}) => {
           </Button>,
         ]}
       >
-        Customer added successfully!
+        {message}
       </Modal>
    
       {/* Error Modal */}
@@ -198,7 +205,7 @@ const AddProductForm = ({ setProducts,products}) => {
         onOk={handleErrorModalOk}
         onCancel={handleErrorModalOk}
       >
-        Error adding customer. Please try again.
+        {errormessage}
       </Modal>
 
     </Form>}

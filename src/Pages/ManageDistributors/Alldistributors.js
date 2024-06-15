@@ -1,30 +1,79 @@
-import { CiCircleFilled, CloseCircleFilled, DeleteFilled, DollarCircleFilled, EditFilled, InfoCircleFilled, LockFilled, SearchOutlined } from '@ant-design/icons';
+import { CiCircleFilled, CloseCircleFilled, CreditCardFilled, DeleteFilled, DollarCircleFilled, EditFilled, InfoCircleFilled, LockFilled, MinusCircleFilled, PlusCircleFilled, SaveFilled, SearchOutlined } from '@ant-design/icons';
 import React, { useState, useRef } from 'react';
 import Highlighter from 'react-highlight-words';
-import { Button, Input, Space,Select,Tabs, Table ,Modal,Spin} from 'antd';
+import { Form,Button, Input, Space,Select,Tabs, Table,Col, Row ,Modal,Spin} from 'antd';
 import AddUserForm from './Editdistributor';
 import EditComission from "./Editcomission"
 import Editprize from "./EditPrize"
 import EditLimit from "./EditLimit"
 import Editpurchase from "./Editpurchase"
 import COLORS from '../../colors';
+import Cashmanager from "./Cashmanager"
+import Creditmanager from "./Creditmanager"
+import Stats from "./Stats"
+import jsPDF from 'jspdf';
+import 'jspdf-autotable';
+
 const { Option } = Select;
 const { TabPane } = Tabs;
 
 
 const ProductTable = ({ products, setProducts,userdata }) => {
+  const [form] = Form.useForm();
   const [visible, setVisible] = useState(false);
   const [visibledetail, setVisibleDetail] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [loading,setLoading]=useState(false)
+  const [transactionhistory,setTransactionhistory]=useState([])
   const [visiblechange, setVisibleChange] = useState(false);
   const [searchText, setSearchText] = useState('');
+  const [creditopen,setCreditopen] = useState(false)
+  const [cashopen,setCashopen] = useState(false)
   const [searchedColumn, setSearchedColumn] = useState('');
+  const [payment, setPayment] = useState([]);
   
   const searchInput = useRef(null);
   const [deleteConfirmationVisible, setDeleteConfirmationVisible] = useState(false); // New state for delete confirmation
+  function getDateAndTime(isoString) {
+    // Parse the ISO 8601 string into a Date object
+    const dateObj = new Date(isoString);
 
-  const showDeleteConfirmationModal = (record) => {
+    // Extract the date components
+    const year = dateObj.getUTCFullYear();
+    const month = String(dateObj.getUTCMonth() + 1).padStart(2, '0');
+    const day = String(dateObj.getUTCDate()).padStart(2, '0');
+    
+    // Extract the time components
+    const hours = String(dateObj.getUTCHours()).padStart(2, '0');
+    const minutes = String(dateObj.getUTCMinutes()).padStart(2, '0');
+    const seconds = String(dateObj.getUTCSeconds()).padStart(2, '0');
+    const milliseconds = String(dateObj.getUTCMilliseconds()).padStart(3, '0');
+
+    // Format the date and time
+    const date = `${year}-${month}-${day}`;
+    const time = `${hours}:${minutes}:${seconds}`;
+
+    return { date, time };
+}
+  const showDeleteConfirmationModal =async (record) => {
+    const token = localStorage.getItem('token');
+    const response = await fetch(`http://localhost:3001/payment/getpaymentsbyid/${record._id}`, {
+      method: 'GET',
+      headers: {
+        token: `${token}`,
+      },
+    });
+
+    if (response.ok) {
+      let userData = await response.json();
+      for (let i=0;i<userData.length;i++){
+        const { date, time } = getDateAndTime(userData[i].createdAt);
+        userData[i].time= time ;
+        userData[i].date=date
+      } 
+     
+      setPayment(userData)
+    }
     setSelectedProduct(record);
     setDeleteConfirmationVisible(true);
   };
@@ -34,7 +83,12 @@ const ProductTable = ({ products, setProducts,userdata }) => {
     
     setLoading(false)
   };
-  
+  const handleCreditOpen=()=>{
+    setCreditopen(true)
+  }
+  const handleCashOpen=()=>{
+    setCashopen(true)
+  }
 
   const handleDeleteConfirmationCancel = () => {
     // Close the confirmation modal
@@ -151,12 +205,12 @@ const ProductTable = ({ products, setProducts,userdata }) => {
       key: 'name',
       ...getColumnSearchProps('name'),
     },
-    {
-      title: 'Contact',
-      dataIndex: 'contact',
-      key: 'contact',
-      ...getColumnSearchProps('contact'),
-    },
+    // {
+    //   title: 'Contact',
+    //   dataIndex: 'contact',
+    //   key: 'contact',
+    //   ...getColumnSearchProps('contact'),
+    // },
     {
       title: 'Username',
       dataIndex: 'username',
@@ -220,7 +274,68 @@ color: "white"
       ),
     },
   ];
-
+  const paymentcolumns = [
+    {
+      title: 'Amount',
+      dataIndex: 'amount',
+      key: 'amount',
+      ...getColumnSearchProps('amount'),
+      render: (_,record) => (
+        <span >
+         {record.type==="Withdraw"?"-"+record.amount:record.amount}
+        </span>
+      ),
+    },
+    {
+      title: 'Type',
+      dataIndex: 'type',
+      key: 'type',
+      render: (type) => (
+        <span style={{ color: type === 'Withdraw' ? 'red' : 'green' }}>
+          {type === 'Withdraw' ? (
+            <MinusCircleFilled style={{ color: 'red' }} />
+          ) : (
+            <PlusCircleFilled style={{ color: 'green' }} />
+          )}{' '}
+          {type.toUpperCase()}
+        </span>
+      ),
+    },
+    {
+      title: 'Cash',
+      dataIndex: 'cash',
+      key: 'cash',
+      ...getColumnSearchProps('cash'),
+    },
+    {
+      title: 'Credit',
+      dataIndex: 'credit',
+      key: 'credit',
+      ...getColumnSearchProps('credit'),
+    },
+    {
+      title: 'Balance Upline',
+      dataIndex: 'balanceupline',
+      key: 'username',
+      ...getColumnSearchProps('username'),
+    },
+    {
+      title: 'Date',
+      dataIndex: 'date',
+      key: 'date',
+      render: (_,record) => (
+        <span >
+         {record.date+" "+record.time}
+        </span>
+      ),
+    },
+    {
+      title: 'Description',
+      dataIndex: 'description',
+      key: 'description',
+      ...getColumnSearchProps('description'),
+    },
+  ];
   const handleEdit = (product) => {
     setSelectedProduct(product);
     setVisible(true);
@@ -301,6 +416,102 @@ color: "white"
     </Tabs>
     );
   };
+  const onFinish = (values) => {
+    const { startdate, enddate } = values;
+    const filteredPayments = payment.filter((pay) => {
+      const payDate = new Date(pay.date);
+      return payDate >= new Date(startdate) && payDate <= new Date(enddate);
+    });
+  
+    // Create a new jsPDF instance
+    const doc = new jsPDF();
+  
+    // Define table columns
+    const columns = [
+      { title: 'Amount', dataKey: 'amount' },
+      { title: 'Type', dataKey: 'type' },
+      { title: 'Cash', dataKey: 'cash' },
+      { title: 'Credit', dataKey: 'credit' },
+      { title: 'Balance Upline', dataKey: 'balanceupline' },
+      { title: 'Date', dataKey: 'date' },
+      { title: 'Description', dataKey: 'description' },
+    ];
+  
+    // Define table rows
+    const rows = filteredPayments.map((pay) => ({
+      amount: pay.type==="Withdraw"?"-"+pay.amount:pay.amount,
+      type: pay.type,
+      cash: pay.cash,
+      credit: pay.credit,
+      balanceupline: pay.balanceupline,
+      date: `${pay.date} ${pay.time}`,
+      description: pay.description,
+    }));
+  
+    // Add title to the PDF with styling
+    doc.setFontSize(18);
+    doc.setTextColor(40);
+    doc.text('Payment Report', 14, 22);
+  
+    // Add username and subtitle with date range
+    doc.setFontSize(12);
+    if (selectedProduct && selectedProduct.username) {
+      doc.text(`User: ${selectedProduct.username}`, 14, 30);
+    }
+    doc.text(`Report from ${startdate} to ${enddate}`, 14, 36);
+  
+    // Generate the PDF table with styling and custom cell rendering
+    doc.autoTable({
+      columns: columns,
+      body: rows,
+      startY: 42,
+      styles: {
+        fontSize: 10,
+        cellPadding: 3,
+        halign: 'center',
+        valign: 'middle',
+        lineColor: [44, 62, 80],
+        lineWidth: 0.5,
+      },
+      headStyles: {
+        fillColor: [44, 62, 80],
+        textColor: [255, 255, 255],
+        fontSize: 12,
+        halign: 'center',
+      },
+      alternateRowStyles: {
+        fillColor: [240, 240, 240],
+      },
+      margin: { top: 42 },
+      willDrawCell: function (data) {
+        if (data.column.dataKey === 'type') {
+          if (data.cell.raw === 'Withdraw') {
+            doc.setTextColor(255, 0, 0); // Red
+          } else if (data.cell.raw === 'Draw') {
+            doc.setTextColor(0, 128, 0); // Green
+          }
+        }
+      },
+      didDrawCell: function (data) {
+        // Reset text color after drawing each cell to avoid affecting other cells
+        doc.setTextColor(0, 0, 0); // Default text color
+      },
+      didDrawPage: function (data) {
+        // Footer with page number
+        let pageCount = doc.internal.getNumberOfPages();
+        doc.setFontSize(10);
+        doc.text(`Page ${doc.internal.getCurrentPageInfo().pageNumber} of ${pageCount}`, 
+                 doc.internal.pageSize.width - 20, 
+                 doc.internal.pageSize.height - 10, 
+                 {
+                   align: 'right',
+                 });
+      },
+    });
+  
+    // Save the PDF
+    doc.save('payment_report.pdf');
+  };
   
 
   return (
@@ -321,31 +532,7 @@ color: "white"
       />
       </>}
       </div>
-      {/* <Modal title="Customer Details" visible={visibledetail} onCancel={handleClose} footer={null}>
-        {selectedProduct && (
-         <div>
-         <p>Name: {selectedProduct.customer}</p>
-         <p>CNIC: {selectedProduct.customerCNIC}</p>
-    <p>Contact: {selectedProduct.customerContact}</p>
-    <p>Flat Code: {selectedProduct.roomcode}</p>
-    <p>Dealdate: {selectedProduct.dealdate}</p>
-    <p>Address: {selectedProduct.customerAddress}</p>
-    <p>Additional details: {selectedProduct.additionalDetails}</p>
-    
-    {selectedProduct.guaranters.map((obj,index)=>{
-      return(
-        <>
-        <h4>Guaranter : {index+1}</h4>
-        <p>Name :{obj.guaranterName}</p>
-        <p>CNIC :{obj.guaranterCnic}</p>
-        <p>Contact :{obj.guaranterContact}</p>
-        <p>Address :{obj.guaranterAddress}</p>
-        </>
-      )
-    })}
-  </div>
-        )}
-      </Modal> */}
+     
 
       <Modal
         title="Edit Customer"
@@ -354,22 +541,33 @@ color: "white"
         footer={null}
         width={800}
       >
-        {/* Assuming the EditProducts component is properly implemented */}
-        {/* <AddUserForm
-          initialValues={selectedProduct}
-          userdata={userdata}
-          onCancel={() => setVisible(false)}
-          setProducts={setProducts}
-          products={products}
-        /> */}
+        
         {renderProductSelection()}
       </Modal>
-
+      <Modal
+        title="Credit manager"
+        visible={creditopen}
+        onCancel={() => setCreditopen(false)}
+        footer={null}
+      >
+        
+        <Creditmanager  selectedProduct={selectedProduct} setSelectedProduct={setSelectedProduct} payment={payment} setPayment={setPayment}/>
+      </Modal>
+      <Modal
+        title="Cash manager"
+        visible={cashopen}
+        onCancel={() => setCashopen(false)}
+        footer={null}
+      >
+        
+        <Cashmanager selectedProduct={selectedProduct} setSelectedProduct={setSelectedProduct} payment={payment} setPayment={setPayment} />
+      </Modal>
       <Modal
         title="Payment"
         visible={deleteConfirmationVisible}
         onOk={handleDeleteConfirmationOk}
         onCancel={handleDeleteConfirmationCancel}
+        width={1000}
         footer={[
           <Button
           icon={<CloseCircleFilled/>}
@@ -385,7 +583,66 @@ color: "white"
           </Button>
         ]}
       >
-        
+        {selectedProduct&&selectedProduct.payment && <Stats data={selectedProduct.payment}/>}
+        <Button
+          icon={<DollarCircleFilled/>}
+            key="cash"
+            onClick={handleCashOpen}
+            style={{
+              borderRadius: 10,
+              background: COLORS.primarygradient,
+              color: 'white',
+            }}
+          >
+            Cash
+          </Button>
+          {' '}
+          <Button
+          icon={<CreditCardFilled/>}
+            key="credit"
+            onClick={handleCreditOpen}
+            style={{
+              borderRadius: 10,
+              background: COLORS.editgradient,
+              color: 'white',
+            }}
+          >
+            Credit
+          </Button>
+          
+          <Form form={form} onFinish={onFinish} layout="vertical">
+  <Row gutter={16}>
+    <Col xs={24} sm={12}>
+      <Form.Item name="startdate" label="Start Date" rules={[{ required: true, message: 'Please enter a start date' }]}>
+        <Input type="date" placeholder="Enter date" />
+      </Form.Item>
+    </Col>
+    <Col xs={24} sm={12}>
+      <Form.Item name="enddate" label="End Date" rules={[{ required: true, message: 'Please enter an end date' }]}>
+        <Input type="date" placeholder="Enter date" />
+      </Form.Item>
+    </Col>
+  </Row>
+  <Form.Item>
+    <Button
+      style={{
+        borderRadius: 10,
+        background: COLORS.savegradient,
+        color: 'white',
+      }}
+      icon={<SaveFilled />}
+      htmlType="submit"
+    >
+      Download
+    </Button>
+  </Form.Item>
+</Form>
+ 
+          <Table columns={paymentcolumns} dataSource={payment} rowKey="id"
+      
+      scroll={{ x: true }} // Enable horizontal scrolling
+      responsive={true} // Enable responsive behavior
+      />
       </Modal>
 
     </>

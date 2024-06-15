@@ -14,13 +14,15 @@ const EditProductForm = (props) => {
   const [successModalVisible, setSuccessModalVisible] = useState(false);
   const [loading, setLoading] = useState(false);
   const [errorModalVisible, setErrorModalVisible] = useState(false);
+  const [message, setMessage] = useState("");
+  const [errormessage, setErrorMessage] = useState("");
   const [product, setProduct] = useState(props.initialValues);
 
 
   useEffect(() => {
   
 
-    form.setFieldsValue(props.initialValues);
+    form.setFieldsValue(props.initialValues.prize);
   }, [props.initialValues, form]);
 
 
@@ -42,7 +44,9 @@ const EditProductForm = (props) => {
         },
         body: JSON.stringify({
           ...props.initialValues,
-          ...values
+          prize:{
+            ...values
+          }
         }),
       });
       if (response.ok) {
@@ -53,14 +57,19 @@ const EditProductForm = (props) => {
         temp[index]={...tempobj}
         props.setProducts(temp)
         form.resetFields();
+        setMessage("Successfully Updated")
+        setSuccessModalVisible(true)
       } else {
         const userData = await response.json();
-        alert(userData.Message)
+        setErrorMessage(userData.Message)
+        setErrorModalVisible(true)
       }
 
     }catch(error){
-      alert(error.message)
+      setErrorMessage(error.message)
+        setErrorModalVisible(true)
     }
+
 
     setLoading(false)
   };
@@ -155,7 +164,7 @@ const EditProductForm = (props) => {
         </Button>,
       ]}
     >
-      Customer editted successfully!
+     {message}
     </Modal>
   
  
@@ -166,7 +175,7 @@ const EditProductForm = (props) => {
       onOk={handleErrorModalOk}
       onCancel={handleErrorModalOk}
     >
-      Error editting customer. Please try again.
+        {errormessage}
     </Modal>
 
   </Form>}

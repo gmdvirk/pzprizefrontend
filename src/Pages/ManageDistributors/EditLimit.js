@@ -14,13 +14,15 @@ const EditProductForm = (props) => {
   const [successModalVisible, setSuccessModalVisible] = useState(false);
   const [loading, setLoading] = useState(false);
   const [errorModalVisible, setErrorModalVisible] = useState(false);
+  const [message, setMessage] = useState("");
+  const [errormessage, setErrorMessage] = useState("");
   const [product, setProduct] = useState(props.initialValues);
 
 
   useEffect(() => {
   
 
-    form.setFieldsValue(props.initialValues);
+    form.setFieldsValue(props.initialValues.limit);
   }, [props.initialValues, form]);
 
 
@@ -42,7 +44,7 @@ const EditProductForm = (props) => {
         },
         body: JSON.stringify({
           ...props.initialValues,
-          ...values
+          limit:{...values}
         }),
       });
       if (response.ok) {
@@ -53,13 +55,17 @@ const EditProductForm = (props) => {
         temp[index]={...tempobj}
         props.setProducts(temp)
         form.resetFields();
+        setMessage("Successfully Updated")
+        setSuccessModalVisible(true)
       } else {
         const userData = await response.json();
-        alert(userData.Message)
+        setErrorMessage(userData.Message)
+        setErrorModalVisible(true)
       }
 
     }catch(error){
-      alert(error.message)
+      setErrorMessage(error.message)
+        setErrorModalVisible(true)
     }
 
     setLoading(false)
@@ -86,42 +92,42 @@ const EditProductForm = (props) => {
        <Row gutter={16}>
       
       <Col xs={24} sm={8}>
-      <Form.Item name="ponedigita" label="Hindsy Ki Had (First)" rules={[{ required: true, message: 'Please enter a number' }]}>
+      <Form.Item name="hindsaa" label="Hindsy Ki Had (First)" rules={[{ required: true, message: 'Please enter a number' }]}>
         <Input type='number' placeholder="Enter number" />
       </Form.Item>
       </Col>
       <Col xs={24} sm={8}>
-      <Form.Item name="ponedigitb" label="Hindsy Ki Had(second)" rules={[{ required: true, message: 'Please enter a number' }]}>
+      <Form.Item name="hindsab" label="Hindsy Ki Had(second)" rules={[{ required: true, message: 'Please enter a number' }]}>
       <Input type='number' placeholder="Enter number" />
       </Form.Item>
       </Col>
       <Col xs={24} sm={8}>
-      <Form.Item name="ptwodigita" label="Akra Ki Had (first)" rules={[{ required: true, message: 'Please enter a number' }]}>
+      <Form.Item name="akraa" label="Akra Ki Had (first)" rules={[{ required: true, message: 'Please enter a number' }]}>
       <Input type='number' placeholder="Enter number" />
       </Form.Item>
       </Col>
       <Col xs={24} sm={8}>
-      <Form.Item name="ptwodigitb" label="Akra Ki Had (second)" rules={[{ required: true, message: 'Please enter a number' }]}>
+      <Form.Item name="akrab" label="Akra Ki Had (second)" rules={[{ required: true, message: 'Please enter a number' }]}>
       <Input type='number' placeholder="Enter number" />
       </Form.Item>
       </Col>
       <Col xs={24} sm={8}>
-      <Form.Item name="pthreedigita" label="Tendola Ki Had(first)" rules={[{ required: true, message: 'Please enter a number' }]}>
+      <Form.Item name="tendolaa" label="Tendola Ki Had(first)" rules={[{ required: true, message: 'Please enter a number' }]}>
       <Input type='number' placeholder="Enter number" />
       </Form.Item>
       </Col>
       <Col xs={24} sm={8}>
-      <Form.Item name="pthreedigitb" label="Tendola Ki Had(second)" rules={[{ required: true, message: 'Please enter a number' }]}>
+      <Form.Item name="tendolab" label="Tendola Ki Had(second)" rules={[{ required: true, message: 'Please enter a number' }]}>
       <Input type='number' placeholder="Enter number" />
       </Form.Item>
       </Col>
       <Col xs={24} sm={8}>
-      <Form.Item name="pfourdigita" label="Pangoda Ki Had(first)"  rules={[{ required: true, message: 'Please enter a number' }]}>
+      <Form.Item name="panogadaa" label="Pangoda Ki Had(first)"  rules={[{ required: true, message: 'Please enter a number' }]}>
       <Input type='number' placeholder="Enter number" />
       </Form.Item>
       </Col>
       <Col xs={24} sm={8}>
-      <Form.Item name="pfourdigitb" label="Pangoda Ki Had(second)" rules={[{ required: true, message: 'Please enter a number' }]}>
+      <Form.Item name="panogadab" label="Pangoda Ki Had(second)" rules={[{ required: true, message: 'Please enter a number' }]}>
       <Input type='number' placeholder="Enter number" />
       </Form.Item>
       </Col>
@@ -173,7 +179,7 @@ const EditProductForm = (props) => {
         </Button>,
       ]}
     >
-      Customer editted successfully!
+       {message}
     </Modal>
   
  
@@ -184,7 +190,7 @@ const EditProductForm = (props) => {
       onOk={handleErrorModalOk}
       onCancel={handleErrorModalOk}
     >
-      Error editting customer. Please try again.
+        {errormessage}
     </Modal>
 
   </Form>}

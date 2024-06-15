@@ -8,64 +8,72 @@ import moment from 'moment';
 
 const { Option } = Select;
 
-const EditProductForm = (props) => {
+const EditProductForm = ({selectedProduct,setSelectedProduct,payment,setPayment}) => {
   const [form] = Form.useForm();
   const [modalVisible, setModalVisible] = useState(false);
   const [successModalVisible, setSuccessModalVisible] = useState(false);
   const [loading, setLoading] = useState(false);
   const [errorModalVisible, setErrorModalVisible] = useState(false);
-  const [message, setMessage] = useState("");
-  const [errormessage, setErrorMessage] = useState("");
-  const [product, setProduct] = useState(props.initialValues);
+  const [errormessage,setErrormessage]=useState("")
+  const [message,setMessage]=useState("")
+  // const [product, setProduct] = useState(props.initialValues);
 
 
-  useEffect(() => {
-  
-
-    form.setFieldsValue(props.initialValues);
-  }, [props.initialValues, form]);
 
 
   const onFinish = async (values) => {
     setLoading(true)
     try {
-      const token = localStorage.getItem('token');
-      
-      if (!token) {
-        console.error('Token not found in local storage');
-        
+      if(values.type==="Withdraw"&&(Number(values.amount)>(Number(selectedProduct.payment.cash)+Number(selectedProduct.payment.credit)))){
+        setErrormessage("You can not with draw more than the available balance")
+        setErrorModalVisible(true)
+        setLoading(false) 
         return;
       }
-      const response = await fetch('http://localhost:3001/user/edituser', {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-          token: token,
-        },
-        body: JSON.stringify({
-          ...props.initialValues,
-          ...values
-        }),
-      });
-      if (response.ok) {
-        const userData = await response.json();
-        let tempobj={...props.initialValues,...values};
-        let temp=[...props.products];
-        const index=temp.findIndex((obj)=>obj._id===props.initialValues._id);
-        temp[index]={...tempobj}
-        props.setProducts(temp)
-        setMessage("Successfully Updated")
+      else{
+        const token = localStorage.getItem('token');
+      
+        if (!token) {
+          console.error('Token not found in local storage');
+          
+          return;
+        }
+        const response = await fetch('http://localhost:3001/payment/addcredit', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            token: token,
+          },
+          body: JSON.stringify({
+            id:selectedProduct._id,
+            ...values
+          }),
+        });
+        if (response.ok) {
+          const userData = await response.json();
+          let tempobj={...userData.payment};
+          let temp=[...payment];
+          temp.push(tempobj)
+          setPayment(temp)
+          let tempobj1={...selectedProduct,payment:{
+            cash:tempobj.cash,
+            credit:tempobj.credit,
+            balanceupline:tempobj.balanceupline
+          }}
+          setSelectedProduct(tempobj1)
+          form.resetFields();
+          setMessage("The transaction was successful.")
         setSuccessModalVisible(true)
-        form.resetFields();
-      } else {
-        const userData = await response.json();
-        setErrorMessage(userData.Message)
-        setErrorModalVisible(true)
+        } else {
+          const userData = await response.json();
+          alert(userData.Message)
+        }
+  
       }
-
+    
     }catch(error){
-      setErrorMessage(error.message)
-        setErrorModalVisible(true)
+      setErrormessage(error.message)
+      setErrorModalVisible(true)
     }
 
     setLoading(false)
@@ -96,45 +104,33 @@ const EditProductForm = (props) => {
          <Input placeholder="Enter Username" />
        </Form.Item>
        </Col> */}
-       <Col xs={24} sm={8}>
-       <Form.Item name="name" label="Name" rules={[{ required: true, message: 'Please enter a name' }]}>
-         <Input placeholder="Enter name" />
+       <Col xs={24} sm={24}>
+       <Form.Item name="description" label="Description" rules={[{ required: true, message: 'Please enter a description' }]}>
+         <Input placeholder="Enter description" />
        </Form.Item>
        </Col>
-       <Col xs={24} sm={8}>
-       <Form.Item name="address" label="Customer Address" rules={[{ required: true, message: 'Please enter customer address' }]}>
-         <Input placeholder="Enter Customer Address" />
+       <Col xs={24} sm={24}>
+      <Form.Item
+      label={"Select TX Type"}
+                    name={ 'type'}
+                      rules={[{ required: true, message: 'Please select' }]}
+                      className="flex-item"
+                      fieldKey={ 'type'}
+                    >
+                      <Select placeholder="Select type" >
+                        <Option value={"Draw"}>Draw</Option>
+                        <Option value={"Withdraw"}>Withdraw</Option>
+                      </Select>
+                    </Form.Item>
+                    </Col>
+       <Col xs={24} sm={24}>
+       <Form.Item name="amount" label="Amount" rules={[{ required: true, message: 'Please enter amount' }]}>
+         <Input placeholder="Enter amount" />
        </Form.Item>
        </Col>
-       <Col xs={24} sm={8}>
-       <Form.Item name="password" label="password" rules={[{ required: true, message: 'Please enter password' }]}>
-         <Input placeholder="Enter password" />
-       </Form.Item>
-       </Col>
+       
        </Row>
-       <Row gutter={16}>
-        
      
-       <Col xs={24} sm={8}>
-       <Form.Item name="contact" label="Contact" rules={[{ required: true, message: 'Please enter contact' }]}>
-         <Input placeholder="Enter contact" />
-       </Form.Item>
-       </Col>
-       <Col xs={24} sm={8}>
-       <Form.Item
-       label={"Status"}
-                     name={ 'blocked'}
-                       rules={[{ required: true, message: 'Please select Status' }]}
-                       className="flex-item"
-                       fieldKey={ 'blocked'}
-                     >
-                       <Select placeholder="Select Status type" >
-                         <Option value={true}>Active</Option>
-                         <Option value={false}>Deactive</Option>
-                       </Select>
-                     </Form.Item>
-                     </Col>
-      </Row>
   <Form.Item>
     <Button   style={{
           borderRadius:10,
@@ -143,7 +139,7 @@ const EditProductForm = (props) => {
                     }}
                     icon={<SaveFilled/>}
                     htmlType="submit">
-      Save Customer
+      Add Payment
     </Button>
   </Form.Item>
 

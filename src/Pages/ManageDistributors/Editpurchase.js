@@ -14,13 +14,15 @@ const EditProductForm = (props) => {
   const [successModalVisible, setSuccessModalVisible] = useState(false);
   const [loading, setLoading] = useState(false);
   const [errorModalVisible, setErrorModalVisible] = useState(false);
+  const [message, setMessage] = useState("");
+  const [errormessage, setErrorMessage] = useState("");
   const [product, setProduct] = useState(props.initialValues);
 
 
   useEffect(() => {
   
 
-    form.setFieldsValue(props.initialValues);
+    form.setFieldsValue(props.initialValues.purchase);
   }, [props.initialValues, form]);
 
 
@@ -42,7 +44,9 @@ const EditProductForm = (props) => {
         },
         body: JSON.stringify({
           ...props.initialValues,
-          ...values
+          purchase:{
+            ...values
+          }
         }),
       });
       if (response.ok) {
@@ -53,13 +57,17 @@ const EditProductForm = (props) => {
         temp[index]={...tempobj}
         props.setProducts(temp)
         form.resetFields();
+        setMessage("Successfully Updated")
+        setSuccessModalVisible(true)
       } else {
         const userData = await response.json();
-        alert(userData.Message)
+        setErrorMessage(userData.Message)
+        setErrorModalVisible(true)
       }
 
     }catch(error){
-      alert(error.message)
+      setErrorMessage(error.message)
+        setErrorModalVisible(true)
     }
 
     setLoading(false)
@@ -86,42 +94,42 @@ const EditProductForm = (props) => {
      <Row gutter={16}>
       
       <Col xs={24} sm={8}>
-      <Form.Item name="ponedigita" label="Purchase Limit A(first)" rules={[{ required: true, message: 'Please enter a number' }]}>
+      <Form.Item name="plimitaf" label="Purchase Limit A(first)" rules={[{ required: true, message: 'Please enter a number' }]}>
         <Input type='number' placeholder="Enter number" />
       </Form.Item>
       </Col>
       <Col xs={24} sm={8}>
-      <Form.Item name="ponedigitb" label="Purchase Limit A(second)" rules={[{ required: true, message: 'Please enter a number' }]}>
+      <Form.Item name="plimitas" label="Purchase Limit A(second)" rules={[{ required: true, message: 'Please enter a number' }]}>
       <Input type='number' placeholder="Enter number" />
       </Form.Item>
       </Col>
       <Col xs={24} sm={8}>
-      <Form.Item name="ptwodigita" label="Purchase Limit A(first)" rules={[{ required: true, message: 'Please enter a number' }]}>
+      <Form.Item name="plimitbf" label="Purchase Limit B(first)" rules={[{ required: true, message: 'Please enter a number' }]}>
       <Input type='number' placeholder="Enter number" />
       </Form.Item>
       </Col>
       <Col xs={24} sm={8}>
-      <Form.Item name="ptwodigitb" label="Purchase Limit B(second)" rules={[{ required: true, message: 'Please enter a number' }]}>
+      <Form.Item name="plimitbs" label="Purchase Limit B(second)" rules={[{ required: true, message: 'Please enter a number' }]}>
       <Input type='number' placeholder="Enter number" />
       </Form.Item>
       </Col>
       <Col xs={24} sm={8}>
-      <Form.Item name="pthreedigita" label="Purchase Limit C(first)" rules={[{ required: true, message: 'Please enter a number' }]}>
+      <Form.Item name="plimitcf" label="Purchase Limit C(first)" rules={[{ required: true, message: 'Please enter a number' }]}>
       <Input type='number' placeholder="Enter number" />
       </Form.Item>
       </Col>
       <Col xs={24} sm={8}>
-      <Form.Item name="pthreedigitb" label="Purchase Limit C(second)" rules={[{ required: true, message: 'Please enter a number' }]}>
+      <Form.Item name="plimitcs" label="Purchase Limit C(second)" rules={[{ required: true, message: 'Please enter a number' }]}>
       <Input type='number' placeholder="Enter number" />
       </Form.Item>
       </Col>
       <Col xs={24} sm={8}>
-      <Form.Item name="pfourdigita" label="Purchase Limit D(first)"  rules={[{ required: true, message: 'Please enter a number' }]}>
+      <Form.Item name="plimitdf" label="Purchase Limit D(first)"  rules={[{ required: true, message: 'Please enter a number' }]}>
       <Input type='number' placeholder="Enter number" />
       </Form.Item>
       </Col>
       <Col xs={24} sm={8}>
-      <Form.Item name="pfourdigitb" label="Purchase Limit D(second)" rules={[{ required: true, message: 'Please enter a number' }]}>
+      <Form.Item name="plimitds" label="Purchase Limit D(second)" rules={[{ required: true, message: 'Please enter a number' }]}>
       <Input type='number' placeholder="Enter number" />
       </Form.Item>
       </Col>
@@ -173,7 +181,7 @@ const EditProductForm = (props) => {
         </Button>,
       ]}
     >
-      Customer editted successfully!
+     {message}
     </Modal>
   
  
@@ -184,7 +192,7 @@ const EditProductForm = (props) => {
       onOk={handleErrorModalOk}
       onCancel={handleErrorModalOk}
     >
-      Error editting customer. Please try again.
+      {errormessage}
     </Modal>
 
   </Form>}
