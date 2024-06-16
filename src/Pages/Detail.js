@@ -3,8 +3,7 @@ import React ,{useEffect,useState}from 'react';
 import { Tabs,Card,Spin } from 'antd';
 import AdminSideBar from "../components/AdminSidebar"
 import { useMedia } from 'react-use';
-import AllUsers from './ManageSubdistributors/Allsubdistributors'
-import AddUserForm from './ManageSubdistributors/Addsubdistributors';
+import Detail from './ManageDistributors/Detail';
 import { db } from '../firebase-config';
 import { getDocs,collection,doc,getDoc } from 'firebase/firestore';
 import { useNavigate } from 'react-router';
@@ -24,28 +23,7 @@ const navigate=useNavigate();
   if(isMobile){
     marginLeft=10
   }
-  const onChange = (key) => {
-   
-  };
-  const Alltabs=[
-    {
-        label:"All Subdistributors",
-        key:"alldistributors",
-        children: <AllUsers
-        userdata={userdata}
-        products={employees}
-        setProducts={setEmployees}
-        />
-    },
-    {
-        label:"Add Subdistributor",
-        key:"adddistributors",
-        children: <AddUserForm
-        userdata={userdata}
-        products={employees}
-        setProducts={setEmployees}/>
-    }
-  ]
+ 
   function getSubstringBeforeAtSymbol(email) {
     const atIndex = email.indexOf('@');
     
@@ -69,16 +47,7 @@ const navigate=useNavigate();
     if (response.ok) {
       const userData = await response.json();
       setUserdata(userData.data)
-      const response1 = await fetch(`http://localhost:3001/user/`, {
-        method: 'GET',
-        headers: {
-          token: `${token}`,
-        },
-      });
-      if (response1.ok) {
-        const userData1 = await response1.json();
-        setEmployees(userData1)
-      }
+      
     } else {
       console.error('Failed to fetch user data:', response.statusText);
       navigate("/login");
@@ -169,7 +138,7 @@ const navigate=useNavigate();
     <div style={!isMobile?mainStyle:{}}>
     <div style={!isMobile?layoutStyle:{}}>
     <div style={!isMobile?sidebarStyle:{}}>
-    <AdminSideBar label={"subdistributors"} userdata={userdata}/>
+    <AdminSideBar label={"admindistributors"} userdata={userdata}/>
     </div>
       <div style={{
 
@@ -180,23 +149,8 @@ marginBottom:20,
       </div>
     
       <div style={contentStyle}>
-
-     <Card
-      title="Sub distributors"
-      style={{ boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)' }}
-    >
-     <Tabs
-    onChange={onChange}
-    type="card"
-    items={Alltabs.map((element, i) => {
-      return {
-        label: element.label,
-        key: element.key,
-        children: element.children,
-      };
-    })}
-  />
-  </Card>
+<Detail/>
+  
 
  </div>
  </div>:<Noaccesspage/>}

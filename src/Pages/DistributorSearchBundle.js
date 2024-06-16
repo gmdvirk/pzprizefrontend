@@ -3,8 +3,7 @@ import React ,{useEffect,useState}from 'react';
 import { Tabs,Card,Spin } from 'antd';
 import AdminSideBar from "../components/AdminSidebar"
 import { useMedia } from 'react-use';
-import AllUsers from './ManageSubdistributors/Allsubdistributors'
-import AddUserForm from './ManageSubdistributors/Addsubdistributors';
+import AddUserForm from './ManageDistributorSearchBundle/Searchbundle';
 import { db } from '../firebase-config';
 import { getDocs,collection,doc,getDoc } from 'firebase/firestore';
 import { useNavigate } from 'react-router';
@@ -24,28 +23,7 @@ const navigate=useNavigate();
   if(isMobile){
     marginLeft=10
   }
-  const onChange = (key) => {
-   
-  };
-  const Alltabs=[
-    {
-        label:"All Subdistributors",
-        key:"alldistributors",
-        children: <AllUsers
-        userdata={userdata}
-        products={employees}
-        setProducts={setEmployees}
-        />
-    },
-    {
-        label:"Add Subdistributor",
-        key:"adddistributors",
-        children: <AddUserForm
-        userdata={userdata}
-        products={employees}
-        setProducts={setEmployees}/>
-    }
-  ]
+ 
   function getSubstringBeforeAtSymbol(email) {
     const atIndex = email.indexOf('@');
     
@@ -169,7 +147,7 @@ const navigate=useNavigate();
     <div style={!isMobile?mainStyle:{}}>
     <div style={!isMobile?layoutStyle:{}}>
     <div style={!isMobile?sidebarStyle:{}}>
-    <AdminSideBar label={"subdistributors"} userdata={userdata}/>
+    <AdminSideBar label={"distributorsearchbundle"} userdata={userdata}/>
     </div>
       <div style={{
 
@@ -182,20 +160,14 @@ marginBottom:20,
       <div style={contentStyle}>
 
      <Card
-      title="Sub distributors"
+      title="Search Bundle"
       style={{ boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)' }}
     >
-     <Tabs
-    onChange={onChange}
-    type="card"
-    items={Alltabs.map((element, i) => {
-      return {
-        label: element.label,
-        key: element.key,
-        children: element.children,
-      };
-    })}
-  />
+   
+  <AddUserForm
+        userdata={userdata}
+        products={employees}
+        setProducts={setEmployees}/>
   </Card>
 
  </div>

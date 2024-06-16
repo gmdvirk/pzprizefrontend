@@ -3,12 +3,11 @@ import React ,{useEffect,useState}from 'react';
 import { Tabs,Card,Spin } from 'antd';
 import AdminSideBar from "../components/AdminSidebar"
 import { useMedia } from 'react-use';
-import AllUsers from './ManageSubdistributors/Allsubdistributors'
-import AddUserForm from './ManageSubdistributors/Addsubdistributors';
-import { db } from '../firebase-config';
-import { getDocs,collection,doc,getDoc } from 'firebase/firestore';
+import BillSheet from './ManageDistrubutorReport/BillSheet'
+import Distributorssale from './ManageDistrubutorReport/Distributorssale';
+import TotalSale from "./ManageDistrubutorReport/TotalSale"
+import TotalHaddlimitSale from "./ManageDistrubutorReport/TotalHaddLimitSale"
 import { useNavigate } from 'react-router';
-import { auth } from '../firebase-config1';
 
 import Noaccesspage from "./NoAccess"
 
@@ -29,22 +28,40 @@ const navigate=useNavigate();
   };
   const Alltabs=[
     {
-        label:"All Subdistributors",
+        label:"Total Sale",
         key:"alldistributors",
-        children: <AllUsers
+        children: <TotalSale
         userdata={userdata}
         products={employees}
         setProducts={setEmployees}
         />
     },
     {
-        label:"Add Subdistributor",
-        key:"adddistributors",
-        children: <AddUserForm
+        label:"Total Hadd Limit",
+        key:"Total",
+        children: <TotalHaddlimitSale
+        userdata={userdata}
+        products={employees}
+        setProducts={setEmployees}/>
+    },
+    {
+        label:"Dealer Sale",
+        key:"Dealer",
+        children: <Distributorssale
+        userdata={userdata}
+        products={employees}
+        setProducts={setEmployees}/>
+    },
+    {
+        label:"Bill Sheet",
+        key:"bill sheet",
+        children: <BillSheet
         userdata={userdata}
         products={employees}
         setProducts={setEmployees}/>
     }
+
+
   ]
   function getSubstringBeforeAtSymbol(email) {
     const atIndex = email.indexOf('@');
@@ -69,7 +86,7 @@ const navigate=useNavigate();
     if (response.ok) {
       const userData = await response.json();
       setUserdata(userData.data)
-      const response1 = await fetch(`http://localhost:3001/user/`, {
+      const response1 = await fetch(`http://localhost:3001/draw/`, {
         method: 'GET',
         headers: {
           token: `${token}`,
@@ -90,50 +107,7 @@ const navigate=useNavigate();
     listener()
   }, []);
 
-  const getAllEmployees=async()=>{
-    try{
-      const userinfo = await listener();
-  
-      if (userinfo) {
-        const result = getSubstringBeforeAtSymbol(userinfo.email);
-        const q = doc(db, "Users", result);
-        const querySnapshot = await getDoc(q);
-  
-        if (querySnapshot.exists()) {
-          if(querySnapshot.data().newpassword===""){
-            if((querySnapshot.data().role==="admin")){
-              setUserdata(querySnapshot.data());
-            }else{
-              setNoaccess(true)
-            }
-          }
-          else{
-            await auth.signOut();
-          }
-        
-        } else {
-          await auth.signOut();
-        }
-      } else {
-        navigate("/login");
-      }
-        const empref=collection(db,"Users");
-        const querySnapshot=await getDocs(empref)
-        let tempemplyees=[]
-        querySnapshot.forEach((element,index)=>{
-          if(element.data().role!=="admin"){
-            tempemplyees.push(element.data())
-          }
-        })
-        setEmployees(tempemplyees)
-        setLoading(false)
-        }catch(error){
-            alert(error.message)
-        }
-  }
-//   useEffect(() => {
-//     getAllEmployees()
-//   }, []);
+
   const sidebarStyle = {
     color: 'white',
     width: '260px',
@@ -169,7 +143,7 @@ const navigate=useNavigate();
     <div style={!isMobile?mainStyle:{}}>
     <div style={!isMobile?layoutStyle:{}}>
     <div style={!isMobile?sidebarStyle:{}}>
-    <AdminSideBar label={"subdistributors"} userdata={userdata}/>
+    <AdminSideBar label={"distributorreports"} userdata={userdata}/>
     </div>
       <div style={{
 
@@ -182,7 +156,7 @@ marginBottom:20,
       <div style={contentStyle}>
 
      <Card
-      title="Sub distributors"
+      title="Reports"
       style={{ boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)' }}
     >
      <Tabs

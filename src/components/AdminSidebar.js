@@ -22,7 +22,8 @@ const { Title } = Typography;
 const SidebarDrawer = (props) => {
   const navigate = useNavigate();
   const Logout = () => {
-   
+    localStorage.removeItem('token');
+    navigate("/login")
   };
   const isMobile = useMedia('(max-width: 768px)'); // Adjust the breakpoint as needed
   const [isDrawerVisible, setDrawerVisible] = useState(false);
@@ -147,19 +148,6 @@ const SidebarDrawer = (props) => {
                   Search Bundle
                 </Menu.Item>
               )}
-              {/* {props.userdata.role === 'superadmin' && (
-                <Menu.Item
-                  key="changepassword"
-                  icon={<SettingOutlined />}
-                  style={{
-                    color: selectedMenuKey === 'changepassword' ? 'white' : 'black',
-                    background: selectedMenuKey === 'changepassword' ? COLORS.primarygradient : 'white',
-                    width: '100%',
-                  }}
-                >
-                  Change Password
-                </Menu.Item>
-              )} */}
             </Menu>
             <Button
               icon={<LogoutOutlined />}
@@ -293,19 +281,72 @@ const SidebarDrawer = (props) => {
                 Search Bundle
               </Menu.Item>
             )}
-            {/* {props.userdata.role === 'superadmin' && (
+             
+            {props.userdata.role === 'distributor' && (
               <Menu.Item
-                key="changepassword"
-                icon={<SettingOutlined />}
+                key="subdistributors"
+                icon={<UserOutlined />}
                 style={{
-                  color: selectedMenuKey === 'changepassword' ? 'white' : 'black',
-                  background: selectedMenuKey === 'changepassword' ? COLORS.primarygradient : 'white',
+                  color: selectedMenuKey === 'subdistributors' ? 'white' : 'black',
+                  background: selectedMenuKey === 'subdistributors' ? COLORS.primarygradient : 'white',
                   width: '100%',
                 }}
               >
-                Change Password
+                Sub Distributors
               </Menu.Item>
-            )} */}
+            )}
+               {props.userdata.role === 'distributor' && (
+              <Menu.Item
+                key="distributorsmerchants"
+                icon={<UserOutlined />}
+                style={{
+                  color: selectedMenuKey === 'distributorsmerchants' ? 'white' : 'black',
+                  background: selectedMenuKey === 'distributorsmerchants' ? COLORS.primarygradient : 'white',
+                  width: '100%',
+                }}
+              >
+                Merchants
+              </Menu.Item>
+            )}
+            {props.userdata.role === 'distributor' && (
+              <Menu.Item
+                key="distributortransaction"
+                icon={<DashboardOutlined />}
+                style={{
+                  color: selectedMenuKey === 'distributortransaction' ? 'white' : 'black',
+                  background: selectedMenuKey === 'distributortransaction' ? COLORS.primarygradient : 'white',
+                  width: '100%',
+                }}
+              >
+                Transaction History
+              </Menu.Item>
+            )}
+            {props.userdata.role === 'distributor' && (
+              <Menu.Item
+                key="distributorreports"
+                icon={<DashboardOutlined />}
+                style={{
+                  color: selectedMenuKey === 'distributorreports' ? 'white' : 'black',
+                  background: selectedMenuKey === 'distributorreports' ? COLORS.primarygradient : 'white',
+                  width: '100%',
+                }}
+              >
+                Reports
+              </Menu.Item>
+            )}
+            {props.userdata.role === 'distributor' && (
+              <Menu.Item
+                key="distributorsearchbundle"
+                icon={<CalendarOutlined />}
+                style={{
+                  color: selectedMenuKey === 'distributorsearchbundle' ? 'white' : 'black',
+                  background: selectedMenuKey === 'distributorsearchbundle' ? COLORS.primarygradient : 'white',
+                  width: '100%',
+                }}
+              >
+                Search Bundle
+              </Menu.Item>
+            )}
           </Menu>
           <Button
             icon={<LogoutOutlined />}

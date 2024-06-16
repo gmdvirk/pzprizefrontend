@@ -246,11 +246,11 @@ const EditProductForm = ({selectedProduct,setSelectedProduct,payment,setPayment}
   </Card>
   <Card
       title="Withdraw Cash"
-      headStyle={{ backgroundColor: '#e62e00', borderColor: '#e62e00' }}
+      headStyle={{ backgroundColor: '#cc0000', borderColor: '#cc0000' }}
       style={{ 
         boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)', 
         marginTop: 20, 
-        borderColor: '#e62e00', 
+        borderColor: '#cc0000', 
         borderWidth: 2
       }}>
      <Form form={form1} onFinish={onFinish1} layout="vertical">

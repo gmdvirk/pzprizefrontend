@@ -29,7 +29,7 @@ const navigate=useNavigate();
   };
   const Alltabs=[
     {
-        label:"All Subdistributors",
+        label:"All Merchants",
         key:"alldistributors",
         children: <AllUsers
         userdata={userdata}
@@ -38,7 +38,7 @@ const navigate=useNavigate();
         />
     },
     {
-        label:"Add Subdistributor",
+        label:"Add Merchant",
         key:"adddistributors",
         children: <AddUserForm
         userdata={userdata}
@@ -169,7 +169,7 @@ const navigate=useNavigate();
     <div style={!isMobile?mainStyle:{}}>
     <div style={!isMobile?layoutStyle:{}}>
     <div style={!isMobile?sidebarStyle:{}}>
-    <AdminSideBar label={"subdistributors"} userdata={userdata}/>
+    <AdminSideBar label={"distributorsmerchants"} userdata={userdata}/>
     </div>
       <div style={{
 
@@ -182,7 +182,7 @@ marginBottom:20,
       <div style={contentStyle}>
 
      <Card
-      title="Sub distributors"
+      title="Merchants"
       style={{ boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)' }}
     >
      <Tabs
