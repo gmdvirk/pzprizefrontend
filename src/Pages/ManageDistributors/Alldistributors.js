@@ -85,9 +85,11 @@ const ProductTable = ({ products, setProducts,userdata }) => {
   };
   const handleCreditOpen=()=>{
     setCreditopen(true)
+    setCashopen(false)
   }
   const handleCashOpen=()=>{
     setCashopen(true)
+    setCreditopen(false)
   }
 
   const handleDeleteConfirmationCancel = () => {
@@ -316,8 +318,14 @@ color: "white"
     {
       title: 'Balance Upline',
       dataIndex: 'balanceupline',
-      key: 'username',
-      ...getColumnSearchProps('username'),
+      key: 'balanceupline',
+      ...getColumnSearchProps('balanceupline'),
+      render: (balanceupline) => (
+        <span style={{ color: balanceupline < 0? 'red' : 'green' }}>
+          
+          {balanceupline}
+        </span>
+      ),
     },
     {
       title: 'Date',
@@ -456,7 +464,8 @@ color: "white"
     // Add username and subtitle with date range
     doc.setFontSize(12);
     if (selectedProduct && selectedProduct.username) {
-      doc.text(`User: ${selectedProduct.username}`, 14, 30);
+      doc.text(`User: ${selectedProduct.name}`, 14, 30);
+      doc.text(`Username: ${selectedProduct.username}`, 80, 30);
     }
     doc.text(`Report from ${startdate} to ${enddate}`, 14, 36);
   
@@ -544,24 +553,7 @@ color: "white"
         
         {renderProductSelection()}
       </Modal>
-      <Modal
-        title="Credit manager"
-        visible={creditopen}
-        onCancel={() => setCreditopen(false)}
-        footer={null}
-      >
-        
-        <Creditmanager  selectedProduct={selectedProduct} setSelectedProduct={setSelectedProduct} payment={payment} setPayment={setPayment}/>
-      </Modal>
-      <Modal
-        title="Cash manager"
-        visible={cashopen}
-        onCancel={() => setCashopen(false)}
-        footer={null}
-      >
-        
-        <Cashmanager selectedProduct={selectedProduct} setSelectedProduct={setSelectedProduct} payment={payment} setPayment={setPayment} />
-      </Modal>
+     
       <Modal
         title="Payment"
         visible={deleteConfirmationVisible}
@@ -584,31 +576,7 @@ color: "white"
         ]}
       >
         {selectedProduct&&selectedProduct.payment && <Stats data={selectedProduct.payment}/>}
-        <Button
-          icon={<DollarCircleFilled/>}
-            key="cash"
-            onClick={handleCashOpen}
-            style={{
-              borderRadius: 10,
-              background: COLORS.primarygradient,
-              color: 'white',
-            }}
-          >
-            Cash
-          </Button>
-          {' '}
-          <Button
-          icon={<CreditCardFilled/>}
-            key="credit"
-            onClick={handleCreditOpen}
-            style={{
-              borderRadius: 10,
-              background: COLORS.editgradient,
-              color: 'white',
-            }}
-          >
-            Credit
-          </Button>
+    
           
           <Form form={form} onFinish={onFinish} layout="vertical">
   <Row gutter={16}>
@@ -643,6 +611,34 @@ color: "white"
       scroll={{ x: true }} // Enable horizontal scrolling
       responsive={true} // Enable responsive behavior
       />
+          <Button
+          icon={<DollarCircleFilled/>}
+            key="cash"
+            onClick={handleCashOpen}
+            style={{
+              borderRadius: 10,
+              background: COLORS.primarygradient,
+              color: 'white',
+            }}
+          >
+            Cash
+          </Button>
+          {' '}
+          <Button
+          icon={<CreditCardFilled/>}
+            key="credit"
+            onClick={handleCreditOpen}
+            style={{
+              borderRadius: 10,
+              background: COLORS.editgradient,
+              color: 'white',
+            }}
+          >
+            Credit
+          </Button>
+               
+       {creditopen&& <Creditmanager  selectedProduct={selectedProduct} setSelectedProduct={setSelectedProduct} payment={payment} setPayment={setPayment}/>}
+   {cashopen&& <Cashmanager selectedProduct={selectedProduct} setSelectedProduct={setSelectedProduct} payment={payment} setPayment={setPayment} />}
       </Modal>
 
     </>

@@ -1,5 +1,5 @@
 import React, { useState, useEffect,useRef } from 'react';
-import { Form, Input, Button, Select, Space,Modal, Upload,Card,Table, message, Col, Row, DatePicker,Spin } from 'antd';
+import { Form, Input, Button, Select,Card, Space,Modal, Upload,Table, message, Col, Row, DatePicker,Spin } from 'antd';
 import { v4 as uuidv4 } from 'uuid';
 import Highlighter from 'react-highlight-words';
 import COLORS from '../../colors';
@@ -10,6 +10,7 @@ const { Option } = Select;
 
 const EditProductForm = ({selectedProduct,setSelectedProduct,payment,setPayment}) => {
   const [form] = Form.useForm();
+  const [form1] = Form.useForm();
   const [modalVisible, setModalVisible] = useState(false);
   const [successModalVisible, setSuccessModalVisible] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -22,10 +23,11 @@ const EditProductForm = ({selectedProduct,setSelectedProduct,payment,setPayment}
 
 
   const onFinish = async (values) => {
+    values.type="Draw";
     setLoading(true)
     try {
       if(values.type==="Withdraw"&&(Number(values.amount)>(Number(selectedProduct.payment.cash)+Number(selectedProduct.payment.credit)))){
-        setErrormessage("You can not with draw more than the available balance")
+        setErrormessage(`You can not with draw more than the available balance that is :${Number(selectedProduct.payment.cash)+Number(selectedProduct.payment.credit)}`)
         setErrorModalVisible(true)
        setLoading(false) 
         return;
@@ -78,6 +80,64 @@ const EditProductForm = ({selectedProduct,setSelectedProduct,payment,setPayment}
 
     setLoading(false)
   };
+  const onFinish1 = async (values) => {
+    values.type="Withdraw";
+    setLoading(true)
+    try {
+      if(values.type==="Withdraw"&&(Number(values.amount)>(Number(selectedProduct.payment.cash)+Number(selectedProduct.payment.credit)))){
+        setErrormessage(`You can not with draw more than the available balance that is :${Number(selectedProduct.payment.cash)+Number(selectedProduct.payment.credit)}`)
+        setErrorModalVisible(true)
+       setLoading(false) 
+        return;
+      }
+      else{
+        const token = localStorage.getItem('token');
+      
+      if (!token) {
+        console.error('Token not found in local storage');
+        
+        return;
+      }
+      const response = await fetch('http://localhost:3001/payment/addcash', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          token: token,
+        },
+        body: JSON.stringify({
+          id:selectedProduct._id,
+          ...values
+        }),
+      });
+      if (response.ok) {
+        const userData = await response.json();
+        let tempobj={...userData.payment};
+        let temp=[...payment];
+        temp.push(tempobj)
+        setPayment(temp)
+        let tempobj1={...selectedProduct,payment:{
+          cash:tempobj.cash,
+          credit:tempobj.credit,
+          balanceupline:tempobj.balanceupline
+        }}
+        setSelectedProduct(tempobj1)
+        form1.resetFields();
+        setMessage("The transaction was successful.")
+      setSuccessModalVisible(true)
+      } else {
+        const userData = await response.json();
+        alert(userData.Message)
+      }
+
+      }
+      
+    }catch(error){
+      setErrormessage(error.message)
+      setErrorModalVisible(true)
+    }
+
+    setLoading(false)
+  };
 
   const handleSuccessModalOk = () => {
     setSuccessModalVisible(false);
@@ -96,29 +156,25 @@ const EditProductForm = ({selectedProduct,setSelectedProduct,payment,setPayment}
         <div className="content" />
           </Spin>
       </div>):
+      <>
+      <Card
+      title="Draw Cash"
+       headStyle={{ backgroundColor: '#33cc33', borderColor: '#33cc33' }}
+      style={{ 
+        boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)', 
+        marginTop: 20, 
+        borderColor: '#33cc33', 
+        borderWidth: 2
+      }}>
      <Form form={form} onFinish={onFinish} layout="vertical">
     <Row gutter={16}>
     
-       <Col xs={24} sm={24}>
+       <Col xs={24} sm={12}>
        <Form.Item name="description" label="Description" rules={[{ required: true, message: 'Please enter a description' }]}>
          <Input placeholder="Enter description" />
        </Form.Item>
        </Col>
-       <Col xs={24} sm={24}>
-      <Form.Item
-      label={"Select TX Type"}
-                    name={ 'type'}
-                      rules={[{ required: true, message: 'Please select' }]}
-                      className="flex-item"
-                      fieldKey={ 'type'}
-                    >
-                      <Select placeholder="Select type" >
-                        <Option value={"Draw"}>Draw</Option>
-                        <Option value={"Withdraw"}>Withdraw</Option>
-                      </Select>
-                    </Form.Item>
-                    </Col>
-       <Col xs={24} sm={24}>
+       <Col xs={24} sm={12}>
        <Form.Item name="amount" label="Amount" rules={[{ required: true, message: 'Please enter amount' }]}>
          <Input placeholder="Enter amount" />
        </Form.Item>
@@ -134,7 +190,7 @@ const EditProductForm = ({selectedProduct,setSelectedProduct,payment,setPayment}
                     }}
                     icon={<SaveFilled/>}
                     htmlType="submit">
-      Add Payment
+      Draw Cash
     </Button>
   </Form.Item>
 
@@ -186,7 +242,49 @@ const EditProductForm = ({selectedProduct,setSelectedProduct,payment,setPayment}
       {errormessage}
     </Modal>
 
-  </Form>}
+  </Form>
+  </Card>
+  <Card
+      title="Withdraw Cash"
+      headStyle={{ backgroundColor: '#e62e00', borderColor: '#e62e00' }}
+      style={{ 
+        boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)', 
+        marginTop: 20, 
+        borderColor: '#e62e00', 
+        borderWidth: 2
+      }}>
+     <Form form={form1} onFinish={onFinish1} layout="vertical">
+    <Row gutter={16}>
+    
+       <Col xs={24} sm={12}>
+       <Form.Item name="description" label="Description" rules={[{ required: true, message: 'Please enter a description' }]}>
+         <Input placeholder="Enter description" />
+       </Form.Item>
+       </Col>
+       <Col xs={24} sm={12}>
+       <Form.Item name="amount" label="Amount" rules={[{ required: true, message: 'Please enter amount' }]}>
+         <Input placeholder="Enter amount" />
+       </Form.Item>
+       </Col>
+       
+       </Row>
+     
+  <Form.Item>
+    <Button   style={{
+          borderRadius:10,
+              background: COLORS.primarygradient,
+              color:"white"
+                    }}
+                    icon={<SaveFilled/>}
+                    htmlType="submit">
+      Withdraw Cash
+    </Button>
+  </Form.Item>
+  </Form>
+  </Card>
+  </>
+  }
+  
   </div>
   );
 };
