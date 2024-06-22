@@ -54,7 +54,7 @@ const navigate=useNavigate();
     if (response.ok) {
       const userData = await response.json();
       setUserdata(userData.data)
-      const response1 = await fetch(`http://localhost:3001/payment/getpaymentsbyid/${userData.data._id}`, {
+      const response1 = await fetch(`http://localhost:3001/payment/getmypayments`, {
         method: 'GET',
         headers: {
           token: `${token}`,

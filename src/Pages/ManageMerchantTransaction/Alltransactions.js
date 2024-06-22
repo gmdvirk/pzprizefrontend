@@ -2,25 +2,15 @@ import { CiCircleFilled, CloseCircleFilled, CreditCardFilled, DeleteFilled, Doll
 import React, { useState, useRef } from 'react';
 import Highlighter from 'react-highlight-words';
 import { Form,Button, Input, Space,Select,Tabs, Table,Col, Row ,Modal,Spin} from 'antd';
-import AddUserForm from './Editdistributor';
-import EditComission from "./Editcomission"
-import Editprize from "./EditPrize"
-import EditLimit from "./EditLimit"
-import Editpurchase from "./Editpurchase"
 import COLORS from '../../colors';
-import Cashmanager from "./Cashmanager"
-import Creditmanager from "./Creditmanager"
-import Loginasanother from "./Loginasanother"
-import Stats from "./Stats"
 import jsPDF from 'jspdf';
-import { useNavigate } from 'react-router';
 import 'jspdf-autotable';
 
 const { Option } = Select;
 const { TabPane } = Tabs;
 
 
-const ProductTable = ({ products, setProducts,userdata }) => {
+const ProductTable = ({ payment, setPayment,userdata }) => {
   const [form] = Form.useForm();
   const [visible, setVisible] = useState(false);
   const [visibledetail, setVisibleDetail] = useState(false);
@@ -28,17 +18,13 @@ const ProductTable = ({ products, setProducts,userdata }) => {
   const [loading,setLoading]=useState(false)
   const [transactionhistory,setTransactionhistory]=useState([])
   const [visiblechange, setVisibleChange] = useState(false);
-  const [loginvisible,setLoginVisible] = useState(false)
   const [searchText, setSearchText] = useState('');
   const [creditopen,setCreditopen] = useState(false)
   const [cashopen,setCashopen] = useState(false)
   const [searchedColumn, setSearchedColumn] = useState('');
-  const [payment, setPayment] = useState([]);
-  const navigate=useNavigate()
   const searchInput = useRef(null);
   const [deleteConfirmationVisible, setDeleteConfirmationVisible] = useState(false); // New state for delete confirmation
   function getDateAndTime(isoString) {
-    
     // Parse the ISO 8601 string into a Date object
     const dateObj = new Date(isoString);
 
@@ -116,10 +102,6 @@ const ProductTable = ({ products, setProducts,userdata }) => {
     // setFilteredInfo({});
     // setSortedInfo({});
   };
-  const handleLoginasanother =(record)=>{
-    setSelectedProduct(record);
-    setLoginVisible(true);
-  }
 
   const getColumnSearchProps = (dataIndex) => ({
     filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters, close }) => (
@@ -208,89 +190,7 @@ const ProductTable = ({ products, setProducts,userdata }) => {
         text
       ),
   });
-  const columns = [
-    {
-      title: 'Name',
-      dataIndex: 'name',
-      key: 'name',
-      ...getColumnSearchProps('name'),
-    },
-    // {
-    //   title: 'Contact',
-    //   dataIndex: 'contact',
-    //   key: 'contact',
-    //   ...getColumnSearchProps('contact'),
-    // },
-    {
-      title: 'Username',
-      dataIndex: 'username',
-      key: 'username',
-      ...getColumnSearchProps('username'),
-    },
-    {
-      title: 'Role',
-      dataIndex: 'role',
-      key: 'role',
-      ...getColumnSearchProps('role'),
-    },
-    // {
-    //     title: 'Username',
-    //     dataIndex: 'username',
-    //     key: 'username',
-    //     ...getColumnSearchProps('username'),
-    //   },
-    // {
-    //   title: 'Security Deposit',
-    //   dataIndex: 'security',
-    //   key: 'security',
-    //   sorter: (a, b) => a.security - b.security,
-    // },
-    {
-      title: 'Actions',
-      key: 'actions',
-      render: (_, record) => (
-        <Space size="middle">
-       <Button
-          icon={<EditFilled/>}
-          style={{
-
-borderRadius: 10,
-background: COLORS.editgradient,
-color: "white"
-          }} onClick={() => handleEdit(record)}>
-            Edit
-          </Button>
-       <Button
-          icon={<InfoCircleFilled/>}
-          style={{
-
-borderRadius: 10,
-background: COLORS.primarygradient,
-color: "white"
-          }} onClick={() => handleDetail(record)}>Detail</Button>
-      <Button
-            icon={<DollarCircleFilled />}
-            style={{
-              borderRadius: 10,
-              background: COLORS.detailgradient,
-              color: 'white',
-            }}
-            onClick={() => showDeleteConfirmationModal(record)}
-          >
-            Payment
-          </Button>
-          <Button
-          icon={<InfoCircleFilled/>}
-          style={{
-
-borderRadius: 10,
-background: COLORS.primarygradient,
-color: "white"
-          }} onClick={() => handleLoginasanother(record)}>Login</Button>
-        </Space>
-      ),
-    },
-  ];
+  
   const paymentcolumns = [
     {
       title: 'Amount',
@@ -314,7 +214,7 @@ color: "white"
           ) : (
             <PlusCircleFilled style={{ color: 'green' }} />
           )}{' '}
-          {type}
+          {type.toUpperCase()}
         </span>
       ),
     },
@@ -358,7 +258,6 @@ color: "white"
       key: 'description',
       ...getColumnSearchProps('description'),
     },
-    
   ];
   const handleEdit = (product) => {
     setSelectedProduct(product);
@@ -367,123 +266,14 @@ color: "white"
 
   const handleDetail = (record) => {
     setSelectedProduct(record);
-    navigate(`/detail/${record._id}`)
-    // setVisibleDetail(true);
+    setVisibleDetail(true);
   };
 
   const handleClose = () => {
     setVisibleDetail(false);
     setSelectedProduct(null);
   };
-  const renderProductSelection = () => {
-    const renderGeneral = () => (
-      <AddUserForm
-          initialValues={selectedProduct}
-          userdata={userdata}
-          onCancel={() => setVisible(false)}
-          setProducts={setProducts}
-          products={products}
-        />
-    );
-    const renderLimit = () => (
-      <EditLimit
-      initialValues={selectedProduct}
-      userdata={userdata}
-      onCancel={() => setVisible(false)}
-      setProducts={setProducts}
-      products={products}
-    />
-    );
-    const renderComission = () => (
-      <EditComission
-      initialValues={selectedProduct}
-      userdata={userdata}
-      onCancel={() => setVisible(false)}
-      setProducts={setProducts}
-      products={products}
-    />
-  );
-    const renderPrize = () => (
-      <Editprize
-      initialValues={selectedProduct}
-      userdata={userdata}
-      onCancel={() => setVisible(false)}
-      setProducts={setProducts}
-      products={products}
-    />
-  );
-    const renderPusrchase = () => (
-      <Editpurchase
-      initialValues={selectedProduct}
-      userdata={userdata}
-      onCancel={() => setVisible(false)}
-      setProducts={setProducts}
-      products={products}
-    />
-    );
-    return (
-      <Tabs defaultActiveKey="mobile" type="card">
-      <TabPane tab="Comission Settings" key="comission">
-        {renderComission()}
-      </TabPane>
-      <TabPane tab="Limit Cutting" key="limit">
-        {renderLimit()}
-      </TabPane>
-      <TabPane tab="General Info" key="general">
-        {renderGeneral()}
-      </TabPane>
-      <TabPane tab="Prize Setting" key="prize">
-        {renderPrize()}
-      </TabPane>
-      <TabPane tab="Purchase Limit" key="purchase">
-        {renderPusrchase()}
-      </TabPane>
-    </Tabs>
-    );
-  };
-  const renderProductSelection1 = () => {
-    const renderGeneral = () => (
-      <AddUserForm
-          initialValues={selectedProduct}
-          userdata={userdata}
-          onCancel={() => setVisible(false)}
-          setProducts={setProducts}
-          products={products}
-        />
-    );
-    const renderComission = () => (
-      <EditComission
-      initialValues={selectedProduct}
-      userdata={userdata}
-      onCancel={() => setVisible(false)}
-      setProducts={setProducts}
-      products={products}
-    />
-  );
-    const renderPrize = () => (
-      <Editprize
-      initialValues={selectedProduct}
-      userdata={userdata}
-      onCancel={() => setVisible(false)}
-      setProducts={setProducts}
-      products={products}
-    />
-  );
-  
-    return (
-      <Tabs defaultActiveKey="mobile" type="card">
-      <TabPane tab="Comission Settings" key="comission">
-        {renderComission()}
-      </TabPane>
-      <TabPane tab="General Info" key="general">
-        {renderGeneral()}
-      </TabPane>
-      <TabPane tab="Prize Setting" key="prize">
-        {renderPrize()}
-      </TabPane>
-    </Tabs>
-    );
-  };
+
   const onFinish = (values) => {
     const { startdate, enddate } = values;
     const filteredPayments = payment.filter((pay) => {
@@ -593,59 +383,9 @@ color: "white"
           </Spin>
       </div>): 
       <>
-      {/* {((userdata.role === "admin")||(userdata.accesses.findIndex((obj)=>obj==="customers"||obj==="customers-stats")!==-1)  )&&  <Statisticscard data={products}/>} */}
-      <Table columns={columns} dataSource={products} rowKey="id"
       
-      scroll={{ x: true }} // Enable horizontal scrolling
-      responsive={true} // Enable responsive behavior
-      />
       </>}
       </div>
-     
-
-      <Modal
-        title="Edit Customer"
-        visible={visible}
-        onCancel={() => setVisible(false)}
-        footer={null}
-        width={800}
-      >
-        
-        {renderProductSelection()}
-      </Modal>
-      <Modal
-        title="Log in as another person"
-        visible={loginvisible}
-        onCancel={() => setLoginVisible(false)}
-        footer={null}
-        width={800}
-      >
-     <Loginasanother selectedProduct={selectedProduct} userdata={userdata}/>
-      </Modal>
-      <Modal
-        title="Payment"
-        visible={deleteConfirmationVisible}
-        onOk={handleDeleteConfirmationOk}
-        onCancel={handleDeleteConfirmationCancel}
-        width={1000}
-        footer={[
-          <Button
-          icon={<CloseCircleFilled/>}
-            key="cancel"
-            onClick={handleDeleteConfirmationCancel}
-            style={{
-              borderRadius: 10,
-              background: COLORS.editgradient,
-              color: 'white',
-            }}
-          >
-            Cancel
-          </Button>
-        ]}
-      >
-        {selectedProduct&&selectedProduct.payment && <Stats data={selectedProduct.payment}/>}
-    
-          
           <Form form={form} onFinish={onFinish} layout="vertical">
   <Row gutter={16}>
     <Col xs={24} sm={12}>
@@ -674,42 +414,12 @@ color: "white"
   </Form.Item>
 </Form>
  
-       
-          <Button
-          icon={<DollarCircleFilled/>}
-            key="cash"
-            onClick={handleCashOpen}
-            style={{
-              borderRadius: 10,
-              background: COLORS.primarygradient,
-              color: 'white',
-            }}
-          >
-            Cash
-          </Button>
-          {' '}
-          <Button
-          icon={<CreditCardFilled/>}
-            key="credit"
-            onClick={handleCreditOpen}
-            style={{
-              borderRadius: 10,
-              background: COLORS.editgradient,
-              color: 'white',
-            }}
-          >
-            Credit
-          </Button>
-               
-       {creditopen&& <Creditmanager  selectedProduct={selectedProduct} setSelectedProduct={setSelectedProduct} payment={payment} setPayment={setPayment}/>}
-   {cashopen&& <Cashmanager selectedProduct={selectedProduct} setSelectedProduct={setSelectedProduct} payment={payment} setPayment={setPayment} />}
-   <Table columns={paymentcolumns} dataSource={payment} rowKey="id"
+          <Table columns={paymentcolumns} dataSource={payment} rowKey="id"
       
       scroll={{ x: true }} // Enable horizontal scrolling
       responsive={true} // Enable responsive behavior
       />
-      </Modal>
-
+ 
     </>
   );
 };

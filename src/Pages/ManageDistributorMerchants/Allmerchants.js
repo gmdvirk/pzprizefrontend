@@ -2,15 +2,12 @@ import { CiCircleFilled, CloseCircleFilled, CreditCardFilled, DeleteFilled, Doll
 import React, { useState, useRef } from 'react';
 import Highlighter from 'react-highlight-words';
 import { Form,Button, Input, Space,Select,Tabs, Table,Col, Row ,Modal,Spin} from 'antd';
-import AddUserForm from './Editdistributor';
+import AddUserForm from './Editmerchant';
 import EditComission from "./Editcomission"
 import Editprize from "./EditPrize"
-import EditLimit from "./EditLimit"
-import Editpurchase from "./Editpurchase"
 import COLORS from '../../colors';
 import Cashmanager from "./Cashmanager"
 import Creditmanager from "./Creditmanager"
-import Loginasanother from "./Loginasanother"
 import Stats from "./Stats"
 import jsPDF from 'jspdf';
 import { useNavigate } from 'react-router';
@@ -28,7 +25,6 @@ const ProductTable = ({ products, setProducts,userdata }) => {
   const [loading,setLoading]=useState(false)
   const [transactionhistory,setTransactionhistory]=useState([])
   const [visiblechange, setVisibleChange] = useState(false);
-  const [loginvisible,setLoginVisible] = useState(false)
   const [searchText, setSearchText] = useState('');
   const [creditopen,setCreditopen] = useState(false)
   const [cashopen,setCashopen] = useState(false)
@@ -116,10 +112,6 @@ const ProductTable = ({ products, setProducts,userdata }) => {
     // setFilteredInfo({});
     // setSortedInfo({});
   };
-  const handleLoginasanother =(record)=>{
-    setSelectedProduct(record);
-    setLoginVisible(true);
-  }
 
   const getColumnSearchProps = (dataIndex) => ({
     filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters, close }) => (
@@ -279,14 +271,7 @@ color: "white"
           >
             Payment
           </Button>
-          <Button
-          icon={<InfoCircleFilled/>}
-          style={{
-
-borderRadius: 10,
-background: COLORS.primarygradient,
-color: "white"
-          }} onClick={() => handleLoginasanother(record)}>Login</Button>
+    
         </Space>
       ),
     },
@@ -367,7 +352,7 @@ color: "white"
 
   const handleDetail = (record) => {
     setSelectedProduct(record);
-    navigate(`/detail/${record._id}`)
+    navigate(`/distributordetail/${record._id}`)
     // setVisibleDetail(true);
   };
 
@@ -385,15 +370,6 @@ color: "white"
           products={products}
         />
     );
-    const renderLimit = () => (
-      <EditLimit
-      initialValues={selectedProduct}
-      userdata={userdata}
-      onCancel={() => setVisible(false)}
-      setProducts={setProducts}
-      products={products}
-    />
-    );
     const renderComission = () => (
       <EditComission
       initialValues={selectedProduct}
@@ -412,64 +388,6 @@ color: "white"
       products={products}
     />
   );
-    const renderPusrchase = () => (
-      <Editpurchase
-      initialValues={selectedProduct}
-      userdata={userdata}
-      onCancel={() => setVisible(false)}
-      setProducts={setProducts}
-      products={products}
-    />
-    );
-    return (
-      <Tabs defaultActiveKey="mobile" type="card">
-      <TabPane tab="Comission Settings" key="comission">
-        {renderComission()}
-      </TabPane>
-      <TabPane tab="Limit Cutting" key="limit">
-        {renderLimit()}
-      </TabPane>
-      <TabPane tab="General Info" key="general">
-        {renderGeneral()}
-      </TabPane>
-      <TabPane tab="Prize Setting" key="prize">
-        {renderPrize()}
-      </TabPane>
-      <TabPane tab="Purchase Limit" key="purchase">
-        {renderPusrchase()}
-      </TabPane>
-    </Tabs>
-    );
-  };
-  const renderProductSelection1 = () => {
-    const renderGeneral = () => (
-      <AddUserForm
-          initialValues={selectedProduct}
-          userdata={userdata}
-          onCancel={() => setVisible(false)}
-          setProducts={setProducts}
-          products={products}
-        />
-    );
-    const renderComission = () => (
-      <EditComission
-      initialValues={selectedProduct}
-      userdata={userdata}
-      onCancel={() => setVisible(false)}
-      setProducts={setProducts}
-      products={products}
-    />
-  );
-    const renderPrize = () => (
-      <Editprize
-      initialValues={selectedProduct}
-      userdata={userdata}
-      onCancel={() => setVisible(false)}
-      setProducts={setProducts}
-      products={products}
-    />
-  );
-  
     return (
       <Tabs defaultActiveKey="mobile" type="card">
       <TabPane tab="Comission Settings" key="comission">
@@ -613,15 +531,7 @@ color: "white"
         
         {renderProductSelection()}
       </Modal>
-      <Modal
-        title="Log in as another person"
-        visible={loginvisible}
-        onCancel={() => setLoginVisible(false)}
-        footer={null}
-        width={800}
-      >
-     <Loginasanother selectedProduct={selectedProduct} userdata={userdata}/>
-      </Modal>
+     
       <Modal
         title="Payment"
         visible={deleteConfirmationVisible}

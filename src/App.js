@@ -11,7 +11,12 @@ import Distributorreports from "./Pages/DistributorReport"
 import Distributortransaction from "./Pages/DistributorTransactionHistory"
 import DistributorSearchBundle from "./Pages/DistributorSearchBundle"
 import DistributorMerchants from "./Pages/DistributorMerchants"
+import MerchantSearchBundle from "./Pages/MerchantSearchBundle"
+import MerchantTransaction from "./Pages/MerchantTransaction"
+import MerchantReport from "./Pages/Merchantreports"
 import AdminDetail from "./Pages/Detail"
+import MerchantHome from "./Pages/Merchant"
+import DistributorDetail from "./Pages/Distributordetail"
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 
 
@@ -27,12 +32,17 @@ const App = () => {
       <Route path="/distributortransaction" element={<Distributortransaction />} />
       <Route path="/distributorreports" element={<Distributorreports />} />
       <Route path="/distributorsearchbundle" element={<DistributorSearchBundle />} />
+      <Route path="/merchanttransaction" element={<MerchantTransaction />} />
+      <Route path="/merchantreports" element={<MerchantReport />} />
+      <Route path="/merchantsearchbundle" element={<MerchantSearchBundle />} />
+      <Route path="/merchant" element={<MerchantHome />} />
       <Route path="/admindraws" element={<AdminDraws />} />
       <Route path="/subdistributors" element={<Subdistributors />} />
       <Route path="/drawresults" element={<Drawresults />} />
       <Route path="/searchbundle" element={<Searchbundle />} />
       <Route path="/reports" element={<Reports />} />
       <Route path="/login" element={<LogIn />} />
+      <Route path="/distributordetail/:userId" element={<DistributorDetail />} />
       <Route path="/detail/:userId" element={<AdminDetail />} />
 
       {/* <Route path="/changepassword" element={<Changepassword />} /> */}

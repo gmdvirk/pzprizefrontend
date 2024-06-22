@@ -3,8 +3,9 @@ import React ,{useEffect,useState}from 'react';
 import { Tabs,Card,Spin } from 'antd';
 import AdminSideBar from "../components/AdminSidebar"
 import { useMedia } from 'react-use';
-import AllUsers from './ManageDistributorMerchants/Allmerchants'
-import AddUserForm from './ManageDistributorMerchants/Addmerchants';
+import BillSheet from './ManageMerchantReports/BillSheet'
+import TotalSale from "./ManageMerchantReports/TotalSale"
+import Totalsheetsave from "./ManageMerchantReports/Totalsheetsave"
 import { useNavigate } from 'react-router';
 
 import Noaccesspage from "./NoAccess"
@@ -26,34 +27,33 @@ const navigate=useNavigate();
   };
   const Alltabs=[
     {
-        label:"All Merchants",
+        label:"Total Sale",
         key:"alldistributors",
-        children: <AllUsers
+        children: <TotalSale
         userdata={userdata}
         products={employees}
         setProducts={setEmployees}
         />
     },
     {
-        label:"Add Merchant",
-        key:"adddistributors",
-        children: <AddUserForm
+        label:"Total Sheet Save",
+        key:"Total",
+        children: <Totalsheetsave
+        userdata={userdata}
+        products={employees}
+        setProducts={setEmployees}/>
+    },
+    {
+        label:"Bill Sheet",
+        key:"bill sheet",
+        children: <BillSheet
         userdata={userdata}
         products={employees}
         setProducts={setEmployees}/>
     }
+
+
   ]
-  function getSubstringBeforeAtSymbol(email) {
-    const atIndex = email.indexOf('@');
-    
-    if (atIndex !== -1) {
-      return email.substring(0, atIndex);
-      // or use slice: return email.slice(0, atIndex);
-    } else {
-      // handle the case where '@' is not present in the email
-      return 'Invalid email format';
-    }
-  }
   const listener = () => new Promise( async(resolve, reject) => {
     const token = localStorage.getItem('token');
     const response = await fetch(`http://localhost:3001/user/auth`, {
@@ -66,7 +66,7 @@ const navigate=useNavigate();
     if (response.ok) {
       const userData = await response.json();
       setUserdata(userData.data)
-      const response1 = await fetch(`http://localhost:3001/user/getallmyMerchants`, {
+      const response1 = await fetch(`http://localhost:3001/draw/`, {
         method: 'GET',
         headers: {
           token: `${token}`,
@@ -86,6 +86,7 @@ const navigate=useNavigate();
   useEffect(() => {
     listener()
   }, []);
+
 
   const sidebarStyle = {
     color: 'white',
@@ -122,7 +123,7 @@ const navigate=useNavigate();
     <div style={!isMobile?mainStyle:{}}>
     <div style={!isMobile?layoutStyle:{}}>
     <div style={!isMobile?sidebarStyle:{}}>
-    <AdminSideBar label={"distributorsmerchants"} userdata={userdata}/>
+    <AdminSideBar label={"merchantreports"} userdata={userdata}/>
     </div>
       <div style={{
 
@@ -135,7 +136,7 @@ marginBottom:20,
       <div style={contentStyle}>
 
      <Card
-      title="Merchants"
+      title="Reports"
       style={{ boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)' }}
     >
      <Tabs

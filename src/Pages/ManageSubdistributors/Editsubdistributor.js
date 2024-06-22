@@ -14,6 +14,8 @@ const EditProductForm = (props) => {
   const [successModalVisible, setSuccessModalVisible] = useState(false);
   const [loading, setLoading] = useState(false);
   const [errorModalVisible, setErrorModalVisible] = useState(false);
+  const [message, setMessage] = useState("");
+  const [errormessage, setErrorMessage] = useState("");
   const [product, setProduct] = useState(props.initialValues);
 
 
@@ -52,14 +54,18 @@ const EditProductForm = (props) => {
         const index=temp.findIndex((obj)=>obj._id===props.initialValues._id);
         temp[index]={...tempobj}
         props.setProducts(temp)
-        form.resetFields();
+        setMessage("Successfully Updated")
+        setSuccessModalVisible(true)
+        // form.resetFields();
       } else {
         const userData = await response.json();
-        alert(userData.Message)
+        setErrorMessage(userData.Message)
+        setErrorModalVisible(true)
       }
 
     }catch(error){
-      alert(error.message)
+      setErrorMessage(error.message)
+        setErrorModalVisible(true)
     }
 
     setLoading(false)
@@ -123,8 +129,8 @@ const EditProductForm = (props) => {
                        fieldKey={ 'blocked'}
                      >
                        <Select placeholder="Select Status type" >
-                         <Option value={true}>Active</Option>
-                         <Option value={false}>Deactive</Option>
+                        <Option value={false}>Active</Option>
+                        <Option value={true}>Deactive</Option>
                        </Select>
                      </Form.Item>
                      </Col>
@@ -175,7 +181,7 @@ const EditProductForm = (props) => {
         </Button>,
       ]}
     >
-      Customer editted successfully!
+      {message}
     </Modal>
   
  
@@ -186,7 +192,7 @@ const EditProductForm = (props) => {
       onOk={handleErrorModalOk}
       onCancel={handleErrorModalOk}
     >
-      Error editting customer. Please try again.
+      {errormessage}
     </Modal>
 
   </Form>}

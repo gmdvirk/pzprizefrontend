@@ -37,7 +37,7 @@ const AddProductForm = ({ setProducts,products}) => {
           token: token,
         },
         body: JSON.stringify({
-          role:"subdistributor",
+          role:"distributor",
           ...values
         }),
       });
@@ -81,44 +81,21 @@ const AddProductForm = ({ setProducts,products}) => {
        <Row gutter={16}>
        
       <Col xs={24} sm={8}>
-      <Form.Item name="username" label="Username" rules={[{ required: true, message: 'Please enter a username' }]}>
-        <Input placeholder="Enter Username" />
-      </Form.Item>
-      </Col>
-      <Col xs={24} sm={8}>
-      <Form.Item name="name" label="Name" rules={[{ required: true, message: 'Please enter a name' }]}>
-        <Input placeholder="Enter name" />
-      </Form.Item>
-      </Col>
-      <Col xs={24} sm={8}>
-      <Form.Item name="address" label="Customer Address" rules={[{ required: true, message: 'Please enter customer address' }]}>
-        <Input placeholder="Enter Customer Address" />
-      </Form.Item>
-      </Col>
-      </Row>
-      <Row gutter={16}>
-      
-      <Col xs={24} sm={8}>
-      <Form.Item name="password" label="Password" rules={[{ required: true, message: 'Please enter password' }]}>
-        <Input placeholder="Enter password" />
-      </Form.Item>
-      </Col>
-      <Col xs={24} sm={8}>
-      <Form.Item name="contact" label="Contact" rules={[{ required: true, message: 'Please enter contact' }]}>
-        <Input placeholder="Enter contact" />
+      <Form.Item name="date" label="Date" rules={[{ required: true, message: 'Please enter a date' }]}>
+        <Input type='date' placeholder="Enter Date" />
       </Form.Item>
       </Col>
       <Col xs={24} sm={8}>
       <Form.Item
-      label={"Status"}
-                    name={ 'blocked'}
-                      rules={[{ required: true, message: 'Please select Status' }]}
+      label={"Report"}
+                    name={ 'report'}
+                      rules={[{ required: true, message: 'Please select report' }]}
                       className="flex-item"
-                      fieldKey={ 'blocked'}
+                      fieldKey={ 'report'}
                     >
                       <Select placeholder="Select Status type" >
-                        <Option value={true}>Active</Option>
-                        <Option value={false}>Deactive</Option>
+                        <Option value={"withoutgroup"}>Without Group</Option>
+                        <Option value={"groupwise"}>Group Wise</Option>
                       </Select>
                     </Form.Item>
                     </Col>
@@ -131,7 +108,7 @@ const AddProductForm = ({ setProducts,products}) => {
                       }}
                       icon={<SaveFilled/>}
                       htmlType="submit">
-        Save Subdistributor
+        Get Report
       </Button>
     </Form.Item>
 

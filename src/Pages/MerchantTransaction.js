@@ -3,8 +3,7 @@ import React ,{useEffect,useState}from 'react';
 import { Tabs,Card,Spin } from 'antd';
 import AdminSideBar from "../components/AdminSidebar"
 import { useMedia } from 'react-use';
-import AllUsers from './ManageDistributorMerchants/Allmerchants'
-import AddUserForm from './ManageDistributorMerchants/Addmerchants';
+import AllUsers from './ManageMerchantTransaction/Alltransactions'
 import { useNavigate } from 'react-router';
 
 import Noaccesspage from "./NoAccess"
@@ -12,6 +11,7 @@ import Noaccesspage from "./NoAccess"
 const AdminHomePage = () => {
 const navigate=useNavigate();
   const [employees, setEmployees] = useState([]);
+  const [payment, setPayment] = useState([]);
   const [loading, setLoading] = useState(true);
   const [userdata,setUserdata]=useState(null)
   const [noaccess,setNoaccess]=useState(false)
@@ -21,39 +21,27 @@ const navigate=useNavigate();
   if(isMobile){
     marginLeft=10
   }
-  const onChange = (key) => {
-   
-  };
-  const Alltabs=[
-    {
-        label:"All Merchants",
-        key:"alldistributors",
-        children: <AllUsers
-        userdata={userdata}
-        products={employees}
-        setProducts={setEmployees}
-        />
-    },
-    {
-        label:"Add Merchant",
-        key:"adddistributors",
-        children: <AddUserForm
-        userdata={userdata}
-        products={employees}
-        setProducts={setEmployees}/>
-    }
-  ]
-  function getSubstringBeforeAtSymbol(email) {
-    const atIndex = email.indexOf('@');
+  function getDateAndTime(isoString) {
+    // Parse the ISO 8601 string into a Date object
+    const dateObj = new Date(isoString);
+
+    // Extract the date components
+    const year = dateObj.getUTCFullYear();
+    const month = String(dateObj.getUTCMonth() + 1).padStart(2, '0');
+    const day = String(dateObj.getUTCDate()).padStart(2, '0');
     
-    if (atIndex !== -1) {
-      return email.substring(0, atIndex);
-      // or use slice: return email.slice(0, atIndex);
-    } else {
-      // handle the case where '@' is not present in the email
-      return 'Invalid email format';
-    }
-  }
+    // Extract the time components
+    const hours = String(dateObj.getUTCHours()).padStart(2, '0');
+    const minutes = String(dateObj.getUTCMinutes()).padStart(2, '0');
+    const seconds = String(dateObj.getUTCSeconds()).padStart(2, '0');
+    const milliseconds = String(dateObj.getUTCMilliseconds()).padStart(3, '0');
+
+    // Format the date and time
+    const date = `${year}-${month}-${day}`;
+    const time = `${hours}:${minutes}:${seconds}`;
+
+    return { date, time };
+}
   const listener = () => new Promise( async(resolve, reject) => {
     const token = localStorage.getItem('token');
     const response = await fetch(`http://localhost:3001/user/auth`, {
@@ -66,15 +54,22 @@ const navigate=useNavigate();
     if (response.ok) {
       const userData = await response.json();
       setUserdata(userData.data)
-      const response1 = await fetch(`http://localhost:3001/user/getallmyMerchants`, {
+      const response1 = await fetch(`http://localhost:3001/payment/getpaymentsbyid/${userData.data._id}`, {
         method: 'GET',
         headers: {
           token: `${token}`,
         },
       });
+  
       if (response1.ok) {
-        const userData1 = await response1.json();
-        setEmployees(userData1)
+        let userData = await response1.json();
+        for (let i=0;i<userData.length;i++){
+          const { date, time } = getDateAndTime(userData[i].createdAt);
+          userData[i].time= time ;
+          userData[i].date=date
+        } 
+       
+        setPayment(userData)
       }
     } else {
       console.error('Failed to fetch user data:', response.statusText);
@@ -86,6 +81,7 @@ const navigate=useNavigate();
   useEffect(() => {
     listener()
   }, []);
+
 
   const sidebarStyle = {
     color: 'white',
@@ -122,7 +118,7 @@ const navigate=useNavigate();
     <div style={!isMobile?mainStyle:{}}>
     <div style={!isMobile?layoutStyle:{}}>
     <div style={!isMobile?sidebarStyle:{}}>
-    <AdminSideBar label={"distributorsmerchants"} userdata={userdata}/>
+    <AdminSideBar label={"merchanttransaction"} userdata={userdata}/>
     </div>
       <div style={{
 
@@ -135,20 +131,14 @@ marginBottom:20,
       <div style={contentStyle}>
 
      <Card
-      title="Merchants"
+      title="Transaction History"
       style={{ boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)' }}
     >
-     <Tabs
-    onChange={onChange}
-    type="card"
-    items={Alltabs.map((element, i) => {
-      return {
-        label: element.label,
-        key: element.key,
-        children: element.children,
-      };
-    })}
-  />
+   <AllUsers
+        userdata={userdata}
+        payment={payment}
+        setPayment={setPayment}
+        />
   </Card>
 
  </div>

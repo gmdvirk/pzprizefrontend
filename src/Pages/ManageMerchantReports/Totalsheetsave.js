@@ -37,7 +37,7 @@ const AddProductForm = ({ setProducts,products}) => {
           token: token,
         },
         body: JSON.stringify({
-          role:"subdistributor",
+          role:"distributor",
           ...values
         }),
       });
@@ -78,51 +78,56 @@ const AddProductForm = ({ setProducts,products}) => {
           <p>Please Wait...</p>
         </div>):
     <Form form={form} onFinish={onFinish} layout="vertical">
-       <Row gutter={16}>
-       
-      <Col xs={24} sm={8}>
-      <Form.Item name="username" label="Username" rules={[{ required: true, message: 'Please enter a username' }]}>
-        <Input placeholder="Enter Username" />
-      </Form.Item>
-      </Col>
-      <Col xs={24} sm={8}>
-      <Form.Item name="name" label="Name" rules={[{ required: true, message: 'Please enter a name' }]}>
-        <Input placeholder="Enter name" />
-      </Form.Item>
-      </Col>
-      <Col xs={24} sm={8}>
-      <Form.Item name="address" label="Customer Address" rules={[{ required: true, message: 'Please enter customer address' }]}>
-        <Input placeholder="Enter Customer Address" />
-      </Form.Item>
-      </Col>
-      </Row>
       <Row gutter={16}>
-      
-      <Col xs={24} sm={8}>
-      <Form.Item name="password" label="Password" rules={[{ required: true, message: 'Please enter password' }]}>
-        <Input placeholder="Enter password" />
-      </Form.Item>
-      </Col>
-      <Col xs={24} sm={8}>
-      <Form.Item name="contact" label="Contact" rules={[{ required: true, message: 'Please enter contact' }]}>
-        <Input placeholder="Enter contact" />
-      </Form.Item>
-      </Col>
-      <Col xs={24} sm={8}>
-      <Form.Item
-      label={"Status"}
-                    name={ 'blocked'}
-                      rules={[{ required: true, message: 'Please select Status' }]}
-                      className="flex-item"
-                      fieldKey={ 'blocked'}
-                    >
-                      <Select placeholder="Select Status type" >
-                        <Option value={true}>Active</Option>
-                        <Option value={false}>Deactive</Option>
-                      </Select>
-                    </Form.Item>
-                    </Col>
-     </Row>
+       
+       <Col xs={24} sm={12}>
+       <Form.Item name="date" label="Date" rules={[{ required: true, message: 'Please enter a date' }]}>
+         <Input type='date' placeholder="Enter Date" />
+       </Form.Item>
+       </Col>
+       <Col xs={24} sm={12}>
+       <Form.Item
+       label={"Dealer"}
+                     name={ 'dealer'}
+                       rules={[{ required: true, message: 'Please select dealer' }]}
+                       className="flex-item"
+                       fieldKey={ 'dealer'}
+                     >
+                       <Select placeholder="Select dealer" >
+                         <Option value={"dealer1"}>dealer 1</Option>
+                         <Option value={"dealer2"}>dealer 2</Option>
+                       </Select>
+                     </Form.Item>
+                     </Col>
+       <Col xs={24} sm={12}>
+       <Form.Item
+       label={"Report"}
+                     name={ 'report'}
+                       rules={[{ required: true, message: 'Please select report' }]}
+                       className="flex-item"
+                       fieldKey={ 'report'}
+                     >
+                       <Select placeholder="Select Status type" >
+                         <Option value={"withoutgroup"}>Without Group</Option>
+                         <Option value={"groupwise"}>Group Wise</Option>
+                       </Select>
+                     </Form.Item>
+                     </Col>
+                     <Col xs={24} sm={12}>
+       <Form.Item
+       label={"Limit Type"}
+                     name={ 'limittype'}
+                       rules={[{ required: true, message: 'Please select limit type' }]}
+                       className="flex-item"
+                       fieldKey={ 'limittype'}
+                     >
+                       <Select placeholder="Select limit type" >
+                         <Option value={"uplimit"}>Up Limit</Option>
+                         <Option value={"downlimit"}>Down Limit</Option>
+                       </Select>
+                     </Form.Item>
+                     </Col>
+      </Row>
     <Form.Item>
       <Button   style={{
             borderRadius:10,
@@ -131,7 +136,17 @@ const AddProductForm = ({ setProducts,products}) => {
                       }}
                       icon={<SaveFilled/>}
                       htmlType="submit">
-        Save Subdistributor
+        Report
+      </Button>
+      {" "}
+      <Button   style={{
+            borderRadius:10,
+                background: COLORS.primarygradient,
+                color:"white"
+                      }}
+                      icon={<SaveFilled/>}
+                      htmlType="submit">
+        Admin Bill Sheet
       </Button>
     </Form.Item>
 

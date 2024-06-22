@@ -5,10 +5,7 @@ import AdminSideBar from "../components/AdminSidebar"
 import { useMedia } from 'react-use';
 import AllUsers from './ManageSubdistributors/Allsubdistributors'
 import AddUserForm from './ManageSubdistributors/Addsubdistributors';
-import { db } from '../firebase-config';
-import { getDocs,collection,doc,getDoc } from 'firebase/firestore';
 import { useNavigate } from 'react-router';
-import { auth } from '../firebase-config1';
 
 import Noaccesspage from "./NoAccess"
 
@@ -46,17 +43,7 @@ const navigate=useNavigate();
         setProducts={setEmployees}/>
     }
   ]
-  function getSubstringBeforeAtSymbol(email) {
-    const atIndex = email.indexOf('@');
-    
-    if (atIndex !== -1) {
-      return email.substring(0, atIndex);
-      // or use slice: return email.slice(0, atIndex);
-    } else {
-      // handle the case where '@' is not present in the email
-      return 'Invalid email format';
-    }
-  }
+
   const listener = () => new Promise( async(resolve, reject) => {
     const token = localStorage.getItem('token');
     const response = await fetch(`http://localhost:3001/user/auth`, {
@@ -69,7 +56,7 @@ const navigate=useNavigate();
     if (response.ok) {
       const userData = await response.json();
       setUserdata(userData.data)
-      const response1 = await fetch(`http://localhost:3001/user/`, {
+      const response1 = await fetch(`http://localhost:3001/user/getallmysubdistributors`, {
         method: 'GET',
         headers: {
           token: `${token}`,
@@ -90,50 +77,7 @@ const navigate=useNavigate();
     listener()
   }, []);
 
-  const getAllEmployees=async()=>{
-    try{
-      const userinfo = await listener();
-  
-      if (userinfo) {
-        const result = getSubstringBeforeAtSymbol(userinfo.email);
-        const q = doc(db, "Users", result);
-        const querySnapshot = await getDoc(q);
-  
-        if (querySnapshot.exists()) {
-          if(querySnapshot.data().newpassword===""){
-            if((querySnapshot.data().role==="admin")){
-              setUserdata(querySnapshot.data());
-            }else{
-              setNoaccess(true)
-            }
-          }
-          else{
-            await auth.signOut();
-          }
-        
-        } else {
-          await auth.signOut();
-        }
-      } else {
-        navigate("/login");
-      }
-        const empref=collection(db,"Users");
-        const querySnapshot=await getDocs(empref)
-        let tempemplyees=[]
-        querySnapshot.forEach((element,index)=>{
-          if(element.data().role!=="admin"){
-            tempemplyees.push(element.data())
-          }
-        })
-        setEmployees(tempemplyees)
-        setLoading(false)
-        }catch(error){
-            alert(error.message)
-        }
-  }
-//   useEffect(() => {
-//     getAllEmployees()
-//   }, []);
+
   const sidebarStyle = {
     color: 'white',
     width: '260px',

@@ -19,6 +19,7 @@ const EditProductForm = ({selectedProduct,setSelectedProduct,payment,setPayment}
   const [message,setMessage]=useState("")
   // const [product, setProduct] = useState(props.initialValues);
 
+
   function getDateAndTime(isoString) {
     
     // Parse the ISO 8601 string into a Date object
@@ -41,7 +42,6 @@ const EditProductForm = ({selectedProduct,setSelectedProduct,payment,setPayment}
 
     return { date, time };
 }
-
 
   const onFinish = async (values) => {
     values.type="Draw"
@@ -67,7 +67,7 @@ const EditProductForm = ({selectedProduct,setSelectedProduct,payment,setPayment}
           
           return;
         }
-        const response = await fetch('http://localhost:3001/payment/addcredit', {
+        const response = await fetch('http://localhost:3001/payment/addcreditbydistributor', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -83,8 +83,8 @@ const EditProductForm = ({selectedProduct,setSelectedProduct,payment,setPayment}
           let tempobj={...userData.payment};
           let temp=[...payment];
           const { date, time } = getDateAndTime(tempobj.createdAt);
-        tempobj.time= time ;
-        tempobj.date=date
+          tempobj.time= time ;
+          tempobj.date=date
           temp.push(tempobj)
           setPayment(temp)
           let tempobj1={...selectedProduct,payment:{
@@ -137,7 +137,7 @@ const EditProductForm = ({selectedProduct,setSelectedProduct,payment,setPayment}
           
           return;
         }
-        const response = await fetch('http://localhost:3001/payment/addcredit', {
+        const response = await fetch('http://localhost:3001/payment/addcreditbydistributor', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -152,6 +152,9 @@ const EditProductForm = ({selectedProduct,setSelectedProduct,payment,setPayment}
           const userData = await response.json();
           let tempobj={...userData.payment};
           let temp=[...payment];
+          const { date, time } = getDateAndTime(tempobj.createdAt);
+        tempobj.time= time ;
+        tempobj.date=date
           temp.push(tempobj)
           setPayment(temp)
           let tempobj1={...selectedProduct,payment:{

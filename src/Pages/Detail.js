@@ -149,7 +149,7 @@ marginBottom:20,
       </div>
     
       <div style={contentStyle}>
-<Detail/>
+<Detail userdata={userdata}/>
   
 
  </div>

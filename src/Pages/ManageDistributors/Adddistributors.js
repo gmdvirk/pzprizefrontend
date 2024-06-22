@@ -99,7 +99,7 @@ const AddProductForm = ({ setProducts,products}) => {
       <Row gutter={16}>
       
       <Col xs={24} sm={8}>
-      <Form.Item name="password" label="password" rules={[{ required: true, message: 'Please enter password' }]}>
+      <Form.Item name="password" label="Password" rules={[{ required: true, message: 'Please enter password' }]}>
         <Input placeholder="Enter password" />
       </Form.Item>
       </Col>
@@ -117,8 +117,8 @@ const AddProductForm = ({ setProducts,products}) => {
                       fieldKey={ 'blocked'}
                     >
                       <Select placeholder="Select Status type" >
-                        <Option value={true}>Active</Option>
-                        <Option value={false}>Deactive</Option>
+                        <Option value={false}>Active</Option>
+                        <Option value={true}>Deactive</Option>
                       </Select>
                     </Form.Item>
                     </Col>

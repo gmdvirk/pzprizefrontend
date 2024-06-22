@@ -3,8 +3,7 @@ import React ,{useEffect,useState}from 'react';
 import { Tabs,Card,Spin } from 'antd';
 import AdminSideBar from "../components/AdminSidebar"
 import { useMedia } from 'react-use';
-import AllUsers from './ManageDistributorMerchants/Allmerchants'
-import AddUserForm from './ManageDistributorMerchants/Addmerchants';
+import AddUserForm from './ManageMerchantSale/Home';
 import { useNavigate } from 'react-router';
 
 import Noaccesspage from "./NoAccess"
@@ -21,28 +20,7 @@ const navigate=useNavigate();
   if(isMobile){
     marginLeft=10
   }
-  const onChange = (key) => {
-   
-  };
-  const Alltabs=[
-    {
-        label:"All Merchants",
-        key:"alldistributors",
-        children: <AllUsers
-        userdata={userdata}
-        products={employees}
-        setProducts={setEmployees}
-        />
-    },
-    {
-        label:"Add Merchant",
-        key:"adddistributors",
-        children: <AddUserForm
-        userdata={userdata}
-        products={employees}
-        setProducts={setEmployees}/>
-    }
-  ]
+ 
   function getSubstringBeforeAtSymbol(email) {
     const atIndex = email.indexOf('@');
     
@@ -66,7 +44,7 @@ const navigate=useNavigate();
     if (response.ok) {
       const userData = await response.json();
       setUserdata(userData.data)
-      const response1 = await fetch(`http://localhost:3001/user/getallmyMerchants`, {
+      const response1 = await fetch(`http://localhost:3001/user/`, {
         method: 'GET',
         headers: {
           token: `${token}`,
@@ -122,7 +100,7 @@ const navigate=useNavigate();
     <div style={!isMobile?mainStyle:{}}>
     <div style={!isMobile?layoutStyle:{}}>
     <div style={!isMobile?sidebarStyle:{}}>
-    <AdminSideBar label={"distributorsmerchants"} userdata={userdata}/>
+    <AdminSideBar label={"merchant"} userdata={userdata}/>
     </div>
       <div style={{
 
@@ -135,20 +113,14 @@ marginBottom:20,
       <div style={contentStyle}>
 
      <Card
-      title="Merchants"
+      title="Sale Counter"
       style={{ boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)' }}
     >
-     <Tabs
-    onChange={onChange}
-    type="card"
-    items={Alltabs.map((element, i) => {
-      return {
-        label: element.label,
-        key: element.key,
-        children: element.children,
-      };
-    })}
-  />
+   
+  <AddUserForm
+        userdata={userdata}
+        products={employees}
+        setProducts={setEmployees}/>
   </Card>
 
  </div>

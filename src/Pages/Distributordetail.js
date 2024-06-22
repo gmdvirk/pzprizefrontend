@@ -3,9 +3,11 @@ import React ,{useEffect,useState}from 'react';
 import { Tabs,Card,Spin } from 'antd';
 import AdminSideBar from "../components/AdminSidebar"
 import { useMedia } from 'react-use';
-import AllUsers from './ManageDistributorMerchants/Allmerchants'
-import AddUserForm from './ManageDistributorMerchants/Addmerchants';
+import Detail from './ManageDistributors/Detail';
+import { db } from '../firebase-config';
+import { getDocs,collection,doc,getDoc } from 'firebase/firestore';
 import { useNavigate } from 'react-router';
+import { auth } from '../firebase-config1';
 
 import Noaccesspage from "./NoAccess"
 
@@ -21,28 +23,7 @@ const navigate=useNavigate();
   if(isMobile){
     marginLeft=10
   }
-  const onChange = (key) => {
-   
-  };
-  const Alltabs=[
-    {
-        label:"All Merchants",
-        key:"alldistributors",
-        children: <AllUsers
-        userdata={userdata}
-        products={employees}
-        setProducts={setEmployees}
-        />
-    },
-    {
-        label:"Add Merchant",
-        key:"adddistributors",
-        children: <AddUserForm
-        userdata={userdata}
-        products={employees}
-        setProducts={setEmployees}/>
-    }
-  ]
+ 
   function getSubstringBeforeAtSymbol(email) {
     const atIndex = email.indexOf('@');
     
@@ -66,16 +47,7 @@ const navigate=useNavigate();
     if (response.ok) {
       const userData = await response.json();
       setUserdata(userData.data)
-      const response1 = await fetch(`http://localhost:3001/user/getallmyMerchants`, {
-        method: 'GET',
-        headers: {
-          token: `${token}`,
-        },
-      });
-      if (response1.ok) {
-        const userData1 = await response1.json();
-        setEmployees(userData1)
-      }
+      
     } else {
       console.error('Failed to fetch user data:', response.statusText);
       navigate("/login");
@@ -87,6 +59,50 @@ const navigate=useNavigate();
     listener()
   }, []);
 
+  const getAllEmployees=async()=>{
+    try{
+      const userinfo = await listener();
+  
+      if (userinfo) {
+        const result = getSubstringBeforeAtSymbol(userinfo.email);
+        const q = doc(db, "Users", result);
+        const querySnapshot = await getDoc(q);
+  
+        if (querySnapshot.exists()) {
+          if(querySnapshot.data().newpassword===""){
+            if((querySnapshot.data().role==="admin")){
+              setUserdata(querySnapshot.data());
+            }else{
+              setNoaccess(true)
+            }
+          }
+          else{
+            await auth.signOut();
+          }
+        
+        } else {
+          await auth.signOut();
+        }
+      } else {
+        navigate("/login");
+      }
+        const empref=collection(db,"Users");
+        const querySnapshot=await getDocs(empref)
+        let tempemplyees=[]
+        querySnapshot.forEach((element,index)=>{
+          if(element.data().role!=="admin"){
+            tempemplyees.push(element.data())
+          }
+        })
+        setEmployees(tempemplyees)
+        setLoading(false)
+        }catch(error){
+            alert(error.message)
+        }
+  }
+//   useEffect(() => {
+//     getAllEmployees()
+//   }, []);
   const sidebarStyle = {
     color: 'white',
     width: '260px',
@@ -122,7 +138,7 @@ const navigate=useNavigate();
     <div style={!isMobile?mainStyle:{}}>
     <div style={!isMobile?layoutStyle:{}}>
     <div style={!isMobile?sidebarStyle:{}}>
-    <AdminSideBar label={"distributorsmerchants"} userdata={userdata}/>
+    <AdminSideBar label={"subdistributors"} userdata={userdata}/>
     </div>
       <div style={{
 
@@ -133,23 +149,8 @@ marginBottom:20,
       </div>
     
       <div style={contentStyle}>
-
-     <Card
-      title="Merchants"
-      style={{ boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)' }}
-    >
-     <Tabs
-    onChange={onChange}
-    type="card"
-    items={Alltabs.map((element, i) => {
-      return {
-        label: element.label,
-        key: element.key,
-        children: element.children,
-      };
-    })}
-  />
-  </Card>
+<Detail/>
+  
 
  </div>
  </div>:<Noaccesspage/>}

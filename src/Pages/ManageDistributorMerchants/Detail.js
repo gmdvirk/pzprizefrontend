@@ -6,7 +6,6 @@ import AddUserForm from './Editdistributor';
 import EditComission from "./Editcomission"
 import Editprize from "./EditPrize"
 import EditLimit from "./EditLimit"
-import Loginasanother from "./Loginasanother"
 import Editpurchase from "./Editpurchase"
 import COLORS from '../../colors';
 import { DollarCircleFilled, EditFilled, InfoCircleFilled } from '@ant-design/icons';
@@ -19,7 +18,6 @@ const UserDetailsPage = ({ userdata }) => {
   const [userData, setUserData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [payment, setPayment] = useState([]);
-  const [loginvisible,setLoginVisible] = useState(false)
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [products, setProducts] = useState(null);
   
@@ -176,10 +174,6 @@ const UserDetailsPage = ({ userdata }) => {
     setProducts(referralusers)
     setVisible(true);
   };
-  const handleLoginasanother =(record)=>{
-    setSelectedProduct(record);
-    setLoginVisible(true);
-  }
   const columns = [
     {
       title: 'Name',
@@ -235,14 +229,6 @@ borderRadius: 10,
 background: COLORS.primarygradient,
 color: "white"
           }} onClick={() => handleDetail(record)}>Detail</Button>
-           <Button
-          icon={<InfoCircleFilled/>}
-          style={{
-
-borderRadius: 10,
-background: COLORS.primarygradient,
-color: "white"
-          }} onClick={() => handleLoginasanother(record)}>Login</Button>
       {/* <Button
             icon={<DollarCircleFilled />}
             style={{
@@ -352,15 +338,7 @@ color: "white"
         
         {renderProductSelection()}
       </Modal>
-      <Modal
-        title="Log in as another person"
-        visible={loginvisible}
-        onCancel={() => setLoginVisible(false)}
-        footer={null}
-        width={800}
-      >
-     <Loginasanother selectedProduct={selectedProduct} userdata={userdata}/>
-      </Modal>
+     
     </div>
   );
 };

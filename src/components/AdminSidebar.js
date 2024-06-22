@@ -282,7 +282,7 @@ const SidebarDrawer = (props) => {
               </Menu.Item>
             )}
              
-            {props.userdata.role === 'distributor' && (
+            {(props.userdata.role === 'distributor' || props.userdata.role === 'subdistributor') && (
               <Menu.Item
                 key="subdistributors"
                 icon={<UserOutlined />}
@@ -295,7 +295,7 @@ const SidebarDrawer = (props) => {
                 Sub Distributors
               </Menu.Item>
             )}
-               {props.userdata.role === 'distributor' && (
+               {(props.userdata.role === 'distributor' || props.userdata.role === 'subdistributor') && (
               <Menu.Item
                 key="distributorsmerchants"
                 icon={<UserOutlined />}
@@ -308,7 +308,7 @@ const SidebarDrawer = (props) => {
                 Merchants
               </Menu.Item>
             )}
-            {props.userdata.role === 'distributor' && (
+            {(props.userdata.role === 'distributor' || props.userdata.role === 'subdistributor') && (
               <Menu.Item
                 key="distributortransaction"
                 icon={<DashboardOutlined />}
@@ -321,7 +321,7 @@ const SidebarDrawer = (props) => {
                 Transaction History
               </Menu.Item>
             )}
-            {props.userdata.role === 'distributor' && (
+            {(props.userdata.role === 'distributor' || props.userdata.role === 'subdistributor') && (
               <Menu.Item
                 key="distributorreports"
                 icon={<DashboardOutlined />}
@@ -334,13 +334,65 @@ const SidebarDrawer = (props) => {
                 Reports
               </Menu.Item>
             )}
-            {props.userdata.role === 'distributor' && (
+            {(props.userdata.role === 'distributor' || props.userdata.role === 'subdistributor') && (
               <Menu.Item
                 key="distributorsearchbundle"
                 icon={<CalendarOutlined />}
                 style={{
                   color: selectedMenuKey === 'distributorsearchbundle' ? 'white' : 'black',
                   background: selectedMenuKey === 'distributorsearchbundle' ? COLORS.primarygradient : 'white',
+                  width: '100%',
+                }}
+              >
+                Search Bundle
+              </Menu.Item>
+            )}
+                       {props.userdata.role === 'merchant' && (
+              <Menu.Item
+                key="merchant"
+                icon={<UserOutlined />}
+                style={{
+                  color: selectedMenuKey === 'merchant' ? 'white' : 'black',
+                  background: selectedMenuKey === 'merchant' ? COLORS.primarygradient : 'white',
+                  width: '100%',
+                }}
+              >
+                Home
+              </Menu.Item>
+            )}
+            {props.userdata.role === 'merchant' && (
+              <Menu.Item
+                key="merchanttransaction"
+                icon={<DashboardOutlined />}
+                style={{
+                  color: selectedMenuKey === 'merchanttransaction' ? 'white' : 'black',
+                  background: selectedMenuKey === 'merchanttransaction' ? COLORS.primarygradient : 'white',
+                  width: '100%',
+                }}
+              >
+                Transaction History
+              </Menu.Item>
+            )}
+            {props.userdata.role === 'merchant' && (
+              <Menu.Item
+                key="merchantreports"
+                icon={<DashboardOutlined />}
+                style={{
+                  color: selectedMenuKey === 'merchantreports' ? 'white' : 'black',
+                  background: selectedMenuKey === 'merchantreports' ? COLORS.primarygradient : 'white',
+                  width: '100%',
+                }}
+              >
+                Reports
+              </Menu.Item>
+            )}
+            {props.userdata.role === 'merchant' && (
+              <Menu.Item
+                key="merchantsearchbundle"
+                icon={<CalendarOutlined />}
+                style={{
+                  color: selectedMenuKey === 'merchantsearchbundle' ? 'white' : 'black',
+                  background: selectedMenuKey === 'merchantsearchbundle' ? COLORS.primarygradient : 'white',
                   width: '100%',
                 }}
               >

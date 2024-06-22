@@ -19,28 +19,7 @@ const EditProductForm = ({selectedProduct,setSelectedProduct,payment,setPayment}
   const [message,setMessage]=useState("")
   // const [product, setProduct] = useState(props.initialValues);
 
-  function getDateAndTime(isoString) {
-    
-    // Parse the ISO 8601 string into a Date object
-    const dateObj = new Date(isoString);
 
-    // Extract the date components
-    const year = dateObj.getUTCFullYear();
-    const month = String(dateObj.getUTCMonth() + 1).padStart(2, '0');
-    const day = String(dateObj.getUTCDate()).padStart(2, '0');
-    
-    // Extract the time components
-    const hours = String(dateObj.getUTCHours()).padStart(2, '0');
-    const minutes = String(dateObj.getUTCMinutes()).padStart(2, '0');
-    const seconds = String(dateObj.getUTCSeconds()).padStart(2, '0');
-    const milliseconds = String(dateObj.getUTCMilliseconds()).padStart(3, '0');
-
-    // Format the date and time
-    const date = `${year}-${month}-${day}`;
-    const time = `${hours}:${minutes}:${seconds}`;
-
-    return { date, time };
-}
 
 
   const onFinish = async (values) => {
@@ -82,9 +61,6 @@ const EditProductForm = ({selectedProduct,setSelectedProduct,payment,setPayment}
           const userData = await response.json();
           let tempobj={...userData.payment};
           let temp=[...payment];
-          const { date, time } = getDateAndTime(tempobj.createdAt);
-        tempobj.time= time ;
-        tempobj.date=date
           temp.push(tempobj)
           setPayment(temp)
           let tempobj1={...selectedProduct,payment:{

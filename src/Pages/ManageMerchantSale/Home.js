@@ -4,6 +4,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { db } from '../../firebase-config';
 import Highlighter from 'react-highlight-words';
 import COLORS from '../../colors';
+import Stats from "./Stats"
 import { CheckCircleFilled, CloseCircleFilled, DeleteFilled, PlusCircleFilled, SaveFilled, ScanOutlined, SecurityScanFilled,SearchOutlined } from '@ant-design/icons';
 const { Option } = Select;
 
@@ -11,15 +12,9 @@ const AddProductForm = ({ setProducts,products}) => {
   const [form] = Form.useForm();
   const [successModalVisible, setSuccessModalVisible] = useState(false);
   const [errorModalVisible, setErrorModalVisible] = useState(false);
+  const [draw, setDraw] = useState(null);
   const [loading, setLoading] = useState(false);
-  const generateProductCode = () => {
-    return `COLLECTION-${uuidv4()}`;
-  };
-  function isValidPassword(password) {
-    // Check for the absence of special characters and spaces
-    const specialCharsAndSpacesRegex = /[^a-zA-Z0-9]/;
-    return !specialCharsAndSpacesRegex.test(password);
-  }
+ 
   const onFinish = async (values) => {
     setLoading(true)
     try {
@@ -30,15 +25,15 @@ const AddProductForm = ({ setProducts,products}) => {
         
         return;
       }
-      const response = await fetch('http://localhost:3001/user/adduser', {
+      const response = await fetch('http://localhost:3001/draw/createdraw', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           token: token,
         },
         body: JSON.stringify({
-          role:"subdistributor",
-          ...values
+          ...values,
+          status:"deactive"
         }),
       });
       if (response.ok) {
@@ -79,51 +74,42 @@ const AddProductForm = ({ setProducts,products}) => {
         </div>):
     <Form form={form} onFinish={onFinish} layout="vertical">
        <Row gutter={16}>
-       
-      <Col xs={24} sm={8}>
-      <Form.Item name="username" label="Username" rules={[{ required: true, message: 'Please enter a username' }]}>
-        <Input placeholder="Enter Username" />
-      </Form.Item>
-      </Col>
-      <Col xs={24} sm={8}>
-      <Form.Item name="name" label="Name" rules={[{ required: true, message: 'Please enter a name' }]}>
-        <Input placeholder="Enter name" />
-      </Form.Item>
-      </Col>
-      <Col xs={24} sm={8}>
-      <Form.Item name="address" label="Customer Address" rules={[{ required: true, message: 'Please enter customer address' }]}>
-        <Input placeholder="Enter Customer Address" />
-      </Form.Item>
-      </Col>
-      </Row>
-      <Row gutter={16}>
-      
-      <Col xs={24} sm={8}>
-      <Form.Item name="password" label="Password" rules={[{ required: true, message: 'Please enter password' }]}>
-        <Input placeholder="Enter password" />
-      </Form.Item>
-      </Col>
-      <Col xs={24} sm={8}>
-      <Form.Item name="contact" label="Contact" rules={[{ required: true, message: 'Please enter contact' }]}>
-        <Input placeholder="Enter contact" />
-      </Form.Item>
-      </Col>
-      <Col xs={24} sm={8}>
+       <Col xs={24} sm={8}>
       <Form.Item
-      label={"Status"}
-                    name={ 'blocked'}
-                      rules={[{ required: true, message: 'Please select Status' }]}
+      label={"Select Draw"}
+                    name={ 'selecteddraw'}
+                      rules={[{ required: true, message: 'Please select draw' }]}
                       className="flex-item"
-                      fieldKey={ 'blocked'}
+                      fieldKey={ 'selecteddraw'}
+                      
                     >
-                      <Select placeholder="Select Status type" >
-                        <Option value={true}>Active</Option>
-                        <Option value={false}>Deactive</Option>
+                      <Select onChange={(e)=>{
+                        console.log(e)
+                        setDraw(e)}} placeholder="Select Status type" >
+                        <Option value={"false"}>Active</Option>
+                        <Option value={"true"}>Deactive</Option>
                       </Select>
                     </Form.Item>
                     </Col>
-     </Row>
-    <Form.Item>
+                    </Row>
+                  {draw&&  <Row gutter={16}>
+      <Col xs={24} sm={8}>
+      <Form.Item name="salenumber" label="Number" rules={[{ required: true, message: 'Please enter a number' }]}>
+        <Input type='number' placeholder="Enter number" />
+      </Form.Item>
+      </Col>
+      <Col xs={24} sm={8}>
+      <Form.Item name="f" label="F" rules={[{ required: true, message: 'Please enter a number' }]}>
+        <Input type='number' placeholder="Enter number" />
+      </Form.Item>
+      </Col>
+      <Col xs={24} sm={8}>
+      <Form.Item name="s" label="S" rules={[{ required: true, message: 'Please enter a number' }]}>
+        <Input type='number' placeholder="Enter number" />
+      </Form.Item>
+      </Col>
+      </Row>}
+{draw&&    <Form.Item>
       <Button   style={{
             borderRadius:10,
                 background: COLORS.primarygradient,
@@ -131,10 +117,12 @@ const AddProductForm = ({ setProducts,products}) => {
                       }}
                       icon={<SaveFilled/>}
                       htmlType="submit">
-        Save Subdistributor
+        Add Sale
       </Button>
     </Form.Item>
-
+   
+    }
+{draw&&  <Stats/>}
       {/* Success Modal */}
     <Modal
         title="Success"

@@ -5,10 +5,12 @@ import Highlighter from 'react-highlight-words';
 import COLORS from '../../colors';
 import { CheckCircleFilled, CloseCircleFilled,SearchOutlined, EditFilled, SaveFilled,PlusCircleFilled,DeleteFilled } from '@ant-design/icons';
 import moment from 'moment';
+import { useNavigate } from 'react-router-dom';
 
 const { Option } = Select;
 
-const EditProductForm = (props) => {
+const EditProductForm = ({selectedProduct,userdata}) => {
+  const navigate = useNavigate();
   const [form] = Form.useForm();
   const [modalVisible, setModalVisible] = useState(false);
   const [successModalVisible, setSuccessModalVisible] = useState(false);
@@ -16,14 +18,7 @@ const EditProductForm = (props) => {
   const [errorModalVisible, setErrorModalVisible] = useState(false);
   const [message, setMessage] = useState("");
   const [errormessage, setErrorMessage] = useState("");
-  const [product, setProduct] = useState(props.initialValues);
 
-
-  useEffect(() => {
-  
-
-    form.setFieldsValue(props.initialValues.comission);
-  }, [props.initialValues, form]);
 
 
   const onFinish = async (values) => {
@@ -36,27 +31,28 @@ const EditProductForm = (props) => {
         
         return;
       }
-      const response = await fetch('http://localhost:3001/user/edituser', {
-        method: 'PUT',
+      // if(token){
+      //   localStorage.removeItem('token');
+      // }
+      const response = await fetch('http://localhost:3001/user/loginasanotheruser', {
+        method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           token: token,
         },
         body: JSON.stringify({
-          ...props.initialValues,
-          comission:{...values}
+            key:values.key,
+            id:userdata._id,
+            idtologin:selectedProduct._id
         }),
       });
       if (response.ok) {
         const userData = await response.json();
-        let tempobj={...props.initialValues,...values};
-        let temp=[...props.products];
-        const index=temp.findIndex((obj)=>obj._id===props.initialValues._id);
-        temp[index]={...tempobj}
-        props.setProducts(temp)
-        // form.resetFields();
-        setMessage("Successfully Updated")
-        setSuccessModalVisible(true)
+        localStorage.setItem('token', userData.token);
+        navigate("/");
+        
+        // setMessage("Successfully Updated")
+        // setSuccessModalVisible(true)
       } else {
         const userData = await response.json();
         setErrorMessage(userData.Message)
@@ -67,7 +63,6 @@ const EditProductForm = (props) => {
       setErrorMessage(error.message)
         setErrorModalVisible(true)
     }
-
 
     setLoading(false)
   };
@@ -90,26 +85,15 @@ const EditProductForm = (props) => {
           </Spin>
       </div>):
      <Form form={form} onFinish={onFinish} layout="vertical">
-    <Row gutter={16}>
-       
-       {/* <Col xs={24} sm={8}>
-       <Form.Item name="username" label="Username" rules={[{ required: true, message: 'Please enter a username' }]}>
-         <Input placeholder="Enter Username" />
-       </Form.Item>
-       </Col> */}
-       <Col xs={24} sm={8}>
-       <Form.Item name="comission" label="Comission" rules={[{ required: true, message: 'Please enter a comission' }]}>
-         <Input placeholder="Enter comission" />
-       </Form.Item>
-       </Col>
-       <Col xs={24} sm={8}>
-       <Form.Item name="pcpercentage" label="Pc percentage" rules={[{ required: true, message: 'Please enter Pc percentage' }]}>
-         <Input placeholder="Enter Pc percentage" />
-       </Form.Item>
-       </Col>
-       
-       </Row>
-     
+     <Row gutter={16}>
+      
+      <Col xs={24} sm={8}>
+      <Form.Item name="key" label="Key" rules={[{ required: true, message: 'Please enter a key' }]}>
+        <Input placeholder="Enter Key" />
+      </Form.Item>
+      </Col>
+      
+     </Row>
   <Form.Item>
     <Button   style={{
           borderRadius:10,
@@ -118,7 +102,7 @@ const EditProductForm = (props) => {
                     }}
                     icon={<SaveFilled/>}
                     htmlType="submit">
-      Save Changes
+      Login
     </Button>
   </Form.Item>
 
@@ -167,7 +151,7 @@ const EditProductForm = (props) => {
       onOk={handleErrorModalOk}
       onCancel={handleErrorModalOk}
     >
-       {errormessage}
+      {errormessage}
     </Modal>
 
   </Form>}

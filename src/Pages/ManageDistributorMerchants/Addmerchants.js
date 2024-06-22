@@ -37,7 +37,7 @@ const AddProductForm = ({ setProducts,products}) => {
           token: token,
         },
         body: JSON.stringify({
-          role:"subdistributor",
+          role:"merchant",
           ...values
         }),
       });
@@ -131,7 +131,7 @@ const AddProductForm = ({ setProducts,products}) => {
                       }}
                       icon={<SaveFilled/>}
                       htmlType="submit">
-        Save Subdistributor
+        Save Merchant
       </Button>
     </Form.Item>
 

@@ -12,14 +12,7 @@ const AddProductForm = ({ setProducts,products}) => {
   const [successModalVisible, setSuccessModalVisible] = useState(false);
   const [errorModalVisible, setErrorModalVisible] = useState(false);
   const [loading, setLoading] = useState(false);
-  const generateProductCode = () => {
-    return `COLLECTION-${uuidv4()}`;
-  };
-  function isValidPassword(password) {
-    // Check for the absence of special characters and spaces
-    const specialCharsAndSpacesRegex = /[^a-zA-Z0-9]/;
-    return !specialCharsAndSpacesRegex.test(password);
-  }
+ 
   const onFinish = async (values) => {
     setLoading(true)
     try {
@@ -30,15 +23,15 @@ const AddProductForm = ({ setProducts,products}) => {
         
         return;
       }
-      const response = await fetch('http://localhost:3001/user/adduser', {
+      const response = await fetch('http://localhost:3001/draw/createdraw', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           token: token,
         },
         body: JSON.stringify({
-          role:"subdistributor",
-          ...values
+          ...values,
+          status:"deactive"
         }),
       });
       if (response.ok) {
@@ -80,49 +73,18 @@ const AddProductForm = ({ setProducts,products}) => {
     <Form form={form} onFinish={onFinish} layout="vertical">
        <Row gutter={16}>
        
+     
       <Col xs={24} sm={8}>
-      <Form.Item name="username" label="Username" rules={[{ required: true, message: 'Please enter a username' }]}>
-        <Input placeholder="Enter Username" />
+      <Form.Item name="date" label="Date" rules={[{ required: true, message: 'Please enter a date' }]}>
+        <Input type='date' placeholder="Enter date" />
       </Form.Item>
       </Col>
       <Col xs={24} sm={8}>
-      <Form.Item name="name" label="Name" rules={[{ required: true, message: 'Please enter a name' }]}>
-        <Input placeholder="Enter name" />
-      </Form.Item>
-      </Col>
-      <Col xs={24} sm={8}>
-      <Form.Item name="address" label="Customer Address" rules={[{ required: true, message: 'Please enter customer address' }]}>
-        <Input placeholder="Enter Customer Address" />
+      <Form.Item name="bundle" label="Bundle" rules={[{ required: true, message: 'Please enter a bundle' }]}>
+        <Input type='number' placeholder="Enter Bundle" />
       </Form.Item>
       </Col>
       </Row>
-      <Row gutter={16}>
-      
-      <Col xs={24} sm={8}>
-      <Form.Item name="password" label="Password" rules={[{ required: true, message: 'Please enter password' }]}>
-        <Input placeholder="Enter password" />
-      </Form.Item>
-      </Col>
-      <Col xs={24} sm={8}>
-      <Form.Item name="contact" label="Contact" rules={[{ required: true, message: 'Please enter contact' }]}>
-        <Input placeholder="Enter contact" />
-      </Form.Item>
-      </Col>
-      <Col xs={24} sm={8}>
-      <Form.Item
-      label={"Status"}
-                    name={ 'blocked'}
-                      rules={[{ required: true, message: 'Please select Status' }]}
-                      className="flex-item"
-                      fieldKey={ 'blocked'}
-                    >
-                      <Select placeholder="Select Status type" >
-                        <Option value={true}>Active</Option>
-                        <Option value={false}>Deactive</Option>
-                      </Select>
-                    </Form.Item>
-                    </Col>
-     </Row>
     <Form.Item>
       <Button   style={{
             borderRadius:10,
@@ -131,7 +93,7 @@ const AddProductForm = ({ setProducts,products}) => {
                       }}
                       icon={<SaveFilled/>}
                       htmlType="submit">
-        Save Subdistributor
+        Search
       </Button>
     </Form.Item>
 

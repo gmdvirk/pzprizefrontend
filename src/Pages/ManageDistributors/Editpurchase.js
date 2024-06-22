@@ -56,7 +56,7 @@ const EditProductForm = (props) => {
         const index=temp.findIndex((obj)=>obj._id===props.initialValues._id);
         temp[index]={...tempobj}
         props.setProducts(temp)
-        form.resetFields();
+        // form.resetFields();
         setMessage("Successfully Updated")
         setSuccessModalVisible(true)
       } else {
