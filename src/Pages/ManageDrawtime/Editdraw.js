@@ -3,6 +3,7 @@ import { Form, Input, Button, Select, Space,Modal, Upload,Card,Table, message, C
 import { v4 as uuidv4 } from 'uuid';
 import Highlighter from 'react-highlight-words';
 import COLORS from '../../colors';
+import { linkurl } from '../../link';
 import { CheckCircleFilled, CloseCircleFilled,SearchOutlined, EditFilled, SaveFilled,PlusCircleFilled,DeleteFilled } from '@ant-design/icons';
 import moment from 'moment';
 
@@ -36,7 +37,7 @@ const EditProductForm = (props) => {
         
         return;
       }
-      const response = await fetch('http://localhost:3001/draw/editdraw', {
+      const response = await fetch(`${linkurl}/draw/editdraw`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
@@ -97,67 +98,55 @@ const EditProductForm = (props) => {
      <Input placeholder="Enter Title" />
    </Form.Item>
    </Col>
-   <Col xs={24} sm={8}>
+   <Col xs={12} sm={8}>
    <Form.Item name="date" label="Date" rules={[{ required: true, message: 'Please enter a date' }]}>
      <Input type='date' placeholder="Enter date" />
    </Form.Item>
    </Col>
-   <Col xs={24} sm={8}>
+   <Col xs={12} sm={8}>
    <Form.Item name="time" label="Time" rules={[{ required: true, message: 'Please enter time' }]}>
      <Input type="time" placeholder="Enter time" />
    </Form.Item>
    </Col>
-   </Row>
-   <Row gutter={16}>
    
-   <Col xs={24} sm={8}>
+   <Col xs={12} sm={8}>
    <Form.Item name="onedigita" label="One digit First" rules={[{ required: true, message: 'Please enter a number' }]}>
      <Input type='number' placeholder="Enter one digit first" />
    </Form.Item>
    </Col>
-   <Col xs={24} sm={8}>
+   <Col xs={12} sm={8}>
    <Form.Item name="onedigitb" label="One digit Second" rules={[{ required: true, message: 'Please enter a number' }]}>
      <Input type='number' placeholder="Enter one digit second" />
    </Form.Item>
    </Col>
-   <Col xs={24} sm={8}>
+   <Col xs={12} sm={8}>
    <Form.Item name="twodigita" label="Two digit First" rules={[{ required: true, message: 'Please enter a number' }]}>
      <Input type='number' placeholder="Enter two digit first" />
    </Form.Item>
    </Col>
-   <Col xs={24} sm={8}>
+   <Col xs={12} sm={8}>
    <Form.Item name="twodigitb" label="Two digit Second" rules={[{ required: true, message: 'Please enter a number' }]}>
      <Input type='number' placeholder="Enter two digit second" />
    </Form.Item>
    </Col>
-   <Col xs={24} sm={8}>
+   <Col xs={12} sm={8}>
    <Form.Item name="threedigita" label="Three digit First" rules={[{ required: true, message: 'Please enter a number' }]}>
      <Input type='number' placeholder="Enter three digit first" />
    </Form.Item>
    </Col>
-   <Col xs={24} sm={8}>
+   <Col xs={12} sm={8}>
    <Form.Item name="threedigitb" label="Three digit Second" rules={[{ required: true, message: 'Please enter a number' }]}>
      <Input type='number' placeholder="Enter three digit second" />
    </Form.Item>
    </Col>
-   <Col xs={24} sm={8}>
+   <Col xs={12} sm={8}>
    <Form.Item name="fourdigita" label="Four digit First" rules={[{ required: true, message: 'Please enter a number' }]}>
      <Input type='number' placeholder="Enter four digit first" />
    </Form.Item>
    </Col>
-   <Col xs={24} sm={8}>
+   <Col xs={12} sm={8}>
    <Form.Item name="fourdigitb" label="Four digit Second" rules={[{ required: true, message: 'Please enter a number' }]}>
      <Input type='number' placeholder="Enter four digit second" />
-   </Form.Item>
-   </Col>
-   <Col xs={24} sm={8}>
-   <Form.Item name="fivedigita" label="Five digit First" rules={[{ required: true, message: 'Please enter a number' }]}>
-     <Input type='number' placeholder="Enter five digit first" />
-   </Form.Item>
-   </Col>
-   <Col xs={24} sm={8}>
-   <Form.Item name="fivedigitb" label="Five digit Second" rules={[{ required: true, message: 'Please enter a number' }]}>
-     <Input type='number' placeholder="Enter five digit second" />
    </Form.Item>
    </Col>
   </Row>

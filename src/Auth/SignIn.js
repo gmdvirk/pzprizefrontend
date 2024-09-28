@@ -1,40 +1,62 @@
 import React, { useState } from 'react';
 import { Form, Input, Button, Card, Select } from 'antd';
 import { UserOutlined, LockOutlined, LockFilled } from '@ant-design/icons';
+import ReCAPTCHA from "react-google-recaptcha";
 import COLORS from '../colors';
+import { linkurl } from '../link';
 import { useNavigate } from 'react-router-dom';
 
 const { Option } = Select;
+
 const SignInPage = () => {
   const navigate = useNavigate();
+  const [captchaValue, setCaptchaValue] = useState(null);
 
-const onFinish = async (values) => {
-  const { username, password } = values;
+  const onFinish = async (values) => {
+    const { username, password } = values;
 
-  try {
-    const response = await fetch(`http://localhost:3001/user/login`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ username, password }),
-    });
+    // if (!captchaValue) {
+    //   alert("Please complete the reCAPTCHA");
+    //   return;
+    // }
 
-    if (response.ok) {
-      const data = await response.json();
-      // Store relevant data in localStorage
-      localStorage.setItem('token', data.token);
-      navigate("/");
-    } else {
-      const errorData = await response.json();
-      console.error('Login failed:', errorData.Message);
-      // Handle the error, e.g., show an error message to the user
+    try {
+      const response = await fetch(`${linkurl}/user/login`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ username, password, captchaValue }),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        if(data.Success){
+          localStorage.setItem('token', data.token);
+          if(data.rest._doc.role==="merchant"){
+            navigate("/merchant")
+          }
+          else if(data.rest._doc.role==="distributor" || data.rest._doc.role==="subdistributor"){
+            navigate("/distributorsmerchants")
+          }else{
+            navigate("/");
+          }
+        }else{
+          alert(data.Message)
+        }
+      } else {
+        const errorData = await response.json();
+        console.error('Login failed:', errorData.Message);
+        alert(errorData.Message)
+      }
+    } catch (error) {
+      console.error('Unexpected error during login:', error.message);
     }
-  } catch (error) {
-    console.error('Unexpected error during login:', error.message);
-    // Handle unexpected errors
-  }
-};
+  };
+
+  const handleCaptchaChange = (value) => {
+    setCaptchaValue(value);
+  };
 
   return (
     <div className="signin-container">
@@ -44,18 +66,6 @@ const onFinish = async (values) => {
           initialValues={{ remember: true }}
           onFinish={onFinish}
         >
-                   {/* <Form.Item
-      // label={"Account Type"}
-                    name={ 'accountType'}
-                      rules={[{ required: true, message: 'Please select Account Type' }]}
-                      className="flex-item"
-                      fieldKey={ 'accountType'}
-                    >
-                      <Select placeholder="Select Account Type" >
-                        <Option value="Customer">Customer</Option>
-                        <Option value="Management">Management</Option>
-                      </Select>
-                    </Form.Item> */}
           <Form.Item
             name="username"
             rules={[{ required: true, message: 'Please enter your username!' }]}
@@ -71,13 +81,23 @@ const onFinish = async (values) => {
           </Form.Item>
 
           <Form.Item>
+            {/* <ReCAPTCHA
+              sitekey="6LfnITkqAAAAALQb_NjzAZI5aAMBS7S_YTNTj9Kw"
+              onChange={handleCaptchaChange}
+            /> */}
+          </Form.Item>
+
+          <Form.Item>
             <Button 
-            icon={<LockFilled/>}
-            style={{
-              background:COLORS.primarygradient,
-               color:"white"
-            }}
-            htmlType="submit" className="signin-button">
+              icon={<LockFilled/>}
+              style={{
+                background: COLORS.primarygradient,
+                color: "white"
+              }}
+              htmlType="submit" 
+              className="signin-button"
+              // disabled={!captchaValue}
+            >
               Sign In
             </Button>
           </Form.Item>

@@ -3,6 +3,7 @@ import { Form, Input, Button, Select, Space,Modal, Upload,Card,Table, message, C
 import { v4 as uuidv4 } from 'uuid';
 import Highlighter from 'react-highlight-words';
 import COLORS from '../../colors';
+import { linkurl } from '../../link';
 import { CheckCircleFilled, CloseCircleFilled,SearchOutlined, EditFilled, SaveFilled,PlusCircleFilled,DeleteFilled } from '@ant-design/icons';
 import moment from 'moment';
 
@@ -36,7 +37,7 @@ const EditProductForm = (props) => {
         
         return;
       }
-      const response = await fetch('http://localhost:3001/user/edituser', {
+      const response = await fetch(`${linkurl}/user/edituser`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -98,12 +99,12 @@ const EditProductForm = (props) => {
        </Form.Item>
        </Col> */}
        <Col xs={24} sm={8}>
-       <Form.Item name="comission" label="Comission" rules={[{ required: true, message: 'Please enter a comission' }]}>
+       <Form.Item name="comission" label="ہنسہ+آکرہ+ٹنڈولہ+کمشن" rules={[{ required: true, message: 'Please enter a comission' }]}>
          <Input placeholder="Enter comission" />
        </Form.Item>
        </Col>
        <Col xs={24} sm={8}>
-       <Form.Item name="pcpercentage" label="Pc percentage" rules={[{ required: true, message: 'Please enter Pc percentage' }]}>
+       <Form.Item name="pcpercentage" label="پی سی کمشن" rules={[{ required: true, message: 'Please enter Pc percentage' }]}>
          <Input placeholder="Enter Pc percentage" />
        </Form.Item>
        </Col>

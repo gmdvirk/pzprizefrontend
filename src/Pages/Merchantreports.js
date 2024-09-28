@@ -7,6 +7,7 @@ import BillSheet from './ManageMerchantReports/BillSheet'
 import TotalSale from "./ManageMerchantReports/TotalSale"
 import Totalsheetsave from "./ManageMerchantReports/Totalsheetsave"
 import { useNavigate } from 'react-router';
+import { linkurl } from '../link';
 
 import Noaccesspage from "./NoAccess"
 
@@ -15,6 +16,8 @@ const navigate=useNavigate();
   const [employees, setEmployees] = useState([]);
   const [loading, setLoading] = useState(true);
   const [userdata,setUserdata]=useState(null)
+  const [draws, setDraws] = useState([]);
+  const [sheets, setSheets] = useState([]);
   const [noaccess,setNoaccess]=useState(false)
   const isMobile = useMedia('(max-width: 768px)'); // Adjust the breakpoint as needed
   let marginLeft=280
@@ -32,15 +35,18 @@ const navigate=useNavigate();
         children: <TotalSale
         userdata={userdata}
         products={employees}
+        draws={draws}
         setProducts={setEmployees}
         />
     },
     {
-        label:"Total Sheet Save",
+        label:"Sheets",
         key:"Total",
         children: <Totalsheetsave
         userdata={userdata}
         products={employees}
+        draws={draws}
+        sheets={sheets}
         setProducts={setEmployees}/>
     },
     {
@@ -49,6 +55,7 @@ const navigate=useNavigate();
         children: <BillSheet
         userdata={userdata}
         products={employees}
+        draws={draws}
         setProducts={setEmployees}/>
     }
 
@@ -56,7 +63,7 @@ const navigate=useNavigate();
   ]
   const listener = () => new Promise( async(resolve, reject) => {
     const token = localStorage.getItem('token');
-    const response = await fetch(`http://localhost:3001/user/auth`, {
+    const response = await fetch(`${linkurl}/user/auth`, {
       method: 'GET',
       headers: {
         token: `${token}`,
@@ -66,16 +73,18 @@ const navigate=useNavigate();
     if (response.ok) {
       const userData = await response.json();
       setUserdata(userData.data)
-      const response1 = await fetch(`http://localhost:3001/draw/`, {
-        method: 'GET',
-        headers: {
-          token: `${token}`,
-        },
-      });
-      if (response1.ok) {
-        const userData1 = await response1.json();
-        setEmployees(userData1)
-      }
+   
+        const response2 = await fetch(`${linkurl}/draw/getlasttendrawsmerchant`, {
+          method: 'GET',
+          headers: {
+            token: `${token}`,
+          },
+        });
+        if (response2.ok) {
+          const userData1 = await response2.json();
+          setDraws(userData1.draws)
+          setSheets(userData1.sheets)
+        }
     } else {
       console.error('Failed to fetch user data:', response.statusText);
       navigate("/login");

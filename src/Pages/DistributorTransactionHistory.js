@@ -5,6 +5,7 @@ import AdminSideBar from "../components/AdminSidebar"
 import { useMedia } from 'react-use';
 import AllUsers from './ManageDistributorTransaction/Alltransactions'
 import { useNavigate } from 'react-router';
+import { linkurl } from '../link';
 
 import Noaccesspage from "./NoAccess"
 
@@ -44,7 +45,7 @@ const navigate=useNavigate();
 }
   const listener = () => new Promise( async(resolve, reject) => {
     const token = localStorage.getItem('token');
-    const response = await fetch(`http://localhost:3001/user/auth`, {
+    const response = await fetch(`${linkurl}/user/auth`, {
       method: 'GET',
       headers: {
         token: `${token}`,
@@ -54,7 +55,7 @@ const navigate=useNavigate();
     if (response.ok) {
       const userData = await response.json();
       setUserdata(userData.data)
-      const response1 = await fetch(`http://localhost:3001/payment/getmypayments`, {
+      const response1 = await fetch(`${linkurl}/payment/getmypayments`, {
         method: 'GET',
         headers: {
           token: `${token}`,
@@ -131,7 +132,7 @@ marginBottom:20,
       <div style={contentStyle}>
 
      <Card
-      title="Transaction History"
+      title="Book Detail"
       style={{ boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)' }}
     >
    <AllUsers

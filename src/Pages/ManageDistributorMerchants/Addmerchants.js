@@ -1,9 +1,10 @@
 import React, { useEffect, useState,useRef } from 'react';
 import { Form, Input, Button, Select, Modal,Card,Table,Space, Row, Col,DatePicker,Upload ,message,Tabs,Spin} from 'antd';
 import { v4 as uuidv4 } from 'uuid';
-import { db } from '../../firebase-config';
 import Highlighter from 'react-highlight-words';
 import COLORS from '../../colors';
+
+import { linkurl } from '../../link';
 import { CheckCircleFilled, CloseCircleFilled, DeleteFilled, PlusCircleFilled, SaveFilled, ScanOutlined, SecurityScanFilled,SearchOutlined } from '@ant-design/icons';
 const { Option } = Select;
 
@@ -30,7 +31,7 @@ const AddProductForm = ({ setProducts,products}) => {
         
         return;
       }
-      const response = await fetch('http://localhost:3001/user/adduser', {
+      const response = await fetch(`${linkurl}/user/adduser`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -110,18 +111,29 @@ const AddProductForm = ({ setProducts,products}) => {
       </Col>
       <Col xs={24} sm={8}>
       <Form.Item
-      label={"Status"}
-                    name={ 'blocked'}
-                      rules={[{ required: true, message: 'Please select Status' }]}
-                      className="flex-item"
-                      fieldKey={ 'blocked'}
-                    >
-                      <Select placeholder="Select Status type" >
-                        <Option value={true}>Active</Option>
-                        <Option value={false}>Deactive</Option>
-                      </Select>
-                    </Form.Item>
+  label={"Status"}
+  name={'blocked'}
+  rules={[{ required: true, message: 'Please select Status' }]}
+  className="flex-item"
+  fieldKey={'blocked'}
+  initialValue={false}  // Set default value to 'false' for Active
+>
+  <Select placeholder="Select Status type">
+    <Option value={false}>Active</Option>
+    <Option value={true}>Deactive</Option>
+  </Select>
+</Form.Item>
                     </Col>
+                    <Col xs={24} sm={8}>
+       <Form.Item name="comission" label="ہنسہ+آکرہ+ٹنڈولہ+کمشن" rules={[{ required: true, message: 'Please enter a comission' }]}>
+         <Input placeholder="Enter comission" />
+       </Form.Item>
+       </Col>
+       <Col xs={24} sm={8}>
+       <Form.Item name="pcpercentage" label="پی سی کمشن" rules={[{ required: true, message: 'Please enter Pc percentage' }]}>
+         <Input placeholder="Enter Pc percentage" />
+       </Form.Item>
+       </Col>
      </Row>
     <Form.Item>
       <Button   style={{
@@ -131,7 +143,7 @@ const AddProductForm = ({ setProducts,products}) => {
                       }}
                       icon={<SaveFilled/>}
                       htmlType="submit">
-        Save Merchant
+        Save User
       </Button>
     </Form.Item>
 

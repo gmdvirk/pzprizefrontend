@@ -3,6 +3,7 @@ import { Form, Input, Button, Select, Space,Modal, Upload,Card,Table, message, C
 import { v4 as uuidv4 } from 'uuid';
 import Highlighter from 'react-highlight-words';
 import COLORS from '../../colors';
+import { linkurl } from '../../link';
 import { CheckCircleFilled, CloseCircleFilled,SearchOutlined, EditFilled, SaveFilled,PlusCircleFilled,DeleteFilled } from '@ant-design/icons';
 import moment from 'moment';
 
@@ -23,6 +24,7 @@ const EditProductForm = (props) => {
   
 
     form.setFieldsValue(props.initialValues);
+    form.setFieldsValue(props.initialValues.comission);
   }, [props.initialValues, form]);
 
 
@@ -36,7 +38,7 @@ const EditProductForm = (props) => {
         
         return;
       }
-      const response = await fetch('http://localhost:3001/user/edituser', {
+      const response = await fetch(`${linkurl}/user/edituser`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -134,7 +136,32 @@ const EditProductForm = (props) => {
                        </Select>
                      </Form.Item>
                      </Col>
+                     <Col xs={24} sm={8}>
+      <Form.Item
+      label={"Hadd limit allowed"}
+                    name={ 'haddaloud'}
+                      rules={[{ required: true, message: 'Please select Status' }]}
+                      className="flex-item"
+                      fieldKey={ 'haddaloud'}
+                    >
+                      <Select placeholder="Select Status type" >
+                        <Option value={true}>Alowed</Option>
+                        <Option value={false}>Not Alowed</Option>
+                      </Select>
+                    </Form.Item>
+                    </Col>
+                    <Col xs={24} sm={8}>
+       <Form.Item name="comission" label="ہنسہ+آکرہ+ٹنڈولہ+کمشن" rules={[{ required: true, message: 'Please enter a comission' }]}>
+         <Input placeholder="Enter comission" />
+       </Form.Item>
+       </Col>
+       <Col xs={24} sm={8}>
+       <Form.Item name="pcpercentage" label="پی سی کمشن" rules={[{ required: true, message: 'Please enter Pc percentage' }]}>
+         <Input placeholder="Enter Pc percentage" />
+       </Form.Item>
+       </Col>
       </Row>
+      
   <Form.Item>
     <Button   style={{
           borderRadius:10,

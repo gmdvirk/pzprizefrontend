@@ -2,6 +2,7 @@ import React, { useState, useEffect,useRef } from 'react';
 import { Form, Input, Button, Select, Space,Modal, Upload,Card,Table, message, Col, Row, DatePicker,Spin } from 'antd';
 import { v4 as uuidv4 } from 'uuid';
 import Highlighter from 'react-highlight-words';
+import { linkurl } from '../../link';
 import COLORS from '../../colors';
 import { CheckCircleFilled, CloseCircleFilled,SearchOutlined, EditFilled, SaveFilled,PlusCircleFilled,DeleteFilled } from '@ant-design/icons';
 import moment from 'moment';
@@ -36,7 +37,7 @@ const EditProductForm = (props) => {
         
         return;
       }
-      const response = await fetch('http://localhost:3001/draw/editdraw', {
+      const response = await fetch(`http://localhost:3001/draw/editdraw`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
@@ -91,32 +92,32 @@ const EditProductForm = (props) => {
   
    <Row gutter={16}>
    
-   <Col xs={24} sm={8}>
+   <Col xs={12} sm={8}>
    <Form.Item name="firstprize" label="First prize" rules={[{ required: true, message: 'Please enter a number' }]}>
      <Input type='number' placeholder="Enter number" />
    </Form.Item>
    </Col>
-   <Col xs={24} sm={8}>
+   <Col xs={12} sm={8}>
    <Form.Item name="secondprize1" label="Second prize 1" rules={[{ required: true, message: 'Please enter a number' }]}>
      <Input type='number' placeholder="Enter number" />
    </Form.Item>
    </Col>
-   <Col xs={24} sm={8}>
+   <Col xs={12} sm={8}>
    <Form.Item name="secondprize2" label="Second prize 2" rules={[{ required: true, message: 'Please enter a number' }]}>
      <Input type='number' placeholder="Enter number" />
    </Form.Item>
    </Col>
-   <Col xs={24} sm={8}>
+   <Col xs={12} sm={8}>
    <Form.Item name="secondprize3" label="Second prize 3" rules={[{ required: true, message: 'Please enter a number' }]}>
      <Input type='number' placeholder="Enter number" />
    </Form.Item>
    </Col>
-   <Col xs={24} sm={8}>
+   <Col xs={12} sm={8}>
    <Form.Item name="secondprize4" label="Second prize 4" rules={[{ required: true, message: 'Please enter a number' }]}>
      <Input type='number' placeholder="Enter number" />
    </Form.Item>
    </Col>
-   <Col xs={24} sm={8}>
+   <Col xs={12} sm={8}>
    <Form.Item name="secondprize5" label="Second prize 5" rules={[{ required: true, message: 'Please enter a number' }]}>
      <Input type='number' placeholder="Enter number" />
    </Form.Item>

@@ -5,6 +5,7 @@ import Highlighter from 'react-highlight-words';
 import COLORS from '../../colors';
 import { CheckCircleFilled, CloseCircleFilled,SearchOutlined, EditFilled, SaveFilled,PlusCircleFilled,DeleteFilled } from '@ant-design/icons';
 import moment from 'moment';
+import { linkurl } from '../../link';
 
 const { Option } = Select;
 
@@ -67,7 +68,7 @@ const EditProductForm = ({selectedProduct,setSelectedProduct,payment,setPayment}
           
           return;
         }
-        const response = await fetch('http://localhost:3001/payment/addcreditbydistributor', {
+        const response = await fetch(`${linkurl}/payment/addcreditbydistributor`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -137,7 +138,7 @@ const EditProductForm = ({selectedProduct,setSelectedProduct,payment,setPayment}
           
           return;
         }
-        const response = await fetch('http://localhost:3001/payment/addcreditbydistributor', {
+        const response = await fetch(`${linkurl}/payment/addcreditbydistributor`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -201,7 +202,7 @@ const EditProductForm = ({selectedProduct,setSelectedProduct,payment,setPayment}
       <>
       <Card 
        title="Draw Credit"
-       headStyle={{ backgroundColor: '#33cc33', borderColor: '#33cc33' }}
+       headStyle={{ backgroundColor: '#33cc33',color:"white", borderColor: '#33cc33' }}
        style={{ 
          boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)', 
          marginTop: 20, 
@@ -229,7 +230,7 @@ const EditProductForm = ({selectedProduct,setSelectedProduct,payment,setPayment}
   <Form.Item>
     <Button   style={{
           borderRadius:10,
-              background: COLORS.primarygradient,
+              background: COLORS.deletegradient,
               color:"white"
                     }}
                     icon={<SaveFilled/>}
@@ -243,7 +244,7 @@ const EditProductForm = ({selectedProduct,setSelectedProduct,payment,setPayment}
   </Card>
   <Card 
        title="Withdraw Credit"
-       headStyle={{ backgroundColor: '#cc0000', borderColor: '#cc0000' }}
+       headStyle={{ backgroundColor: '#cc0000',color:"white",  borderColor: '#cc0000' }}
        style={{ 
          boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)', 
          marginTop: 20, 
@@ -271,7 +272,7 @@ const EditProductForm = ({selectedProduct,setSelectedProduct,payment,setPayment}
   <Form.Item>
     <Button   style={{
           borderRadius:10,
-              background: COLORS.primarygradient,
+              background: COLORS.deletegradient,
               color:"white"
                     }}
                     icon={<SaveFilled/>}

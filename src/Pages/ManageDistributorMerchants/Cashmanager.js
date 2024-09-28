@@ -3,6 +3,7 @@ import { Form, Input, Button, Select,Card, Space,Modal, Upload,Table, message, C
 import { v4 as uuidv4 } from 'uuid';
 import Highlighter from 'react-highlight-words';
 import COLORS from '../../colors';
+import { linkurl } from '../../link';
 import { CheckCircleFilled, CloseCircleFilled,SearchOutlined, EditFilled, SaveFilled,PlusCircleFilled,DeleteFilled } from '@ant-design/icons';
 import moment from 'moment';
 
@@ -20,7 +21,28 @@ const EditProductForm = ({selectedProduct,setSelectedProduct,payment,setPayment}
   // const [product, setProduct] = useState(props.initialValues);
 
 
+  function getDateAndTime(isoString) {
+    
+    // Parse the ISO 8601 string into a Date object
+    const dateObj = new Date(isoString);
 
+    // Extract the date components
+    const year = dateObj.getUTCFullYear();
+    const month = String(dateObj.getUTCMonth() + 1).padStart(2, '0');
+    const day = String(dateObj.getUTCDate()).padStart(2, '0');
+    
+    // Extract the time components
+    const hours = String(dateObj.getUTCHours()).padStart(2, '0');
+    const minutes = String(dateObj.getUTCMinutes()).padStart(2, '0');
+    const seconds = String(dateObj.getUTCSeconds()).padStart(2, '0');
+    const milliseconds = String(dateObj.getUTCMilliseconds()).padStart(3, '0');
+
+    // Format the date and time
+    const date = `${year}-${month}-${day}`;
+    const time = `${hours}:${minutes}:${seconds}`;
+
+    return { date, time };
+}
 
   const onFinish = async (values) => {
     values.type="Draw";
@@ -40,7 +62,7 @@ const EditProductForm = ({selectedProduct,setSelectedProduct,payment,setPayment}
         
         return;
       }
-      const response = await fetch('http://localhost:3001/payment/addcash', {
+      const response = await fetch(`${linkurl}/payment/addcashbydistributor`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -55,6 +77,9 @@ const EditProductForm = ({selectedProduct,setSelectedProduct,payment,setPayment}
         const userData = await response.json();
         let tempobj={...userData.payment};
         let temp=[...payment];
+        const { date, time } = getDateAndTime(tempobj.createdAt);
+        tempobj.time= time ;
+        tempobj.date=date
         temp.push(tempobj)
         setPayment(temp)
         let tempobj1={...selectedProduct,payment:{
@@ -98,7 +123,7 @@ const EditProductForm = ({selectedProduct,setSelectedProduct,payment,setPayment}
         
         return;
       }
-      const response = await fetch('http://localhost:3001/payment/addcash', {
+      const response = await fetch(`${linkurl}/payment/addcashbydistributor`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -113,6 +138,9 @@ const EditProductForm = ({selectedProduct,setSelectedProduct,payment,setPayment}
         const userData = await response.json();
         let tempobj={...userData.payment};
         let temp=[...payment];
+        const { date, time } = getDateAndTime(tempobj.createdAt);
+        tempobj.time= time ;
+        tempobj.date=date
         temp.push(tempobj)
         setPayment(temp)
         let tempobj1={...selectedProduct,payment:{
@@ -159,7 +187,7 @@ const EditProductForm = ({selectedProduct,setSelectedProduct,payment,setPayment}
       <>
       <Card
       title="Draw Cash"
-       headStyle={{ backgroundColor: '#33cc33', borderColor: '#33cc33' }}
+       headStyle={{ backgroundColor: '#33cc33',color:"white",  borderColor: '#33cc33' }}
       style={{ 
         boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)', 
         marginTop: 20, 
@@ -246,7 +274,7 @@ const EditProductForm = ({selectedProduct,setSelectedProduct,payment,setPayment}
   </Card>
   <Card
       title="Withdraw Cash"
-      headStyle={{ backgroundColor: '#cc0000', borderColor: '#cc0000' }}
+      headStyle={{ backgroundColor: '#cc0000',color:"white",  borderColor: '#cc0000' }}
       style={{ 
         boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)', 
         marginTop: 20, 

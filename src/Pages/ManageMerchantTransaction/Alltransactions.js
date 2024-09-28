@@ -4,6 +4,7 @@ import Highlighter from 'react-highlight-words';
 import { Form,Button, Input, Space,Select,Tabs, Table,Col, Row ,Modal,Spin} from 'antd';
 import COLORS from '../../colors';
 import jsPDF from 'jspdf';
+import { linkurl } from '../../link';
 import 'jspdf-autotable';
 
 const { Option } = Select;
@@ -47,7 +48,7 @@ const ProductTable = ({ payment, setPayment,userdata }) => {
 }
   const showDeleteConfirmationModal =async (record) => {
     const token = localStorage.getItem('token');
-    const response = await fetch(`http://localhost:3001/payment/getpaymentsbyid/${record._id}`, {
+    const response = await fetch(`${linkurl}/payment/getpaymentsbyid/${record._id}`, {
       method: 'GET',
       headers: {
         token: `${token}`,

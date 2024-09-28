@@ -5,11 +5,9 @@ import AdminSideBar from "../components/AdminSidebar"
 import { useMedia } from 'react-use';
 import AllUsers from './ManageDistributors/Alldistributors'
 import AddUserForm from './ManageDistributors/Adddistributors';
-import { db } from '../firebase-config';
-import { getDocs,collection,doc,getDoc } from 'firebase/firestore';
 import { useNavigate } from 'react-router';
-import { auth } from '../firebase-config1';
 
+import { linkurl } from '../link';
 import Noaccesspage from "./NoAccess"
 
 const AdminHomePage = () => {
@@ -59,7 +57,7 @@ const navigate=useNavigate();
   }
   const listener = () => new Promise( async(resolve, reject) => {
     const token = localStorage.getItem('token');
-    const response = await fetch(`http://localhost:3001/user/auth`, {
+    const response = await fetch(`${linkurl}/user/auth`, {
       method: 'GET',
       headers: {
         token: `${token}`,
@@ -69,7 +67,7 @@ const navigate=useNavigate();
     if (response.ok) {
       const userData = await response.json();
       setUserdata(userData.data)
-      const response1 = await fetch(`http://localhost:3001/user/`, {
+      const response1 = await fetch(`${linkurl}/user/getalldistributors`, {
         method: 'GET',
         headers: {
           token: `${token}`,
@@ -90,50 +88,6 @@ const navigate=useNavigate();
     listener()
   }, []);
 
-  const getAllEmployees=async()=>{
-    try{
-      const userinfo = await listener();
-  
-      if (userinfo) {
-        const result = getSubstringBeforeAtSymbol(userinfo.email);
-        const q = doc(db, "Users", result);
-        const querySnapshot = await getDoc(q);
-  
-        if (querySnapshot.exists()) {
-          if(querySnapshot.data().newpassword===""){
-            if((querySnapshot.data().role==="admin")){
-              setUserdata(querySnapshot.data());
-            }else{
-              setNoaccess(true)
-            }
-          }
-          else{
-            await auth.signOut();
-          }
-        
-        } else {
-          await auth.signOut();
-        }
-      } else {
-        navigate("/login");
-      }
-        const empref=collection(db,"Users");
-        const querySnapshot=await getDocs(empref)
-        let tempemplyees=[]
-        querySnapshot.forEach((element,index)=>{
-          if(element.data().role!=="admin"){
-            tempemplyees.push(element.data())
-          }
-        })
-        setEmployees(tempemplyees)
-        setLoading(false)
-        }catch(error){
-            alert(error.message)
-        }
-  }
-//   useEffect(() => {
-//     getAllEmployees()
-//   }, []);
   const sidebarStyle = {
     color: 'white',
     width: '260px',

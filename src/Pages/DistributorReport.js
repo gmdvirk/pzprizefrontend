@@ -8,6 +8,7 @@ import Distributorssale from './ManageDistrubutorReport/Distributorssale';
 import TotalSale from "./ManageDistrubutorReport/TotalSale"
 import TotalHaddlimitSale from "./ManageDistrubutorReport/TotalHaddLimitSale"
 import { useNavigate } from 'react-router';
+import { linkurl } from '../link';
 
 import Noaccesspage from "./NoAccess"
 
@@ -16,7 +17,9 @@ const navigate=useNavigate();
   const [employees, setEmployees] = useState([]);
   const [loading, setLoading] = useState(true);
   const [userdata,setUserdata]=useState(null)
+  const [draws, setDraws] = useState([]);
   const [noaccess,setNoaccess]=useState(false)
+  const [aloud,setAloud]=useState(false)
   const isMobile = useMedia('(max-width: 768px)'); // Adjust the breakpoint as needed
   let marginLeft=280
   let marginRight=10
@@ -34,6 +37,7 @@ const navigate=useNavigate();
         userdata={userdata}
         products={employees}
         setProducts={setEmployees}
+        draws={draws}
         />
     },
     {
@@ -42,6 +46,8 @@ const navigate=useNavigate();
         children: <TotalHaddlimitSale
         userdata={userdata}
         products={employees}
+        draws={draws}
+        aloud={aloud}
         setProducts={setEmployees}/>
     },
     {
@@ -50,6 +56,7 @@ const navigate=useNavigate();
         children: <Distributorssale
         userdata={userdata}
         products={employees}
+        draws={draws}
         setProducts={setEmployees}/>
     },
     {
@@ -58,25 +65,16 @@ const navigate=useNavigate();
         children: <BillSheet
         userdata={userdata}
         products={employees}
+        draws={draws}
         setProducts={setEmployees}/>
     }
 
 
   ]
-  function getSubstringBeforeAtSymbol(email) {
-    const atIndex = email.indexOf('@');
-    
-    if (atIndex !== -1) {
-      return email.substring(0, atIndex);
-      // or use slice: return email.slice(0, atIndex);
-    } else {
-      // handle the case where '@' is not present in the email
-      return 'Invalid email format';
-    }
-  }
+
   const listener = () => new Promise( async(resolve, reject) => {
     const token = localStorage.getItem('token');
-    const response = await fetch(`http://localhost:3001/user/auth`, {
+    const response = await fetch(`${linkurl}/user/auth`, {
       method: 'GET',
       headers: {
         token: `${token}`,
@@ -86,7 +84,17 @@ const navigate=useNavigate();
     if (response.ok) {
       const userData = await response.json();
       setUserdata(userData.data)
-      const response1 = await fetch(`http://localhost:3001/draw/`, {
+      const response10 = await fetch(`${linkurl}/report/getHaddLimitAloudornot`, {
+        method: 'GET',
+        headers: {
+          token: `${token}`,
+        },
+      });
+      if (response10.ok) {
+        const userData1 = await response10.json();
+        setAloud(userData1)
+      }
+      const response1 = await fetch(`${linkurl}/user/getallmyMerchants`, {
         method: 'GET',
         headers: {
           token: `${token}`,
@@ -95,6 +103,16 @@ const navigate=useNavigate();
       if (response1.ok) {
         const userData1 = await response1.json();
         setEmployees(userData1)
+        const response2 = await fetch(`${linkurl}/draw/getlasttendraws`, {
+          method: 'GET',
+          headers: {
+            token: `${token}`,
+          },
+        });
+        if (response2.ok) {
+          const userData1 = await response2.json();
+          setDraws(userData1)
+        }
       }
     } else {
       console.error('Failed to fetch user data:', response.statusText);

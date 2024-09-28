@@ -8,8 +8,9 @@ import Editprize from "./EditPrize"
 import EditLimit from "./EditLimit"
 import Loginasanother from "./Loginasanother"
 import Editpurchase from "./Editpurchase"
+import { linkurl } from '../../link';
 import COLORS from '../../colors';
-import { DollarCircleFilled, EditFilled, InfoCircleFilled } from '@ant-design/icons';
+import { DollarCircleFilled, EditFilled, InfoCircleFilled, MinusCircleFilled } from '@ant-design/icons';
 
 const { Option } = Select;
 const { TabPane } = Tabs;
@@ -30,7 +31,7 @@ const UserDetailsPage = ({ userdata }) => {
     const fetchData = async () => {
       try {
         const token = localStorage.getItem('token');
-        const response = await fetch(`http://localhost:3001/user/getuserdetailbyid/${userId}`, {
+        const response = await fetch(`${linkurl}/user/getuserdetailbyid/${userId}`, {
           method: 'GET',
           headers: {
             token: `${token}`,
@@ -85,7 +86,7 @@ const UserDetailsPage = ({ userdata }) => {
 }
   const showDeleteConfirmationModal =async (record) => {
     const token = localStorage.getItem('token');
-    const response = await fetch(`http://localhost:3001/payment/getpaymentsbyid/${record._id}`, {
+    const response = await fetch(`${linkurl}/payment/getpaymentsbyid/${record._id}`, {
       method: 'GET',
       headers: {
         token: `${token}`,
@@ -190,6 +191,11 @@ const UserDetailsPage = ({ userdata }) => {
       title: 'Username',
       dataIndex: 'username',
       key: 'username',
+      render: (username,blocked) => (
+        <span style={{ color: blocked.blocked ? 'red' : 'green' }}>
+        {username}
+      </span>
+      ),
     },
     {
       title: 'Address',
@@ -205,12 +211,21 @@ const UserDetailsPage = ({ userdata }) => {
       title: 'Role',
       dataIndex: 'role',
       key: 'role',
+      render: (type) => (
+        <span style={{ color: type === 'merchant' ? 'red' : 'green' }}>
+          {type}
+        </span>
+      ),
     },
     {
       title: 'Blocked',
       dataIndex: 'blocked',
       key: 'blocked',
-      render: (blocked) => (blocked ? 'Yes' : 'No'),
+      render: (blocked) => (
+        <span style={{ color: blocked ? 'red' : 'green' }}>
+          {blocked ? 'Yes' : 'No'}
+        </span>
+      ),
     },
     {
       title: 'Actions',
@@ -281,29 +296,32 @@ color: "white"
             </Row>
           </Card>
           <Card title="Payment Details" style={{ marginTop: 20 }}>
-            <Row gutter={16}>
-              <Col xs={24} sm={12} md={8}>
+          <Row gutter={16}>
+              <Col xs={24} sm={12} md={6}>
                 <p><strong>Cash:</strong> {users.payment.cash}</p>
               </Col>
-              <Col xs={24} sm={12} md={8}>
+              <Col xs={24} sm={12} md={6}>
                 <p><strong>Credit:</strong> {users.payment.credit}</p>
               </Col>
-              <Col xs={24} sm={12} md={8}>
-                <p><strong>Balance Upline:</strong> {users.payment.balanceupline}</p>
+              <Col xs={24} sm={12} md={6}>
+                <p style={{color:users.payment.balanceupline>0?"green":'red'}}><strong style={{color:users.payment.balanceupline>0?"green":'red'}}>Balance Upline:</strong> {users.payment.balanceupline}</p>
+              </Col>
+              <Col xs={24} sm={12} md={6}>
+                <p><strong>Available Balance:</strong> {users.payment.availablebalance}</p>
               </Col>
             </Row>
           </Card>
           <Card title="Commission Details" style={{ marginTop: 20 }}>
-            <Row gutter={16}>
+          <Row gutter={16}>
               <Col xs={24} sm={12} md={8}>
-                <p><strong>Commission:</strong> {users.comission.comission}</p>
+                <p><strong>ہنسہ+آکرہ+ٹنڈولہ+کمشن:</strong> {users.comission.comission}</p>
               </Col>
               <Col xs={24} sm={12} md={8}>
-                <p><strong>PC Percentage:</strong> {users.comission.pcpercentage}</p>
+                <p><strong>پی سی کمشن:</strong> {users.comission.pcpercentage}</p>
               </Col>
             </Row>
           </Card>
-          <Card title="Purchase Limits" style={{ marginTop: 20 }}>
+          {/* <Card title="Purchase Limits" style={{ marginTop: 20 }}>
             <Row gutter={16}>
               <Col xs={24} sm={12} md={6}>
                 <p><strong>Limit AF:</strong> {users.purchase.plimitaf}</p>
@@ -330,8 +348,8 @@ color: "white"
                 <p><strong>Limit DS:</strong> {users.purchase.plimitds}</p>
               </Col>
             </Row>
-          </Card>
-          <Card title="Referral Users" style={{ marginTop: 20 }}>
+          </Card> */}
+          <Card title={"Referral Users : "+referralusers.length} style={{ marginTop: 20 }}>
             <Table
               dataSource={referralusers}
               columns={columns}

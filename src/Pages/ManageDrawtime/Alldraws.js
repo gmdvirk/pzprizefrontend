@@ -3,6 +3,7 @@ import React, { useState, useRef } from 'react';
 import Highlighter from 'react-highlight-words';
 import { Button, Input, Space, Table ,Modal,Spin} from 'antd';
 import AddUserForm from './Editdraw';
+import { linkurl } from '../../link';
 import COLORS from '../../colors';
 
 
@@ -144,84 +145,51 @@ const ProductTable = ({ products, setProducts,userdata }) => {
       dataIndex: 'title',
       key: 'title',
       ...getColumnSearchProps('title'),
+      render: (data,object) => <div style={{color:(object.firstprize===""&&object.status==="active")?"green":"red"}}><span >{object.title}</span></div>,
+   
     },
     {
       title: 'Date',
       dataIndex: 'date',
       key: 'date',
       ...getColumnSearchProps('date'),
+      render: (data,object) => <div style={{color:(object.firstprize===""&&object.status==="active")?"green":"red"}}><span >{object.date}</span></div>,
     },
     {
-      title: 'Time',
-      dataIndex: 'time',
-      key: 'time',
-      ...getColumnSearchProps('time'),
-    },
-    {
-      title: 'Status',
-      dataIndex: 'status',
-      key: 'status',
-      ...getColumnSearchProps('status'),
-    },
-    {
-      title: 'One Digit (A)',
+      title: 'One Digit (A+B)',
       dataIndex: 'onedigita',
       key: 'onedigita',
       ...getColumnSearchProps('onedigita'),
-    },
-    {
-      title: 'One Digit (B)',
-      dataIndex: 'onedigitb',
-      key: 'onedigitb',
-      ...getColumnSearchProps('onedigitb'),
+      render: (data,object) => <div style={{color:(object.firstprize===""&&object.status==="active")?"green":"red"}}><span >{object.onedigita}</span><br/>
+      <span >{"----"}</span><br/>
+      <span >{object.onedigitb}</span></div>,
     },
     {
       title: 'Two Digit (A)',
       dataIndex: 'twodigita',
       key: 'twodigita',
       ...getColumnSearchProps('twodigita'),
-    },
-    {
-      title: 'Two Digit (B)',
-      dataIndex: 'twodigitb',
-      key: 'twodigitb',
-      ...getColumnSearchProps('twodigitb'),
+      render: (data,object) => <div style={{color:(object.firstprize===""&&object.status==="active")?"green":"red"}}><span >{object.twodigita}</span><br/>
+      <span >{"----"}</span><br/>
+      <span >{object.twodigitb}</span></div>,
     },
     {
       title: 'Three Digit (A)',
       dataIndex: 'threedigita',
       key: 'threedigita',
       ...getColumnSearchProps('threedigita'),
-    },
-    {
-      title: 'Three Digit (B)',
-      dataIndex: 'threedigitb',
-      key: 'threedigitb',
-      ...getColumnSearchProps('threedigitb'),
+      render: (data,object) => <div style={{color:(object.firstprize===""&&object.status==="active")?"green":"red"}}><span >{object.threedigita}</span><br/>
+      <span >{"----"}</span><br/>
+      <span >{object.threedigitb}</span></div>,
     },
     {
       title: 'Four Digit (A)',
       dataIndex: 'fourdigita',
       key: 'fourdigita',
       ...getColumnSearchProps('fourdigita'),
-    },
-    {
-      title: 'Four Digit (B)',
-      dataIndex: 'fourdigitb',
-      key: 'fourdigitb',
-      ...getColumnSearchProps('fourdigitb'),
-    },
-    {
-      title: 'Five Digit (A)',
-      dataIndex: 'fivedigita',
-      key: 'fivedigita',
-      ...getColumnSearchProps('fivedigita'),
-    },
-    {
-      title: 'Five Digit (B)',
-      dataIndex: 'fivedigitb',
-      key: 'fivedigitb',
-      ...getColumnSearchProps('fivedigitb'),
+      render: (data,object) => <div style={{color:(object.firstprize===""&&object.status==="active")?"green":"red"}}><span >{object.fourdigita}</span><br/>
+      <span >{"----"}</span><br/>
+      <span >{object.fourdigitb}</span></div>,
     },
    
     {
@@ -229,7 +197,7 @@ const ProductTable = ({ products, setProducts,userdata }) => {
       key: 'actions',
       render: (_, record) => (
         <Space size="middle">
-       <Button
+       {record.firstprize===""&&<Button
           icon={<EditFilled/>}
           style={{
 
@@ -238,8 +206,17 @@ background: COLORS.editgradient,
 color: "white"
           }} onClick={() => handleEdit(record)}>
             Edit
-          </Button>
-      {record.status==="deactive"&& <Button
+          </Button>}
+          {record.firstprize!==""&&<Button
+          style={{
+
+borderRadius: 10,
+background: COLORS.detailgradient,
+color: "white"
+          }} >
+            Posted
+          </Button>}
+      {record.firstprize===""&&record.status==="deactive"&& <Button
           icon={<InfoCircleFilled/>}
           style={{
 
@@ -247,7 +224,7 @@ borderRadius: 10,
 background: COLORS.primarygradient,
 color: "white"
           }} onClick={() => handleDetail(record)}>Activate</Button>}
-      {record.status==="active"&&<Button
+      {record.firstprize===""&&record.status==="active"&&<Button
             icon={<InfoCircleFilled />}
             style={{
               borderRadius: 10,
@@ -279,7 +256,7 @@ color: "white"
         
         return;
       }
-      const response = await fetch('http://localhost:3001/draw/activatedraw', {
+      const response = await fetch(`${linkurl}/draw/activatedraw`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
@@ -317,7 +294,7 @@ color: "white"
         
         return;
       }
-      const response = await fetch('http://localhost:3001/draw/deactivatedraw', {
+      const response = await fetch(`${linkurl}/draw/deactivatedraw`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',

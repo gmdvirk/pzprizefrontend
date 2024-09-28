@@ -17,6 +17,9 @@ import MerchantReport from "./Pages/Merchantreports"
 import AdminDetail from "./Pages/Detail"
 import MerchantHome from "./Pages/Merchant"
 import DistributorDetail from "./Pages/Distributordetail"
+import ChangeKey from "./Pages/ChangeKey"
+import Changepassword from "./Pages/Changepassword"
+import EditAdmin from "./Pages/Editadmin"
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 
 
@@ -42,10 +45,11 @@ const App = () => {
       <Route path="/searchbundle" element={<Searchbundle />} />
       <Route path="/reports" element={<Reports />} />
       <Route path="/login" element={<LogIn />} />
+      <Route path="/changekey" element={<ChangeKey />} />
       <Route path="/distributordetail/:userId" element={<DistributorDetail />} />
       <Route path="/detail/:userId" element={<AdminDetail />} />
-
-      {/* <Route path="/changepassword" element={<Changepassword />} /> */}
+      <Route path="/editadmin" element={<EditAdmin />} />
+      <Route path="/changepassword" element={<Changepassword />} />
 </Routes>
 
     </Router>

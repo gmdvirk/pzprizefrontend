@@ -3,6 +3,7 @@ import { Form, Input, Button, Select, Space,Modal, Upload,Card,Table, message, C
 import { v4 as uuidv4 } from 'uuid';
 import Highlighter from 'react-highlight-words';
 import COLORS from '../../colors';
+import { linkurl } from '../../link';
 import { CheckCircleFilled, CloseCircleFilled,SearchOutlined, EditFilled, SaveFilled,PlusCircleFilled,DeleteFilled } from '@ant-design/icons';
 import moment from 'moment';
 
@@ -36,7 +37,7 @@ const EditProductForm = (props) => {
         
         return;
       }
-      const response = await fetch('http://localhost:3001/user/edituser', {
+      const response = await fetch(`${linkurl}/user/edituser`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -96,24 +97,24 @@ const EditProductForm = (props) => {
        
       
        <Col xs={24} sm={8}>
-       <Form.Item name="prizea" label="Prize A" rules={[{ required: true, message: 'Please enter value' }]}>
+       <Form.Item name="prizea" label="ہندسہ" rules={[{ required: true, message: 'Please enter value' }]}>
          <Input placeholder="Enter value" />
        </Form.Item>
        </Col>
        <Col xs={24} sm={8}>
-       <Form.Item name="prizeb" label="Prize B" rules={[{ required: true, message: 'Please enter value' }]}>
+       <Form.Item name="prizeb" label="آکرہ" rules={[{ required: true, message: 'Please enter value' }]}>
        <Input placeholder="Enter value" />
        </Form.Item>
        </Col>
        <Col xs={24} sm={8}>
-       <Form.Item name="prizec" label="Prize C" rules={[{ required: true, message: 'Please enter value' }]}>
+       <Form.Item name="prizec" label="ٹنڈولہ" rules={[{ required: true, message: 'Please enter value' }]}>
        <Input placeholder="Enter value" />
        </Form.Item>
        </Col>
        </Row>
        <Row gutter={16}>
        <Col xs={24} sm={8}>
-       <Form.Item name="prized" label="Prize D" rules={[{ required: true, message: 'Please enter value' }]}>
+       <Form.Item name="prized" label="پی سی"  rules={[{ required: true, message: 'Please enter value' }]}>
        <Input placeholder="Enter value" />
        </Form.Item>
        </Col>

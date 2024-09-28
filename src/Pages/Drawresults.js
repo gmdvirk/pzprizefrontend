@@ -6,6 +6,7 @@ import { useMedia } from 'react-use';
 import AllUsers from './ManageDrawresults/Allresults'
 import { useNavigate } from 'react-router';
 
+import { linkurl } from '../link';
 import Noaccesspage from "./NoAccess"
 
 const AdminHomePage = () => {
@@ -47,7 +48,7 @@ const navigate=useNavigate();
   }
   const listener = () => new Promise( async(resolve, reject) => {
     const token = localStorage.getItem('token');
-    const response = await fetch(`http://localhost:3001/user/auth`, {
+    const response = await fetch(`${linkurl}/user/auth`, {
       method: 'GET',
       headers: {
         token: `${token}`,
@@ -57,7 +58,7 @@ const navigate=useNavigate();
     if (response.ok) {
       const userData = await response.json();
       setUserdata(userData.data)
-      const response1 = await fetch(`http://localhost:3001/draw/`, {
+      const response1 = await fetch(`${linkurl}/draw/`, {
         method: 'GET',
         headers: {
           token: `${token}`,

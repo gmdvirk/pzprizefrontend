@@ -6,11 +6,15 @@ import { useMedia } from 'react-use';
 import AddUserForm from './ManageMerchantSale/Home';
 import { useNavigate } from 'react-router';
 
+import { linkurl } from '../link';
 import Noaccesspage from "./NoAccess"
 
 const AdminHomePage = () => {
 const navigate=useNavigate();
   const [employees, setEmployees] = useState([]);
+  const [balance, setBalance] = useState(0);
+  const [upline, setUpline] = useState(0);
+  const [credit, setCredit] = useState(0);
   const [loading, setLoading] = useState(true);
   const [userdata,setUserdata]=useState(null)
   const [noaccess,setNoaccess]=useState(false)
@@ -18,23 +22,13 @@ const navigate=useNavigate();
   let marginLeft=280
   let marginRight=10
   if(isMobile){
-    marginLeft=10
+    marginLeft=0
   }
  
-  function getSubstringBeforeAtSymbol(email) {
-    const atIndex = email.indexOf('@');
-    
-    if (atIndex !== -1) {
-      return email.substring(0, atIndex);
-      // or use slice: return email.slice(0, atIndex);
-    } else {
-      // handle the case where '@' is not present in the email
-      return 'Invalid email format';
-    }
-  }
+
   const listener = () => new Promise( async(resolve, reject) => {
     const token = localStorage.getItem('token');
-    const response = await fetch(`http://localhost:3001/user/auth`, {
+    const response = await fetch(`${linkurl}/user/auth`, {
       method: 'GET',
       headers: {
         token: `${token}`,
@@ -44,7 +38,7 @@ const navigate=useNavigate();
     if (response.ok) {
       const userData = await response.json();
       setUserdata(userData.data)
-      const response1 = await fetch(`http://localhost:3001/user/`, {
+      const response1 = await fetch(`${linkurl}/draw/getallactivedraws`, {
         method: 'GET',
         headers: {
           token: `${token}`,
@@ -53,6 +47,18 @@ const navigate=useNavigate();
       if (response1.ok) {
         const userData1 = await response1.json();
         setEmployees(userData1)
+      }
+      const response2 = await fetch(`${linkurl}/user/getbalance`, {
+        method: 'GET',
+        headers: {
+          token: `${token}`,
+        },
+      });
+      if (response2.ok) {
+        const userData2 = await response2.json();
+        setBalance(userData2.payment.availablebalance)
+        setCredit(userData2.payment.credit)
+        setUpline(userData2.payment.balanceupline)
       }
     } else {
       console.error('Failed to fetch user data:', response.statusText);
@@ -76,8 +82,8 @@ const navigate=useNavigate();
 
   const contentStyle = {
     marginLeft: `${marginLeft}px`,
-    marginRight:10,
-    marginTop:10,
+    marginRight:0,
+    marginTop:0,
     width: '100%',
   };
   const mainStyle = {
@@ -104,7 +110,7 @@ const navigate=useNavigate();
     </div>
       <div style={{
 
-marginBottom:20,
+marginBottom:5,
       }}>
 
       </div>
@@ -112,16 +118,19 @@ marginBottom:20,
     
       <div style={contentStyle}>
 
-     <Card
+     {/* <Card
       title="Sale Counter"
-      style={{ boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)' }}
-    >
+      style={{ boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)' }} 
+    >*/}
    
   <AddUserForm
         userdata={userdata}
         products={employees}
+        balance={balance}
+        credit={credit}
+        upline={upline}
+        setBalance={setBalance}
         setProducts={setEmployees}/>
-  </Card>
 
  </div>
  </div>:<Noaccesspage/>}

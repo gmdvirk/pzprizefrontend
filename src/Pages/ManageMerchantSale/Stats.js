@@ -9,8 +9,21 @@ import {
   DollarCircleFilled,
 } from '@ant-design/icons';
 import COLORS from '../../colors';
-const Statisticscard = () => {
-  
+const Statisticscard = ({products}) => {
+  function getF(){
+    let temp=0;
+    for(let i=0;i<products.length;i++){
+      temp=temp+Number(products[i].f)
+    }
+    return temp
+  }
+  function getS(){
+    let temp=0;
+    for(let i=0;i<products.length;i++){
+      temp=temp+Number(products[i].s)
+    }
+    return temp
+  }
   return (
     <div style={{ padding: '24px' }}>
       <Row gutter={[16, 16]}>
@@ -20,8 +33,8 @@ const Statisticscard = () => {
             // bodyStyle={{ backgroundColor: '#f0f0f0' }}
           >
             <Statistic
-              title="Cash"
-              value={10000}
+              title="Total records"
+              value={products.length}
               prefix={<AppstoreAddOutlined 
                 style={{
                   background: COLORS.primarygradient,
@@ -41,8 +54,8 @@ const Statisticscard = () => {
             // bodyStyle={{ backgroundColor: '#f0f0f0' }}
           >
             <Statistic
-              title="Credit"
-              value={10000}
+              title="F"
+              value={getF()}
               prefix={<AppstoreAddOutlined 
                 style={{
                   background: COLORS.primarygradient,
@@ -62,8 +75,8 @@ const Statisticscard = () => {
             // bodyStyle={{ backgroundColor: '#f0f0f0' }}
           >
             <Statistic
-              title="Balance Upline"
-              value={10000}
+              title="S"
+              value={getS()}
               prefix={<AppstoreAddOutlined 
                 style={{
                   background:  COLORS.savegradient,
@@ -83,8 +96,8 @@ const Statisticscard = () => {
             // bodyStyle={{ backgroundColor: '#f0f0f0' }}
           >
             <Statistic
-              title="Available Balance"
-              value={10000}
+              title="T"
+              value={getF()+getS()}
               prefix={<AppstoreAddOutlined 
                 style={{
                   background: COLORS.primarygradient,

@@ -3,6 +3,7 @@ import { Form, Input, Button, Select, Space,Modal, Upload,Card,Table, message, C
 import { v4 as uuidv4 } from 'uuid';
 import Highlighter from 'react-highlight-words';
 import COLORS from '../../colors';
+import { linkurl } from '../../link';
 import { CheckCircleFilled, CloseCircleFilled,SearchOutlined, EditFilled, SaveFilled,PlusCircleFilled,DeleteFilled } from '@ant-design/icons';
 import moment from 'moment';
 
@@ -36,7 +37,7 @@ const EditProductForm = (props) => {
         
         return;
       }
-      const response = await fetch('http://localhost:3001/user/edituser', {
+      const response = await fetch(`${linkurl}/user/edituser`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -91,42 +92,42 @@ const EditProductForm = (props) => {
      <Form form={form} onFinish={onFinish} layout="vertical">
        <Row gutter={16}>
       
-      <Col xs={24} sm={8}>
+      <Col xs={12} sm={8}>
       <Form.Item name="hindsaa" label="Hindsy Ki Had (First)" rules={[{ required: true, message: 'Please enter a number' }]}>
         <Input type='number' placeholder="Enter number" />
       </Form.Item>
       </Col>
-      <Col xs={24} sm={8}>
+      <Col xs={12} sm={8}>
       <Form.Item name="hindsab" label="Hindsy Ki Had(second)" rules={[{ required: true, message: 'Please enter a number' }]}>
       <Input type='number' placeholder="Enter number" />
       </Form.Item>
       </Col>
-      <Col xs={24} sm={8}>
+      <Col xs={12} sm={8}>
       <Form.Item name="akraa" label="Akra Ki Had (first)" rules={[{ required: true, message: 'Please enter a number' }]}>
       <Input type='number' placeholder="Enter number" />
       </Form.Item>
       </Col>
-      <Col xs={24} sm={8}>
+      <Col xs={12} sm={8}>
       <Form.Item name="akrab" label="Akra Ki Had (second)" rules={[{ required: true, message: 'Please enter a number' }]}>
       <Input type='number' placeholder="Enter number" />
       </Form.Item>
       </Col>
-      <Col xs={24} sm={8}>
+      <Col xs={12} sm={8}>
       <Form.Item name="tendolaa" label="Tendola Ki Had(first)" rules={[{ required: true, message: 'Please enter a number' }]}>
       <Input type='number' placeholder="Enter number" />
       </Form.Item>
       </Col>
-      <Col xs={24} sm={8}>
+      <Col xs={12} sm={8}>
       <Form.Item name="tendolab" label="Tendola Ki Had(second)" rules={[{ required: true, message: 'Please enter a number' }]}>
       <Input type='number' placeholder="Enter number" />
       </Form.Item>
       </Col>
-      <Col xs={24} sm={8}>
+      <Col xs={12} sm={8}>
       <Form.Item name="panogadaa" label="Pangoda Ki Had(first)"  rules={[{ required: true, message: 'Please enter a number' }]}>
       <Input type='number' placeholder="Enter number" />
       </Form.Item>
       </Col>
-      <Col xs={24} sm={8}>
+      <Col xs={12} sm={8}>
       <Form.Item name="panogadab" label="Pangoda Ki Had(second)" rules={[{ required: true, message: 'Please enter a number' }]}>
       <Input type='number' placeholder="Enter number" />
       </Form.Item>

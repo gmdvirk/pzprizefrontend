@@ -9,12 +9,14 @@ import Limitcutting from "./ManageReports/Limitcutting"
 import TotalSale from "./ManageReports/TotalSale"
 import TotalHaddlimitSale from "./ManageReports/TotalHaddLimitSale"
 import { useNavigate } from 'react-router';
+import { linkurl } from '../link';
 
 import Noaccesspage from "./NoAccess"
 
 const AdminHomePage = () => {
 const navigate=useNavigate();
   const [employees, setEmployees] = useState([]);
+  const [draws, setDraws] = useState([]);
   const [loading, setLoading] = useState(true);
   const [userdata,setUserdata]=useState(null)
   const [noaccess,setNoaccess]=useState(false)
@@ -33,6 +35,7 @@ const navigate=useNavigate();
         key:"alldistributors",
         children: <TotalSale
         userdata={userdata}
+        draws={draws}
         products={employees}
         setProducts={setEmployees}
         />
@@ -42,6 +45,7 @@ const navigate=useNavigate();
         key:"Total",
         children: <TotalHaddlimitSale
         userdata={userdata}
+        draws={draws}
         products={employees}
         setProducts={setEmployees}/>
     },
@@ -50,6 +54,7 @@ const navigate=useNavigate();
         key:"Distributors",
         children: <Distributorssale
         userdata={userdata}
+        draws={draws}
         products={employees}
         setProducts={setEmployees}/>
     },
@@ -58,6 +63,7 @@ const navigate=useNavigate();
         key:"limitcut",
         children: <Limitcutting
         userdata={userdata}
+        draws={draws}
         products={employees}
         setProducts={setEmployees}/>
     },
@@ -66,6 +72,7 @@ const navigate=useNavigate();
         key:"bill sheet",
         children: <BillSheet
         userdata={userdata}
+        draws={draws}
         products={employees}
         setProducts={setEmployees}/>
     }
@@ -85,7 +92,7 @@ const navigate=useNavigate();
   }
   const listener = () => new Promise( async(resolve, reject) => {
     const token = localStorage.getItem('token');
-    const response = await fetch(`http://localhost:3001/user/auth`, {
+    const response = await fetch(`${linkurl}/user/auth`, {
       method: 'GET',
       headers: {
         token: `${token}`,
@@ -95,7 +102,7 @@ const navigate=useNavigate();
     if (response.ok) {
       const userData = await response.json();
       setUserdata(userData.data)
-      const response1 = await fetch(`http://localhost:3001/draw/`, {
+      const response1 = await fetch(`${linkurl}/user/getalldistributors`, {
         method: 'GET',
         headers: {
           token: `${token}`,
@@ -104,6 +111,17 @@ const navigate=useNavigate();
       if (response1.ok) {
         const userData1 = await response1.json();
         setEmployees(userData1)
+      }
+      
+      const response2 = await fetch(`${linkurl}/draw/getlasttendraws`, {
+        method: 'GET',
+        headers: {
+          token: `${token}`,
+        },
+      });
+      if (response2.ok) {
+        const userData1 = await response2.json();
+        setDraws(userData1)
       }
     } else {
       console.error('Failed to fetch user data:', response.statusText);

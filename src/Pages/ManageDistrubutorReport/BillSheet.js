@@ -1,16 +1,20 @@
 import React, { useEffect, useState,useRef } from 'react';
 import { Form, Input, Button, Select, Modal,Card,Table,Space, Row, Col,DatePicker,Upload ,message,Tabs,Spin} from 'antd';
 import { v4 as uuidv4 } from 'uuid';
-import { db } from '../../firebase-config';
 import Highlighter from 'react-highlight-words';
 import COLORS from '../../colors';
+import { linkurl } from '../../link';
+import jsPDF from 'jspdf';
+import 'jspdf-autotable';
+
 import { CheckCircleFilled, CloseCircleFilled, DeleteFilled, PlusCircleFilled, SaveFilled, ScanOutlined, SecurityScanFilled,SearchOutlined } from '@ant-design/icons';
 const { Option } = Select;
 
-const AddProductForm = ({ setProducts,products}) => {
+const AddProductForm = ({draws, setProducts,products}) => {
   const [form] = Form.useForm();
   const [successModalVisible, setSuccessModalVisible] = useState(false);
   const [errorModalVisible, setErrorModalVisible] = useState(false);
+  const [selecteddraw,setSelectedDraw]=useState(null)
   const [loading, setLoading] = useState(false);
   const generateProductCode = () => {
     return `COLLECTION-${uuidv4()}`;
@@ -20,6 +24,217 @@ const AddProductForm = ({ setProducts,products}) => {
     const specialCharsAndSpacesRegex = /[^a-zA-Z0-9]/;
     return !specialCharsAndSpacesRegex.test(password);
   }
+  const generateSummarisedreportpdf = async (arr) => {
+    let dataarr = [];
+    const doc = new jsPDF();
+  
+    // Define header and footer
+    const header = () => {
+      doc.setFontSize(18);
+      doc.setTextColor(40, 40, 40);
+      doc.text('Bill Sheet Report', 14, 22);
+      doc.setFontSize(10);
+      doc.setTextColor(100);
+      doc.text(`Generated on: ${new Date().toLocaleDateString()}`, 14, 28);
+    };
+  
+    const footer = (pageNumber) => {
+      doc.setFontSize(10);
+      doc.setTextColor(150);
+      doc.text(`Page ${pageNumber}`, doc.internal.pageSize.width - 20, doc.internal.pageSize.height - 10);
+    };
+    arr.majorsalesreport.forEach((report) => {
+      let totalFp = report.prize.tempobj.f;
+      let totalSs = report.prize.tempobj.s;
+      let totalF = report.prize.tempsale.f;
+      let totalS = report.prize.tempsale.s;
+      const totalPrizes = Number(totalFp )+ Number(totalSs) 
+      const commissionValue = report.comission.comission;
+      const commissionAmount = commissionValue === 0 ? 0 : ((totalF + totalS) * commissionValue) / 100;
+      const pcPercentageAmount = report.comission.pcpercentage === 0 ? 0 : ((totalF + totalS) * report.comission.pcpercentage) / 100;
+      const pcPercentageValue = report.comission.pcpercentage;
+      const grandTotal = totalF + totalS;
+      const safitotal = grandTotal - pcPercentageAmount - commissionAmount;
+      const nettotal = grandTotal - pcPercentageAmount - commissionAmount- Number(totalPrizes);
+      const name = report.name
+      const username=report.username
+  
+      dataarr.push({
+        commissionValue,
+        commissionAmount: commissionAmount.toFixed(2),
+        pcPercentageAmount: pcPercentageAmount.toFixed(2),
+        pcPercentageValue,
+        grandTotal: grandTotal.toFixed(2),
+        safitotal: safitotal.toFixed(2),
+        nettotal: nettotal.toFixed(2),
+        name,
+        totalPrizes,
+        username
+      });
+    });
+  
+    // Add header to PDF
+    header();
+  
+    // Define the table columns and rows
+    const columns = [
+      { header: 'Name', dataKey: 'name' },
+      { header: 'Username', dataKey: 'username' },
+      // { header: 'Commission Value', dataKey: 'commissionValue' },
+      { header: 'Commission', dataKey: 'commissionAmount' },
+      { header: 'PC Percentage', dataKey: 'pcPercentageAmount' },
+      { header: 'Prize', dataKey: 'totalPrizes' },
+      { header: 'Grand Total', dataKey: 'grandTotal' },
+      { header: 'Safi Total', dataKey: 'safitotal' },
+      { header: 'Net Total', dataKey: 'nettotal' },
+    ];
+  
+    const rows = dataarr;
+  
+    // Generate the table
+    doc.autoTable({
+      columns: columns,
+      body: rows,
+      startY: 40,
+      showHead: 'firstPage',
+      didDrawPage: (data) => {
+        // Footer
+        footer(doc.internal.getNumberOfPages());
+      },
+    });
+  
+    // Save the PDF
+    doc.save('bill_sheet_report.pdf');
+  };
+  
+  const generateSummarisedreport = async () => {
+   setLoading(true)
+try{
+  const token = localStorage.getItem('token');
+      
+  if (!token) {
+    console.error('Token not found in local storage');
+    
+    return;
+  }
+  if(!selecteddraw){
+    alert('Select a valid Draw');
+    return;
+  }
+  const response = await fetch(`${linkurl}/report/getBillSheetReportforparticulardistributorme`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      token: token,
+    },
+    body: JSON.stringify({
+      date:selecteddraw
+    }),
+  });
+  if (response.ok) {
+    const userData = await response.json();
+ generateSummarisedreportpdf(userData)
+      // downloadinvoice4(drawarrtosend,values)
+    // form.resetFields();
+  } else {
+    const userData = await response.json();
+    alert(userData.Message)
+  }
+}catch(e){
+  alert(e)
+}
+setLoading(false)
+  }
+  const generatePDFReport = (data) => {
+    console.log(data)
+    const doc = new jsPDF();
+  
+    // Define header and footer
+    const header = () => {
+      doc.setFontSize(18);
+      doc.setTextColor(40, 40, 40);
+      doc.text('Bill Sheet Report', 14, 22);
+      doc.setFontSize(10);
+      doc.setTextColor(100);
+      doc.text(`Generated on: ${new Date().toLocaleDateString()}`, 14, 28);
+    };
+  
+    const footer = (pageNumber) => {
+      doc.setFontSize(10);
+      doc.setTextColor(150);
+      doc.text(`Page ${pageNumber}`, doc.internal.pageSize.width - 20, doc.internal.pageSize.height - 10);
+    };
+  
+    data.majorsalesreport.forEach((report, index) => {
+      if (index !== 0) {
+        doc.addPage();
+      }
+  
+      header();
+  
+      doc.setFontSize(14);
+      doc.setTextColor(40, 40, 40);
+      doc.text(`Report ${index + 1}`, 14, 40);
+  
+      // Second Prizes table
+      doc.autoTable({
+        startY: 50,
+        head: [['firstprize','secondprize1', 'secondprize2', 'secondprize3', 'secondprize4', 'secondprize5']],
+        body: [
+          [
+            data.firstprize || 'N/A',
+            data.secondprize1,
+            data.secondprize2,
+            data.secondprize3,
+            data.secondprize4,
+            data.secondprize5
+          ]
+        ],
+        theme: 'grid',
+        styles: {
+          fontSize: 10,
+          textColor: 80,
+        },
+        headStyles: {
+          fillColor: [240, 240, 240],
+          textColor: 40,
+          fontSize: 11,
+        }
+      });
+      let totalFp = report.prize.tempobj.f;
+      let totalSs = report.prize.tempobj.s;
+      let totalF = report.prize.tempsale.f;
+      let totalS = report.prize.tempsale.s;
+  
+  
+      const totalPrizes = Number(totalFp )+ Number(totalSs) 
+      const commissionValue = report.comission.comission;
+      const commissionAmount = report.comission.comission===0?report.comission.comission:(((totalF + totalS)*Number(report.comission.comission))/100);
+      const pcPercentageAmount = report.comission.pcpercentage===0?report.comission.pcpercentage:(((totalF + totalS)*Number(report.comission.pcpercentage))/100);
+      const pcPercentageValue = report.comission.pcpercentage;
+  
+      doc.setFontSize(12);
+      doc.setTextColor(60, 60, 60);
+      doc.text(`Totals:`, 14, doc.autoTable.previous.finalY + 10);
+      doc.setTextColor(80, 80, 80);
+      doc.text(`Total F: ${totalF}`, 14, doc.autoTable.previous.finalY + 15);
+      doc.text(`Total S: ${totalS}`, 14, doc.autoTable.previous.finalY + 20);
+      doc.text(`Grand Total: ${totalF + totalS}`, 14, doc.autoTable.previous.finalY + 25);
+      doc.text(`Total Prizes: ${totalPrizes}`, 14, doc.autoTable.previous.finalY + 30);
+      doc.text(`Commission: ${commissionValue}`, 14, doc.autoTable.previous.finalY + 35);
+      doc.text(`PC Percentage: ${pcPercentageValue}%`, 14, doc.autoTable.previous.finalY + 40);
+      doc.text(`Commission Amount: ${commissionAmount }%`, 14, doc.autoTable.previous.finalY + 45);
+      doc.text(`PC Percentage Amount: ${pcPercentageAmount}`, 14, doc.autoTable.previous.finalY + 50);
+      doc.text(`Safi Total: ${(totalF + totalS)-pcPercentageAmount-commissionAmount}`, 14, doc.autoTable.previous.finalY + 55);
+      doc.text(`Net Total: ${((totalF + totalS)- Number(totalPrizes)-pcPercentageAmount-commissionAmount).toFixed(2)}`, 14, doc.autoTable.previous.finalY + 60);
+     
+      // doc.text(`Net Total: ${(totalF + totalS)-pcPercentageAmount-commissionAmount}`, 14, doc.autoTable.previous.finalY + 60);
+
+      footer(doc.internal.getNumberOfPages());
+    });
+  
+    doc.save('MajorsalesReport.pdf');
+  };
   const onFinish = async (values) => {
     setLoading(true)
     try {
@@ -30,36 +245,52 @@ const AddProductForm = ({ setProducts,products}) => {
         
         return;
       }
-      const response = await fetch('http://localhost:3001/user/adduser', {
+      if(values.dealer!=="allcombined"){
+        const response = await fetch(`${linkurl}/report/getBillSheetReportforparticulardistributorbyme`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           token: token,
         },
         body: JSON.stringify({
-          role:"distributor",
           ...values
         }),
       });
       if (response.ok) {
         const userData = await response.json();
-        let tempobj={...userData.data};
-        let temp=[...products];
-        temp.push(tempobj)
-        setProducts(temp)
-        form.resetFields();
+        generatePDFReport(userData)
+        // form.resetFields();
       } else {
         const userData = await response.json();
         alert(userData.Message)
       }
-
+}
+else if (values.dealer==="allcombined"){
+  const response = await fetch(`${linkurl}/report/getBillSheetReportforparticulardistributorme`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      token: token,
+    },
+    body: JSON.stringify({
+      ...values
+    }),
+  });
+  if (response.ok) {
+    const userData = await response.json();
+    generatePDFReport(userData)
+    // form.resetFields();
+  } else {
+    const userData = await response.json();
+    alert(userData.Message)
+  }
+}
     }catch(error){
       alert(error.message)
     }
 
     setLoading(false)
   };
-
   const handleSuccessModalOk = () => {
     setSuccessModalVisible(false);
   };
@@ -67,6 +298,23 @@ const AddProductForm = ({ setProducts,products}) => {
   const handleErrorModalOk = () => {
     setErrorModalVisible(false);
   };
+  const getExpiredOrNot=(users)=>{
+    // Parse the draw date and time from the users object
+    
+    const drawDateTime = new Date(`${users.date}T${users.time}Z`);
+    let currentDatetime = new Date();
+    let currentDate = currentDatetime.toLocaleDateString('en-CA'); // 'YYYY-MM-DD'
+    let currentTime = currentDatetime.toLocaleTimeString('en-GB', { hour12: false }).slice(0, 5); // 'HH:MM'
+    // Check if the current date and time are less than the draw date and time
+    const drawDateTime1 = new Date(`${currentDate}T${currentTime}Z`);
+    if (drawDateTime1 >= drawDateTime) {
+        return "expired"
+    }
+    if (users.status === 'active') {
+     return "active"
+ }
+    return "deactive"
+ }
 
 
   return (
@@ -80,37 +328,43 @@ const AddProductForm = ({ setProducts,products}) => {
     <Form form={form} onFinish={onFinish} layout="vertical">
    <Row gutter={16}>
        
-       <Col xs={24} sm={8}>
-       <Form.Item name="date" label="Date" rules={[{ required: true, message: 'Please enter a date' }]}>
-         <Input type='date' placeholder="Enter Date" />
-       </Form.Item>
+       <Col xs={24} sm={12}>
+       <Form.Item
+       label={"Select Draw"}
+                     name={ 'date'}
+                       rules={[{ required: true, message: 'Please select draw' }]}
+                       className="flex-item"
+                       fieldKey={ 'date'}
+                     >
+                      <Select placeholder="Select draw" 
+                       onChange={(e)=>setSelectedDraw(e)}
+                       >
+                        
+                      {draws.map((obj)=>{
+                        return(
+                          <Option style={{color:getExpiredOrNot(obj)==="active"?"green":'red'}} value={obj.date}>{obj.title+"---"+obj.date+"--"+getExpiredOrNot(obj)}</Option>
+                        )
+                      })  }
+                       </Select>
+                     </Form.Item>
        </Col>
-       <Col xs={24} sm={8}>
+       <Col xs={24} sm={12}>
         <Form.Item
         label={"Dealer"}
                       name={ 'dealer'}
                         rules={[{ required: true, message: 'Please select dealer' }]}
                         className="flex-item"
                         fieldKey={ 'dealer'}
+                        initialValue={"allcombined"}
                       >
-                        <Select placeholder="Select dealer" >
-                          <Option value={"dealer1"}>dealer 1</Option>
-                          <Option value={"dealer2"}>dealer 2</Option>
-                        </Select>
-                      </Form.Item>
-                      </Col>
-                      <Col xs={24} sm={8}>
-        <Form.Item
-        label={"Limit/Share"}
-                      name={ 'limitorshare'}
-                        rules={[{ required: true, message: 'Please select ' }]}
-                        className="flex-item"
-                        fieldKey={ 'limitorshare'}
-                      >
-                        <Select placeholder="Select" >
-                          <Option value={true}>Apply</Option>
-                          <Option value={false}>Not Apply</Option>
-                        </Select>
+                            <Select placeholder="Select dealer">
+                  <Option value={"allcombined"}>All Distributors</Option>
+                  {products.map((element) => {
+                    return (
+                      <Option key={element._id} value={element._id}>{element.username}</Option>
+                    );
+                  })}
+                </Select>
                       </Form.Item>
                       </Col>
       </Row>
@@ -131,10 +385,11 @@ const AddProductForm = ({ setProducts,products}) => {
                 background: COLORS.primarygradient,
                 color:"white"
                       }}
-                      icon={<SaveFilled/>}
-                      htmlType="submit">
+                      onClick={generateSummarisedreport}
+                      icon={<SaveFilled/>}>
         Summarized Bill Sheet
       </Button>
+    
     </Form.Item>
 
       {/* Success Modal */}

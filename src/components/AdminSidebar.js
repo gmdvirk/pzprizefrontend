@@ -13,8 +13,6 @@ import { useNavigate } from 'react-router';
 import Info from '../info';
 import { Typography } from 'antd';
 import COLORS from '../colors';
-import { signOut } from 'firebase/auth';
-import { auth } from '../firebase-config1';
 // import image
 
 const { Title } = Typography;
@@ -35,9 +33,7 @@ const SidebarDrawer = (props) => {
     setDrawerVisible(false);
   };
 
-  const handleLogout = () => {
-    console.log('Logging out...');
-  };
+ 
 
   const customScrollbarStyle = `
     ::-webkit-scrollbar {
@@ -72,83 +68,240 @@ const SidebarDrawer = (props) => {
               onClick={handleMenuClick}
               style={{ background: 'white' }}
             >
+               <Menu.Item
+              key="profile"
+              icon={<UserOutlined />}
+              style={{
+                color: selectedMenuKey === 'profile' ? 'white' : 'black',
+                background: selectedMenuKey === 'profile' ? COLORS.primarygradient : 'white',
+                width: '100%',
+              }}
+            >
+              Profile
+            </Menu.Item>
+            {props.userdata.role === 'superadmin' && (
               <Menu.Item
-                key="profile"
-                icon={<UserOutlined />}
+                key="admindraws"
+                icon={<CalendarOutlined />}
                 style={{
-                  color: selectedMenuKey === 'profile' ? 'white' : 'black',
-                  background: selectedMenuKey === 'profile' ? COLORS.primarygradient : 'white',
+                  color: selectedMenuKey === 'admindraws' ? 'white' : 'black',
+                  background: selectedMenuKey === 'admindraws' ? COLORS.primarygradient : 'white',
                   width: '100%',
                 }}
               >
-                Profile
+                Draw Time
               </Menu.Item>
-              {props.userdata.role === 'superadmin' && (
-                <Menu.Item
-                  key="admindraws"
-                  icon={<CalendarOutlined />}
-                  style={{
-                    color: selectedMenuKey === 'admindraws' ? 'white' : 'black',
-                    background: selectedMenuKey === 'admindraws' ? COLORS.primarygradient : 'white',
-                    width: '100%',
-                  }}
-                >
-                  Draw Time
-                </Menu.Item>
-              )}
-              {props.userdata.role === 'superadmin' && (
-                <Menu.Item
-                  key="Drawresults"
-                  icon={<CalendarOutlined />}
-                  style={{
-                    color: selectedMenuKey === 'Drawresults' ? 'white' : 'black',
-                    background: selectedMenuKey === 'Drawresults' ? COLORS.primarygradient : 'white',
-                    width: '100%',
-                  }}
-                >
-                  Draw Results
-                </Menu.Item>
-              )}
-              {props.userdata.role === 'superadmin' && (
-                <Menu.Item
-                  key="admindistributors"
-                  icon={<UserOutlined />}
-                  style={{
-                    color: selectedMenuKey === 'admindistributors' ? 'white' : 'black',
-                    background: selectedMenuKey === 'admindistributors' ? COLORS.primarygradient : 'white',
-                    width: '100%',
-                  }}
-                >
-                  Distributors
-                </Menu.Item>
-              )}
-              {props.userdata.role === 'superadmin' && (
-                <Menu.Item
-                  key="customers"
-                  icon={<DashboardOutlined />}
-                  style={{
-                    color: selectedMenuKey === 'customers' ? 'white' : 'black',
-                    background: selectedMenuKey === 'customers' ? COLORS.primarygradient : 'white',
-                    width: '100%',
-                  }}
-                >
-                  Reports
-                </Menu.Item>
-              )}
-              {props.userdata.role === 'superadmin' && (
-                <Menu.Item
-                  key="digikhatta"
-                  icon={<CalendarOutlined />}
-                  style={{
-                    color: selectedMenuKey === 'digikhatta' ? 'white' : 'black',
-                    background: selectedMenuKey === 'digikhatta' ? COLORS.primarygradient : 'white',
-                    width: '100%',
-                  }}
-                >
-                  Search Bundle
-                </Menu.Item>
-              )}
-            </Menu>
+            )}
+            {props.userdata.role === 'superadmin' && (
+              <Menu.Item
+                key="Drawresults"
+                icon={<CalendarOutlined />}
+                style={{
+                  color: selectedMenuKey === 'Drawresults' ? 'white' : 'black',
+                  background: selectedMenuKey === 'Drawresults' ? COLORS.primarygradient : 'white',
+                  width: '100%',
+                }}
+              >
+                Draw Results
+              </Menu.Item>
+            )}
+            {props.userdata.role === 'superadmin' && (
+              <Menu.Item
+                key="admindistributors"
+                icon={<UserOutlined />}
+                style={{
+                  color: selectedMenuKey === 'admindistributors' ? 'white' : 'black',
+                  background: selectedMenuKey === 'admindistributors' ? COLORS.primarygradient : 'white',
+                  width: '100%',
+                }}
+              >
+                Distributors
+              </Menu.Item>
+            )}
+            {props.userdata.role === 'superadmin' && (
+              <Menu.Item
+                key="reports"
+                icon={<DashboardOutlined />}
+                style={{
+                  color: selectedMenuKey === 'reports' ? 'white' : 'black',
+                  background: selectedMenuKey === 'reports' ? COLORS.primarygradient : 'white',
+                  width: '100%',
+                }}
+              >
+                Reports
+              </Menu.Item>
+            )}
+            {props.userdata.role === 'superadmin' && (
+              <Menu.Item
+                key="searchbundle"
+                icon={<CalendarOutlined />}
+                style={{
+                  color: selectedMenuKey === 'searchbundle' ? 'white' : 'black',
+                  background: selectedMenuKey === 'searchbundle' ? COLORS.primarygradient : 'white',
+                  width: '100%',
+                }}
+              >
+                Search Number
+              </Menu.Item>
+            )}
+             
+            {(props.userdata.role === 'distributor' ) && (
+              <Menu.Item
+                key="subdistributors"
+                icon={<UserOutlined />}
+                style={{
+                  color: selectedMenuKey === 'subdistributors' ? 'white' : 'black',
+                  background: selectedMenuKey === 'subdistributors' ? COLORS.primarygradient : 'white',
+                  width: '100%',
+                }}
+              >
+                Distributors
+              </Menu.Item>
+            )}
+               {(props.userdata.role === 'distributor' || props.userdata.role === 'subdistributor') && (
+              <Menu.Item
+                key="distributorsmerchants"
+                icon={<UserOutlined />}
+                style={{
+                  color: selectedMenuKey === 'distributorsmerchants' ? 'white' : 'black',
+                  background: selectedMenuKey === 'distributorsmerchants' ? COLORS.primarygradient : 'white',
+                  width: '100%',
+                }}
+              >
+                Users
+              </Menu.Item>
+            )}
+            {(props.userdata.role === 'distributor' || props.userdata.role === 'subdistributor') && (
+              <Menu.Item
+                key="distributortransaction"
+                icon={<DashboardOutlined />}
+                style={{
+                  color: selectedMenuKey === 'distributortransaction' ? 'white' : 'black',
+                  background: selectedMenuKey === 'distributortransaction' ? COLORS.primarygradient : 'white',
+                  width: '100%',
+                }}
+              >
+                Book Detail
+              </Menu.Item>
+            )}
+            {(props.userdata.role === 'distributor' || props.userdata.role === 'subdistributor') && (
+              <Menu.Item
+                key="distributorreports"
+                icon={<DashboardOutlined />}
+                style={{
+                  color: selectedMenuKey === 'distributorreports' ? 'white' : 'black',
+                  background: selectedMenuKey === 'distributorreports' ? COLORS.primarygradient : 'white',
+                  width: '100%',
+                }}
+              >
+                Reports
+              </Menu.Item>
+            )}
+            {(props.userdata.role === 'distributor' || props.userdata.role === 'subdistributor') && (
+              <Menu.Item
+                key="distributorsearchbundle"
+                icon={<CalendarOutlined />}
+                style={{
+                  color: selectedMenuKey === 'distributorsearchbundle' ? 'white' : 'black',
+                  background: selectedMenuKey === 'distributorsearchbundle' ? COLORS.primarygradient : 'white',
+                  width: '100%',
+                }}
+              >
+                Search Number
+              </Menu.Item>
+            )}
+                       {props.userdata.role === 'merchant' && (
+              <Menu.Item
+                key="merchant"
+                icon={<UserOutlined />}
+                style={{
+                  color: selectedMenuKey === 'merchant' ? 'white' : 'black',
+                  background: selectedMenuKey === 'merchant' ? COLORS.primarygradient : 'white',
+                  width: '100%',
+                }}
+              >
+                Home
+              </Menu.Item>
+            )}
+            {props.userdata.role === 'merchant' && (
+              <Menu.Item
+                key="merchanttransaction"
+                icon={<DashboardOutlined />}
+                style={{
+                  color: selectedMenuKey === 'merchanttransaction' ? 'white' : 'black',
+                  background: selectedMenuKey === 'merchanttransaction' ? COLORS.primarygradient : 'white',
+                  width: '100%',
+                }}
+              >
+                Book Detail
+              </Menu.Item>
+            )}
+            {props.userdata.role === 'merchant' && (
+              <Menu.Item
+                key="merchantreports"
+                icon={<DashboardOutlined />}
+                style={{
+                  color: selectedMenuKey === 'merchantreports' ? 'white' : 'black',
+                  background: selectedMenuKey === 'merchantreports' ? COLORS.primarygradient : 'white',
+                  width: '100%',
+                }}
+              >
+                Reports
+              </Menu.Item>
+            )}
+            {props.userdata.role === 'merchant' && (
+              <Menu.Item
+                key="merchantsearchbundle"
+                icon={<CalendarOutlined />}
+                style={{
+                  color: selectedMenuKey === 'merchantsearchbundle' ? 'white' : 'black',
+                  background: selectedMenuKey === 'merchantsearchbundle' ? COLORS.primarygradient : 'white',
+                  width: '100%',
+                }}
+              >
+                Search Number
+              </Menu.Item>
+            )}
+               {props.userdata.role !== 'merchant' && (
+              <Menu.Item
+                key="changekey"
+                icon={<CalendarOutlined />}
+                style={{
+                  color: selectedMenuKey === 'changekey' ? 'white' : 'black',
+                  background: selectedMenuKey === 'changekey' ? COLORS.primarygradient : 'white',
+                  width: '100%',
+                }}
+              >
+                Change Key
+              </Menu.Item>
+            )}
+            {props.userdata.role === 'superadmin' && (
+              <Menu.Item
+                key="editadmin"
+                icon={<CalendarOutlined />}
+                style={{
+                  color: selectedMenuKey === 'editadmin' ? 'white' : 'black',
+                  background: selectedMenuKey === 'editadmin' ? COLORS.primarygradient : 'white',
+                  width: '100%',
+                }}
+              >
+                Edit Admin
+              </Menu.Item>
+            )}
+             {props.userdata.role === 'superadmin' && (
+              <Menu.Item
+                key="changepassword"
+                icon={<CalendarOutlined />}
+                style={{
+                  color: selectedMenuKey === 'changepassword' ? 'white' : 'black',
+                  background: selectedMenuKey === 'changepassword' ? COLORS.primarygradient : 'white',
+                  width: '100%',
+                }}
+              >
+                Change Password
+              </Menu.Item>
+            )}
+          </Menu>
             <Button
               icon={<LogoutOutlined />}
               style={{
@@ -170,13 +323,18 @@ const SidebarDrawer = (props) => {
           <Card
             style={{
               boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)',
-              margin: 10,
+              marginTop: 10,
+              marginLeft: 10,
+              marginRigth: 10,
+              marginBottom:0,
+              height: 70,
             }}
           >
             <Button
               style={{
                 background: COLORS.primarygradient,
                 borderRadius: 10,
+                marginTop:-15
               }}
               type="primary"
               icon={<MenuOutlined />}
@@ -278,11 +436,11 @@ const SidebarDrawer = (props) => {
                   width: '100%',
                 }}
               >
-                Search Bundle
+                Search Number
               </Menu.Item>
             )}
              
-            {(props.userdata.role === 'distributor' || props.userdata.role === 'subdistributor') && (
+            {(props.userdata.role === 'distributor' ) && (
               <Menu.Item
                 key="subdistributors"
                 icon={<UserOutlined />}
@@ -292,7 +450,7 @@ const SidebarDrawer = (props) => {
                   width: '100%',
                 }}
               >
-                Sub Distributors
+                Distributors
               </Menu.Item>
             )}
                {(props.userdata.role === 'distributor' || props.userdata.role === 'subdistributor') && (
@@ -305,7 +463,7 @@ const SidebarDrawer = (props) => {
                   width: '100%',
                 }}
               >
-                Merchants
+                Users
               </Menu.Item>
             )}
             {(props.userdata.role === 'distributor' || props.userdata.role === 'subdistributor') && (
@@ -318,7 +476,7 @@ const SidebarDrawer = (props) => {
                   width: '100%',
                 }}
               >
-                Transaction History
+                Book Detail
               </Menu.Item>
             )}
             {(props.userdata.role === 'distributor' || props.userdata.role === 'subdistributor') && (
@@ -344,7 +502,7 @@ const SidebarDrawer = (props) => {
                   width: '100%',
                 }}
               >
-                Search Bundle
+                Search Number
               </Menu.Item>
             )}
                        {props.userdata.role === 'merchant' && (
@@ -370,7 +528,7 @@ const SidebarDrawer = (props) => {
                   width: '100%',
                 }}
               >
-                Transaction History
+                Book Detail
               </Menu.Item>
             )}
             {props.userdata.role === 'merchant' && (
@@ -396,9 +554,49 @@ const SidebarDrawer = (props) => {
                   width: '100%',
                 }}
               >
-                Search Bundle
+                Search Number
               </Menu.Item>
             )}
+              {props.userdata.role !== 'merchant' && (
+              <Menu.Item
+                key="changekey"
+                icon={<CalendarOutlined />}
+                style={{
+                  color: selectedMenuKey === 'changekey' ? 'white' : 'black',
+                  background: selectedMenuKey === 'changekey' ? COLORS.primarygradient : 'white',
+                  width: '100%',
+                }}
+              >
+                Change Key
+              </Menu.Item>
+            )}
+            {props.userdata.role === 'superadmin' && (
+              <Menu.Item
+                key="editadmin"
+                icon={<CalendarOutlined />}
+                style={{
+                  color: selectedMenuKey === 'editadmin' ? 'white' : 'black',
+                  background: selectedMenuKey === 'editadmin' ? COLORS.primarygradient : 'white',
+                  width: '100%',
+                }}
+              >
+                Edit Admin
+              </Menu.Item>
+            )}
+             {props.userdata.role === 'superadmin' && (
+              <Menu.Item
+                key="changepassword"
+                icon={<CalendarOutlined />}
+                style={{
+                  color: selectedMenuKey === 'changepassword' ? 'white' : 'black',
+                  background: selectedMenuKey === 'changepassword' ? COLORS.primarygradient : 'white',
+                  width: '100%',
+                }}
+              >
+                Change Password
+              </Menu.Item>
+            )}
+            
           </Menu>
           <Button
             icon={<LogoutOutlined />}

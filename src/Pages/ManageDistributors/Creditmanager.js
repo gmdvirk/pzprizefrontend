@@ -3,6 +3,7 @@ import { Form, Input, Button, Select, Space,Modal, Upload,Card,Table, message, C
 import { v4 as uuidv4 } from 'uuid';
 import Highlighter from 'react-highlight-words';
 import COLORS from '../../colors';
+import { linkurl } from '../../link';
 import { CheckCircleFilled, CloseCircleFilled,SearchOutlined, EditFilled, SaveFilled,PlusCircleFilled,DeleteFilled } from '@ant-design/icons';
 import moment from 'moment';
 
@@ -67,7 +68,7 @@ const EditProductForm = ({selectedProduct,setSelectedProduct,payment,setPayment}
           
           return;
         }
-        const response = await fetch('http://localhost:3001/payment/addcredit', {
+        const response = await fetch(`${linkurl}/payment/addcredit`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -100,9 +101,7 @@ const EditProductForm = ({selectedProduct,setSelectedProduct,payment,setPayment}
           const userData = await response.json();
           alert(userData.Message)
         }
-  
       }
-    
     }catch(error){
       setErrormessage(error.message)
       setErrorModalVisible(true)
@@ -137,7 +136,7 @@ const EditProductForm = ({selectedProduct,setSelectedProduct,payment,setPayment}
           
           return;
         }
-        const response = await fetch('http://localhost:3001/payment/addcredit', {
+        const response = await fetch(`${linkurl}/payment/addcredit`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -152,6 +151,9 @@ const EditProductForm = ({selectedProduct,setSelectedProduct,payment,setPayment}
           const userData = await response.json();
           let tempobj={...userData.payment};
           let temp=[...payment];
+          const { date, time } = getDateAndTime(tempobj.createdAt);
+          tempobj.time= time ;
+          tempobj.date=date
           temp.push(tempobj)
           setPayment(temp)
           let tempobj1={...selectedProduct,payment:{
@@ -198,7 +200,7 @@ const EditProductForm = ({selectedProduct,setSelectedProduct,payment,setPayment}
       <>
       <Card 
        title="Draw Credit"
-       headStyle={{ backgroundColor: '#33cc33', borderColor: '#33cc33' }}
+       headStyle={{ backgroundColor: '#33cc33',color:"white",  borderColor: '#33cc33' }}
        style={{ 
          boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)', 
          marginTop: 20, 
@@ -226,7 +228,7 @@ const EditProductForm = ({selectedProduct,setSelectedProduct,payment,setPayment}
   <Form.Item>
     <Button   style={{
           borderRadius:10,
-              background: COLORS.primarygradient,
+              background: COLORS.deletegradient,
               color:"white"
                     }}
                     icon={<SaveFilled/>}
@@ -240,7 +242,7 @@ const EditProductForm = ({selectedProduct,setSelectedProduct,payment,setPayment}
   </Card>
   <Card 
        title="Withdraw Credit"
-       headStyle={{ backgroundColor: '#cc0000', borderColor: '#cc0000' }}
+       headStyle={{ backgroundColor: '#cc0000',color:"white",  borderColor: '#cc0000' }}
        style={{ 
          boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)', 
          marginTop: 20, 
@@ -268,7 +270,7 @@ const EditProductForm = ({selectedProduct,setSelectedProduct,payment,setPayment}
   <Form.Item>
     <Button   style={{
           borderRadius:10,
-              background: COLORS.primarygradient,
+              background: COLORS.deletegradient,
               color:"white"
                     }}
                     icon={<SaveFilled/>}

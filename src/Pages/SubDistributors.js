@@ -6,7 +6,7 @@ import { useMedia } from 'react-use';
 import AllUsers from './ManageSubdistributors/Allsubdistributors'
 import AddUserForm from './ManageSubdistributors/Addsubdistributors';
 import { useNavigate } from 'react-router';
-
+import {linkurl} from "../link"
 import Noaccesspage from "./NoAccess"
 
 const AdminHomePage = () => {
@@ -14,6 +14,7 @@ const navigate=useNavigate();
   const [employees, setEmployees] = useState([]);
   const [loading, setLoading] = useState(true);
   const [userdata,setUserdata]=useState(null)
+  const [completeuserdata,setCompleteUserdata]=useState(null)
   const [noaccess,setNoaccess]=useState(false)
   const isMobile = useMedia('(max-width: 768px)'); // Adjust the breakpoint as needed
   let marginLeft=280
@@ -26,16 +27,17 @@ const navigate=useNavigate();
   };
   const Alltabs=[
     {
-        label:"All Subdistributors",
+        label:"All distributors",
         key:"alldistributors",
         children: <AllUsers
         userdata={userdata}
         products={employees}
+        completeuserdata={completeuserdata}
         setProducts={setEmployees}
         />
     },
     {
-        label:"Add Subdistributor",
+        label:"New distributor",
         key:"adddistributors",
         children: <AddUserForm
         userdata={userdata}
@@ -46,7 +48,7 @@ const navigate=useNavigate();
 
   const listener = () => new Promise( async(resolve, reject) => {
     const token = localStorage.getItem('token');
-    const response = await fetch(`http://localhost:3001/user/auth`, {
+    const response = await fetch(`${linkurl}/user/auth`, {
       method: 'GET',
       headers: {
         token: `${token}`,
@@ -56,7 +58,7 @@ const navigate=useNavigate();
     if (response.ok) {
       const userData = await response.json();
       setUserdata(userData.data)
-      const response1 = await fetch(`http://localhost:3001/user/getallmysubdistributors`, {
+      const response1 = await fetch(`${linkurl}/user/getallmysubdistributors`, {
         method: 'GET',
         headers: {
           token: `${token}`,
@@ -66,6 +68,17 @@ const navigate=useNavigate();
         const userData1 = await response1.json();
         setEmployees(userData1)
       }
+      const response2 = await fetch(`${linkurl}/user/getBalance`, {
+        method: 'GET',
+        headers: {
+          token: `${token}`,
+        },
+      });
+      if (response2.ok) {
+        const userData1 = await response2.json();
+        setCompleteUserdata(userData1)
+      }
+      
     } else {
       console.error('Failed to fetch user data:', response.statusText);
       navigate("/login");
@@ -126,7 +139,7 @@ marginBottom:20,
       <div style={contentStyle}>
 
      <Card
-      title="Sub distributors"
+      title="Distributors"
       style={{ boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)' }}
     >
      <Tabs

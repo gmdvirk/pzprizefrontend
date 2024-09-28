@@ -3,6 +3,7 @@ import { Form, Input, Button, Select, Space,Modal, Upload,Card,Table, message, C
 import { v4 as uuidv4 } from 'uuid';
 import Highlighter from 'react-highlight-words';
 import COLORS from '../../colors';
+import { linkurl } from '../../link';
 import { CheckCircleFilled, CloseCircleFilled,SearchOutlined, EditFilled, SaveFilled,PlusCircleFilled,DeleteFilled } from '@ant-design/icons';
 import moment from 'moment';
 import { useNavigate } from 'react-router-dom';
@@ -34,7 +35,7 @@ const EditProductForm = ({selectedProduct,userdata}) => {
       // if(token){
       //   localStorage.removeItem('token');
       // }
-      const response = await fetch('http://localhost:3001/user/loginasanotheruser', {
+      const response = await fetch(`${linkurl}/user/loginasanotheruser`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -49,8 +50,14 @@ const EditProductForm = ({selectedProduct,userdata}) => {
       if (response.ok) {
         const userData = await response.json();
         localStorage.setItem('token', userData.token);
-        navigate("/");
-        
+          if(userData.rest._doc.role==="merchant"){
+            navigate("/merchant")
+          }
+          else if(userData.rest._doc.role==="distributor" || userData.rest._doc.role==="subdistributor"){
+            navigate("/distributorsmerchants")
+          }else{
+            navigate("/");
+          }
         // setMessage("Successfully Updated")
         // setSuccessModalVisible(true)
       } else {

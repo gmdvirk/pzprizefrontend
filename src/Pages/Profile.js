@@ -3,10 +3,9 @@ import React,{useEffect,useState} from 'react';
 import { Tabs,Card ,Spin} from 'antd';
 import AdminSideBar from "../components/AdminSidebar"
 import { useMedia } from 'react-use';
-import { db } from '../firebase-config';
-import { getDocs,collection,getDoc,doc } from 'firebase/firestore';
-import { auth } from '../firebase-config1';
 import { useNavigate } from 'react-router';
+
+import { linkurl } from '../link';
 const AdminHomePage = () => {
 const navigate=useNavigate();
     const [userdata, setUserdata] = useState(null);
@@ -18,20 +17,10 @@ const navigate=useNavigate();
     marginLeft=10
   }
 
-  function getSubstringBeforeAtSymbol(email) {
-    const atIndex = email.indexOf('@');
-    
-    if (atIndex !== -1) {
-      return email.substring(0, atIndex);
-      // or use slice: return email.slice(0, atIndex);
-    } else {
-      // handle the case where '@' is not present in the email
-      return 'Invalid email format';
-    }
-  }
+
   const listener = () => new Promise( async(resolve, reject) => {
     const token = localStorage.getItem('token');
-    const response = await fetch(`http://localhost:3001/user/auth`, {
+    const response = await fetch(`${linkurl}/user/auth`, {
       method: 'GET',
       headers: {
         token: `${token}`,
@@ -40,6 +29,9 @@ const navigate=useNavigate();
 
     if (response.ok) {
       const userData = await response.json();
+      if(userData.data.role==="merchant"){
+        navigate("/merchant");
+      }
       setUserdata(userData.data)
     } else {
       console.error('Failed to fetch user data:', response.statusText);

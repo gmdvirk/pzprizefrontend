@@ -73,7 +73,8 @@ const Statisticscard = ({data}) => {
                   padding: '8px', 
                   borderRadius: 10,
                   color:'white'
-                }} />}
+                }} />
+              }
             />
           </Card>
         </Col>
@@ -84,7 +85,7 @@ const Statisticscard = ({data}) => {
           >
             <Statistic
               title="Available Balance"
-              value={data.cash+data.credit}
+              value={data.availablebalance}
               prefix={<AppstoreAddOutlined 
                 style={{
                   background: COLORS.primarygradient,
