@@ -590,7 +590,8 @@ const ProductTable = ({ products, setProducts,userdata ,completeuserdata}) => {
     // Save the PDF
     doc.save('payment_report.pdf');
   };
-  
+  const today = new Date().toISOString().split('T')[0];
+
 
   return (
     <>
@@ -666,37 +667,8 @@ const ProductTable = ({ products, setProducts,userdata ,completeuserdata}) => {
       >
         {selectedProduct&&selectedProduct.payment && <Stats data={selectedProduct.payment}/>}
     
-          
-          <Form form={form} onFinish={onFinish} layout="vertical">
-  <Row gutter={16}>
-    <Col xs={24} sm={12}>
-      <Form.Item name="startdate" label="Start Date" rules={[{ required: true, message: 'Please enter a start date' }]}>
-        <Input type="date" placeholder="Enter date" />
-      </Form.Item>
-    </Col>
-    <Col xs={24} sm={12}>
-      <Form.Item name="enddate" label="End Date" rules={[{ required: true, message: 'Please enter an end date' }]}>
-        <Input type="date" placeholder="Enter date" />
-      </Form.Item>
-    </Col>
-  </Row>
-  <Form.Item>
-    <Button
-      style={{
-        borderRadius: 10,
-        background: COLORS.savegradient,
-        color: 'white',
-      }}
-      icon={<SaveFilled />}
-      htmlType="submit"
-    >
-      Download
-    </Button>
-  </Form.Item>
-</Form>
- 
-       
-          <Button
+                 
+        <Button
           icon={<DollarCircleFilled/>}
             key="cash"
             onClick={handleCashOpen}
@@ -724,7 +696,41 @@ const ProductTable = ({ products, setProducts,userdata ,completeuserdata}) => {
                
        {creditopen&& <Creditmanager  selectedProduct={selectedProduct} setSelectedProduct={setSelectedProduct} payment={payment} setPayment={setPayment}/>}
    {cashopen&& <Cashmanager selectedProduct={selectedProduct} setSelectedProduct={setSelectedProduct} payment={payment} setPayment={setPayment} />}
-   <Table columns={paymentcolumns} dataSource={payment} rowKey="id"
+  
+          <Form form={form} onFinish={onFinish} layout="vertical"
+          initialValues={{
+            startdate: today,
+            enddate: today
+          }}
+          >
+  <Row gutter={16}>
+    <Col xs={24} sm={12}>
+      <Form.Item name="startdate" label="Start Date" rules={[{ required: true, message: 'Please enter a start date' }]}>
+        <Input type="date" placeholder="Enter date" />
+      </Form.Item>
+    </Col>
+    <Col xs={24} sm={12}>
+      <Form.Item name="enddate" label="End Date" rules={[{ required: true, message: 'Please enter an end date' }]}>
+        <Input type="date" placeholder="Enter date" />
+      </Form.Item>
+    </Col>
+  </Row>
+  <Form.Item>
+    <Button
+      style={{
+        borderRadius: 10,
+        background: COLORS.savegradient,
+        color: 'white',
+      }}
+      icon={<SaveFilled />}
+      htmlType="submit"
+    >
+      Download
+    </Button>
+  </Form.Item>
+</Form>
+ 
+ <Table columns={paymentcolumns} dataSource={payment} rowKey="id"
       
       scroll={{ x: true }} // Enable horizontal scrolling
       responsive={true} // Enable responsive behavior

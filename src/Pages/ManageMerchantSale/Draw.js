@@ -35,7 +35,7 @@ const DrawSelector = ({ completedraw, products, getSaleDetail, setCompletedraw }
       return () => clearInterval(interval);
     }, [targetDate, targetTime]);
   
-    return <p style={{ fontSize: 12, paddingTop: 30}}>{remainingTime}</p>;
+    return <p style={{ fontSize: 12, paddingTop: 30}}>{remainingTime +  "  Draw:"+ completedraw.title  }</p>;
   };
   const handleChange = useCallback((e) => {
     getSaleDetail(e);
@@ -43,14 +43,7 @@ const DrawSelector = ({ completedraw, products, getSaleDetail, setCompletedraw }
     setCompletedraw(memoizedProducts[index]);
   }, [getSaleDetail, memoizedProducts, setCompletedraw]);
 
-  const memoizedOptions = useMemo(() => 
-    memoizedProducts.map((element) => (
-      <Option key={element._id} value={element._id}>
-        {element.title + " --- " + element.date}
-      </Option>
-    )),
-    [memoizedProducts]
-  );
+  
 
   const memoizedLabel = useMemo(() => 
     completedraw && (
@@ -61,7 +54,6 @@ const DrawSelector = ({ completedraw, products, getSaleDetail, setCompletedraw }
     ),
     [completedraw]
   );
-
   return (
     <Col xs={25} sm={8}>
       <Form.Item
@@ -74,9 +66,15 @@ const DrawSelector = ({ completedraw, products, getSaleDetail, setCompletedraw }
         <Select 
           onChange={handleChange} 
           placeholder="Select Draw"
-  className="custom-select"
+          className="custom-select"
         >
-          {memoizedOptions}
+      {   
+           memoizedProducts.map((element) => (
+          <Option key={element._id} value={element._id}>
+              {element.title + " --- " + element.date}
+          </Option>
+             ))
+             }
         </Select>
       </Form.Item>
     </Col>

@@ -91,6 +91,22 @@ const AddProductForm = ({ setProducts,products}) => {
         <Input placeholder="Enter name" />
       </Form.Item>
       </Col>
+           
+      <Col xs={24} sm={8}>
+      <Form.Item name="password" label="Password" rules={[{ required: true, message: 'Please enter password' }]}>
+        <Input placeholder="Enter password" />
+      </Form.Item>
+      </Col>
+      <Col xs={24} sm={8}>
+       <Form.Item name="comission" label="ہنسہ+آکرہ+ٹنڈولہ+کمشن" rules={[{ required: true, message: 'Please enter a comission' }]}>
+         <Input placeholder="Enter comission" />
+       </Form.Item>
+       </Col>
+       <Col xs={24} sm={8}>
+       <Form.Item name="pcpercentage" label="پی سی کمشن" rules={[{ required: true, message: 'Please enter Pc percentage' }]}>
+         <Input placeholder="Enter Pc percentage" />
+       </Form.Item>
+       </Col>
       <Col xs={24} sm={8}>
       <Form.Item name="address" label="Customer Address" rules={[{ required: true, message: 'Please enter customer address' }]}>
         <Input placeholder="Enter Customer Address" />
@@ -98,12 +114,7 @@ const AddProductForm = ({ setProducts,products}) => {
       </Col>
       </Row>
       <Row gutter={16}>
-      
-      <Col xs={24} sm={8}>
-      <Form.Item name="password" label="Password" rules={[{ required: true, message: 'Please enter password' }]}>
-        <Input placeholder="Enter password" />
-      </Form.Item>
-      </Col>
+ 
       <Col xs={24} sm={8}>
       <Form.Item name="contact" label="Contact" rules={[{ required: true, message: 'Please enter contact' }]}>
         <Input placeholder="Enter contact" />
@@ -124,16 +135,7 @@ const AddProductForm = ({ setProducts,products}) => {
   </Select>
 </Form.Item>
                     </Col>
-                    <Col xs={24} sm={8}>
-       <Form.Item name="comission" label="ہنسہ+آکرہ+ٹنڈولہ+کمشن" rules={[{ required: true, message: 'Please enter a comission' }]}>
-         <Input placeholder="Enter comission" />
-       </Form.Item>
-       </Col>
-       <Col xs={24} sm={8}>
-       <Form.Item name="pcpercentage" label="پی سی کمشن" rules={[{ required: true, message: 'Please enter Pc percentage' }]}>
-         <Input placeholder="Enter Pc percentage" />
-       </Form.Item>
-       </Col>
+        
      </Row>
     <Form.Item>
       <Button   style={{

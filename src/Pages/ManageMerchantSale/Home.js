@@ -1021,9 +1021,9 @@ const App = ({ userdata, setProducts,credit,upline, products,balance,setBalance 
 
     }
     
-    doc.text(`Total of First: ${totalFirst1.toFixed(2)}`, 14, 42);
-    doc.text(`Total of Second: ${totalSecond1.toFixed(2)}`, 84, 42);
-    doc.text(`Total: ${total1.toFixed(2)}`, 154, 42);
+    // doc.text(`Total of First: ${totalFirst1.toFixed(2)}`, 14, 42);
+    // doc.text(`Total of Second: ${totalSecond1.toFixed(2)}`, 84, 42);
+    doc.text(`Total: ${total1.toFixed(2)}`, 14, 42);
     doc.setFontSize(10);
     if (userdata && userdata.username) {
       doc.text(`User: ${userdata.name}`, 14, 30);
@@ -1032,7 +1032,7 @@ const App = ({ userdata, setProducts,credit,upline, products,balance,setBalance 
       doc.text(`Draw Title: ${completedraw.title}`, 14, 35);
     }
   
-    let startY = 60; // Initial Y position for the first section
+    let startY = 40; // Initial Y position for the first section
     let startX = 14; // Initial X position
     const blockWidth = 15; // Smaller width for each block
     const blockHeight = 8; // Smaller height for each block
@@ -1048,9 +1048,9 @@ const App = ({ userdata, setProducts,credit,upline, products,balance,setBalance 
     })
     
     doc.setFontSize(12);
-    doc.text(`Total of First: ${totalFirst1.toFixed(2)}`, 14, startY);
-    doc.text(`Total of Second: ${totalSecond1.toFixed(2)}`, 84, startY);
-    doc.text(`Total: ${total1.toFixed(2)}`, 154, startY);
+    // doc.text(`Total of First: ${totalFirst1.toFixed(2)}`, 14, startY);
+    // doc.text(`Total of Second: ${totalSecond1.toFixed(2)}`, 84, startY);
+    // doc.text(`Total: ${total1.toFixed(2)}`, 154, startY);
     startY += 10; // Add some spacing before the totals
     temparr.forEach((filteredPayments, arrIndex) => {
       
@@ -1182,9 +1182,9 @@ const App = ({ userdata, setProducts,credit,upline, products,balance,setBalance 
     totalFirstf=totalFirst1+totalFirst2
     totalSecondf=totalSecond1+totalSecond2
     totalf=total1+total2
-    doc.text(`Total of First: ${totalFirstf.toFixed(2)}`, 14, 42);
-    doc.text(`Total of Second: ${totalSecondf.toFixed(2)}`, 84, 42);
-    doc.text(`Total: ${totalf.toFixed(2)}`, 154, 42);
+    // doc.text(`Total of First: ${totalFirstf.toFixed(2)}`, 14, 42);
+    // doc.text(`Total of Second: ${totalSecondf.toFixed(2)}`, 84, 42);
+    doc.text(`Total: ${totalf.toFixed(2)}`, 14, 42);
     for (let i=0;i<2;i++){
     let arr1 = filteredPayments.filter((obj) => obj.bundle.length === 1);
     let arr2 = filteredPayments.filter((obj) => obj.bundle.length === 2);
@@ -1208,16 +1208,16 @@ const App = ({ userdata, setProducts,credit,upline, products,balance,setBalance 
     let startX = 14; // Initial X position
     const blockWidth = 15; // Smaller width for each block
     const blockHeight = 8; // Smaller height for each block
-    temparr.forEach((filteredPayments, arrIndex) => {
+    // temparr.forEach((filteredPayments, arrIndex) => {
       
-      if(filteredPayments.length>0){
-      filteredPayments.forEach((pay) => {
-        totalFirst1 += parseFloat(pay.f) || 0;
-        totalSecond1 += parseFloat(pay.s) || 0;
-        total1 += (parseFloat(pay.f) || 0) + (parseFloat(pay.s) || 0);
-      })
-    }
-    })
+    //   if(filteredPayments.length>0){
+    //   filteredPayments.forEach((pay) => {
+    //     totalFirst1 += parseFloat(pay.f) || 0;
+    //     totalSecond1 += parseFloat(pay.s) || 0;
+    //     total1 += (parseFloat(pay.f) || 0) + (parseFloat(pay.s) || 0);
+    //   })
+    // }
+    // })
     
     doc.setFontSize(12);
     doc.text(`Total of First: ${totalFirst1.toFixed(2)}`, 14, startY);
@@ -1951,7 +1951,8 @@ useEffect(() => {
    {[1, 2, 3].map((item, index) => (
   <div
   style={{
-    backgroundColor:lastkeypressed === item.toString() ? 'green':'white'
+    backgroundColor:lastkeypressed === item.toString() ? '#0000FF':'white',
+      color:lastkeypressed === item.toString() ? 'white':'black',
   }}
     key={index}
     onClick={() => handleKeyPress(item.toString())}
@@ -1965,7 +1966,8 @@ useEffect(() => {
     </div>
   {[4, 5, 6].map((item, index) => (
     <div style={{
-      backgroundColor:lastkeypressed === item.toString() ? 'green':'white'
+      backgroundColor:lastkeypressed === item.toString() ? '#0000FF':'white',
+      color:lastkeypressed === item.toString() ? 'white':'black',
     }} key={index + 4} onClick={ () => handleKeyPress(item.toString())}>
       {item}
     </div>
@@ -1977,7 +1979,8 @@ useEffect(() => {
   {[7, 8, 9].map((item, index) => (
     <div
     style={{
-      backgroundColor:lastkeypressed === item.toString() ? 'green':'white'
+      backgroundColor:lastkeypressed === item.toString() ? '#0000FF':'white',
+      color:lastkeypressed === item.toString() ? 'white':'black',
     }}
       key={index + 8}
       onClick={ () => handleKeyPress(item.toString())}
@@ -1988,20 +1991,24 @@ useEffect(() => {
 <div 
   key={99} 
   style={{
-    borderColor: lastkeypressed === "_" ? 'green' : 'black',
-    backgroundColor: lastkeypressed === "_" ? 'green': '#bbeddf'
+    backgroundColor:lastkeypressed === "_" ? '#0000FF':'white',
+    color:lastkeypressed === "_" ? 'white':'black',
   }}  
   onClick={() => setLastKeyPressed('_')}
 >
   {'_'}
 </div>
-    <div style={{backgroundColor:lastkeypressed===","?'green':'white'}} onClick={()=>setLastKeyPressed(',')}  key={69} >
+    <div style={{
+       backgroundColor:lastkeypressed === "," ? '#0000FF':'white',
+       color:lastkeypressed === "," ? 'white':'black',
+    }} onClick={()=>setLastKeyPressed(',')}  key={69} >
       {','}
     </div>
   {[ 0, ].map((item, index) => (
     <div
     style={{
-      backgroundColor:lastkeypressed === item.toString() ? 'green':'white'
+      backgroundColor:lastkeypressed === item.toString() ? '#0000FF':'white',
+      color:lastkeypressed === item.toString() ? 'white':'black',
     }}
       key={index + 12}
       onClick={() => handleKeyPress(item.toString())}
@@ -2009,10 +2016,16 @@ useEffect(() => {
       {item}
     </div>
   ))}
-   <div style={{backgroundColor:lastkeypressed==="."?'green':'white'}}  key={79} onClick={()=>setLastKeyPressed('.')}    >
+   <div style={{
+     backgroundColor:lastkeypressed === "." ? '#0000FF':'white',
+     color:lastkeypressed === "." ? 'white':'black',
+   }}  key={79} onClick={()=>setLastKeyPressed('.')}    >
       {'.'}
     </div>
- <div style={{backgroundColor:lastkeypressed==="-"?'green':'white'}}  onClick={()=>setLastKeyPressed('-')} key={4}   >
+ <div style={{
+ backgroundColor:lastkeypressed === "-" ? '#0000FF':'white',
+      color:lastkeypressed === "-" ? 'white':'black',
+ }}  onClick={()=>setLastKeyPressed('-')} key={4}   >
       {'-'}
     </div>
 </div>
@@ -2083,35 +2096,44 @@ useEffect(() => {
             Error adding sale. Please try again.
           </Modal>
           <Modal
-        title={"Send SMS Total Game :"+modalTableTotal}
-        visible={smsModalVisible}
-        onOk={handleSmsModalOk}
-        onCancel={handleSmsModalCancel}
-        style={{
-          zIndex:9999
-        }}
-      >
-        <p>{completedraw&&completedraw.sms&&completedraw.sms[userdata._id]?completedraw.sms[userdata._id]:"0"}</p>
-  <TextArea
-  value={inputValue3}
-  placeholder="1,f1,s1 or 2,f2,s2"
-  onChange={handleInputChange3}
-  rows={6}  // You can adjust this value to change the height of the text area
+  title={`Send SMS Total Game: ${modalTableTotal}`}
+  visible={smsModalVisible}
+  onOk={handleSmsModalOk}
+  onCancel={handleSmsModalCancel}
   style={{
-    width: '100%',
-    fontSize: '14px',
-    resize: 'vertical'  // Allows vertical resizing
+    zIndex: 9999
   }}
-/>
-        <Table
-          columns={columns1}
-          dataSource={modalTableData}
-          pagination={false}
-          bordered
-          size="small"
-          style={{ marginTop: 20 }}
-        />
-      </Modal>
+  bodyStyle={{
+    height: '500px',  // Set a fixed height for the modal body
+    display: 'flex',
+    flexDirection: 'column'
+  }}
+>
+  <p>{completedraw && completedraw.sms && completedraw.sms[userdata._id] ? completedraw.sms[userdata._id] : "0"}</p>
+  <TextArea
+    value={inputValue3}
+    placeholder="1,f1,s1 or 2,f2,s2"
+    onChange={handleInputChange3}
+    rows={6}
+    style={{
+      width: '100%',
+      fontSize: '14px',
+      resize: 'vertical',
+      marginBottom: '10px'
+    }}
+  />
+  <div style={{ flex: 1, overflow: 'auto' }}>
+    <Table
+      columns={columns1}
+      dataSource={modalTableData}
+      pagination={false}
+      bordered
+      size="small"
+      scroll={{ y: 'calc(100% - 10px)' }}  // Make the table body scrollable
+      style={{ marginTop: 20 }}
+    />
+  </div>
+</Modal>
       <Modal
         title={"Save Sheet"}
         visible={sheetmodal}

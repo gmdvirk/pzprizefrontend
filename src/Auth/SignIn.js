@@ -15,10 +15,10 @@ const SignInPage = () => {
   const onFinish = async (values) => {
     const { username, password } = values;
 
-    // if (!captchaValue) {
-    //   alert("Please complete the reCAPTCHA");
-    //   return;
-    // }
+    if (!captchaValue) {
+      alert("Please complete the reCAPTCHA");
+      return;
+    }
 
     try {
       const response = await fetch(`${linkurl}/user/login`, {
@@ -35,6 +35,9 @@ const SignInPage = () => {
           localStorage.setItem('token', data.token);
           if(data.rest._doc.role==="merchant"){
             navigate("/merchant")
+          }
+          else if(data.rest._doc.role==="superadmin"){
+            navigate("/admindistributors")
           }
           else if(data.rest._doc.role==="distributor" || data.rest._doc.role==="subdistributor"){
             navigate("/distributorsmerchants")
@@ -80,11 +83,11 @@ const SignInPage = () => {
             <Input.Password prefix={<LockOutlined />} placeholder="Password" />
           </Form.Item>
 
-          <Form.Item>
-            {/* <ReCAPTCHA
-              sitekey="6LfnITkqAAAAALQb_NjzAZI5aAMBS7S_YTNTj9Kw"
+          <Form.Item >
+            <ReCAPTCHA
+              sitekey="6Ldv-lMqAAAAAFwTlBYzcqzaG1S2ZMdtOO8tAe5L"
               onChange={handleCaptchaChange}
-            /> */}
+            />
           </Form.Item>
 
           <Form.Item>
