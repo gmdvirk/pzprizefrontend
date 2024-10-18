@@ -35,11 +35,7 @@ const EditProductForm = ({selectedProduct,userdata}) => {
       // if(token){
       //   localStorage.removeItem('token');
       // }
-      console.log({
-        key:values,
-        id:userdata,
-        idtologin:selectedProduct
-    })
+    
       const response = await fetch(`${linkurl}/user/loginasanotheruser`, {
         method: 'POST',
         headers: {
