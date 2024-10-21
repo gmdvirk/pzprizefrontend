@@ -16,9 +16,111 @@ const AddProductForm = ({draws,userdata, setProducts,products}) => {
   const [successModalVisible, setSuccessModalVisible] = useState(false);
   const [errorModalVisible, setErrorModalVisible] = useState(false);
   const [loading, setLoading] = useState(false);
- const getAllbill=(data)=>{
+ const getAllbill=async()=>{
+console.log(drawdate)
+setLoading(true)
+try {
+  const token = localStorage.getItem('token');
+  
+  if (!token) {
+    console.error('Token not found in local storage');
+    
+    return;
+  }
+    const response = await fetch(`${linkurl}/report/getAllSellBill`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      token: token,
+    },
+    body: JSON.stringify({
+      draw:drawdate
+    }),
+  });
+  if (response.ok) {
+    const userData = await response.json();
+    console.log(userData)
+    let sheets=[]
+    for(let i=0;i<userData.sheets.length;i++){
+      sheets.push({sheetname:userData.sheets[i].sheetname,total:Number(userData.sheets[i].result.tempsale.f)+Number(userData.sheets[i].result.tempsale.s)+Number(userData.sheets[i].result.tempsalefour.f)+Number(userData.sheets[i].result.tempsalefour.f),prize:Number(userData.sheets[i].result.tempobj.f)+Number(userData.sheets[i].result.tempobj.s)})
+    }
+    // let tempobj=userData.drawarrtosend;
+    generatePDFReport1(sheets)
+    // form.resetFields();
+  } else {
+    const userData = await response.json();
+    alert(userData.Message)
+  }
+}catch(error){
+  alert(error.message)
+}
 
+setLoading(false)
  }
+ const generatePDFReport1 = (data) => {
+  const doc = new jsPDF();
+
+  // Define header and footer
+  const header = () => {
+    doc.setFontSize(18);
+    doc.setTextColor(40, 40, 40);
+    doc.text('All Sell Bill Report', 14, 22);
+    doc.setFontSize(10);
+    doc.setTextColor(100);
+    doc.text(`Generated on: ${new Date().toLocaleDateString()}`, 84, 22);
+  };
+
+  if (userdata && userdata.username) {
+    doc.setFontSize(10);
+    doc.text(`User: ${userdata.name}`, 14, 30);
+    doc.text(`Username: ${userdata.username}`, 80, 30);
+    doc.text(`Draw: ${drawdate.date}`, 150, 30);
+    doc.text(`Draw Title: ${drawdate.title}`, 14, 35);
+  }
+
+  const footer = (pageNumber) => {
+    doc.setFontSize(10);
+    doc.setTextColor(150);
+    doc.text(`Page ${pageNumber}`, doc.internal.pageSize.width - 20, doc.internal.pageSize.height - 10);
+  };
+
+  header();
+
+  doc.setFontSize(14);
+  doc.setTextColor(40, 40, 40);
+
+  // Prepare table data
+  const tableData = data.map(sheet => [
+    sheet.sheetname || 'N/A',
+    sheet.total,
+    sheet.prize
+  ]);
+
+  // Second Prizes table
+  doc.autoTable({
+    startY: 50,
+    head: [['Sheet Name', 'Total Sale', 'Total Prize']],
+    body: tableData,
+    theme: 'grid',
+    styles: {
+      fontSize: 10,
+      textColor: 80,
+    },
+    headStyles: {
+      fillColor: [240, 240, 240],
+      textColor: 40,
+      fontSize: 11,
+    }
+  });
+
+  doc.setFontSize(12);
+  doc.setTextColor(60, 60, 60);
+  doc.setTextColor(80, 80, 80);
+
+  footer(doc.internal.getNumberOfPages());
+
+  doc.save('AllSellBill.pdf');
+};
   const generatePDFReport = (data) => {
     const doc = new jsPDF();
   
