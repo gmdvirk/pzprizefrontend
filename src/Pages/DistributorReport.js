@@ -83,6 +83,11 @@ const navigate=useNavigate();
 
     if (response.ok) {
       const userData = await response.json();
+      if(userData.data.role!=="distributor"){
+        setNoaccess(true)
+        setLoading(false)
+        return;
+      }
       setUserdata(userData.data)
       const response10 = await fetch(`${linkurl}/report/getHaddLimitAloudornot`, {
         method: 'GET',

@@ -46,7 +46,14 @@ const AddProductForm = ({userdata,draws,aloud, setProducts,products}) => {
         filteredPayments[i].s=filteredPayments[i].s-Number(limits.panogadab)
       }
     }
-   
+    for (let i=0;i<filteredPayments.length;i++){
+    if(Number(filteredPayments[i].f)<0){
+      filteredPayments[i].f=0
+    }
+    if(Number(filteredPayments[i].s)<0){
+      filteredPayments[i].s=0
+    }
+  }
   
     const doc = new jsPDF();
     const columns = [
@@ -403,7 +410,14 @@ const AddProductForm = ({userdata,draws,aloud, setProducts,products}) => {
           filteredPayments[i].s = filteredPayments[i].s - Number(Payments.limits.panogadab);
         }
       }
-     
+      for (let i=0;i<filteredPayments.length;i++){
+        if(Number(filteredPayments[i].f)<0){
+          filteredPayments[i].f=0
+        }
+        if(Number(filteredPayments[i].s)<0){
+          filteredPayments[i].s=0
+        }
+      }
       let arr1=filteredPayments.filter((obj)=>obj.bundle.length===1)
       let arr2=filteredPayments.filter((obj)=>obj.bundle.length===2)
       let arr3=filteredPayments.filter((obj)=>obj.bundle.length===3)
@@ -1075,11 +1089,16 @@ else if (values.dealer==="allcombined"){
 
         userData.forEach((Payments) => {
           let filteredPayments=Payments.drawarrtosend
-      
           for (let i = 0; i < filteredPayments.length; i++) {
             if (filteredPayments[i].bundle.length === 1) {
               filteredPayments[i].f = filteredPayments[i].f - Number(Payments.limits.hindsaa);
               filteredPayments[i].s = filteredPayments[i].s - Number(Payments.limits.hindsab);
+              if(Number(filteredPayments[i].f)<0){
+                filteredPayments[i].f=0
+              }
+              if(Number(filteredPayments[i].s)<0){
+                filteredPayments[i].s=0
+              }
               if(alldraws.includes(filteredPayments[i].bundle)){
                 drawtosend[filteredPayments[i].bundle] ={bundle:filteredPayments[i].bundle,f:Number( drawtosend[filteredPayments[i].bundle].f )+filteredPayments[i].f,s:Number( drawtosend[filteredPayments[i].bundle].s )+filteredPayments[i].s}
             }else{
@@ -1090,6 +1109,12 @@ else if (values.dealer==="allcombined"){
             if (filteredPayments[i].bundle.length === 2) {
               filteredPayments[i].f = filteredPayments[i].f - Number(Payments.limits.akraa);
               filteredPayments[i].s = filteredPayments[i].s - Number(Payments.limits.akrab);
+              if(Number(filteredPayments[i].f)<0){
+                filteredPayments[i].f=0
+              }
+              if(Number(filteredPayments[i].s)<0){
+                filteredPayments[i].s=0
+              }
               if(alldraws.includes(filteredPayments[i].bundle)){
                 drawtosend[filteredPayments[i].bundle] ={bundle:filteredPayments[i].bundle,f:Number( drawtosend[filteredPayments[i].bundle].f )+filteredPayments[i].f,s:Number( drawtosend[filteredPayments[i].bundle].s )+filteredPayments[i].s}
             }else{
@@ -1100,6 +1125,12 @@ else if (values.dealer==="allcombined"){
             if (filteredPayments[i].bundle.length === 3) {
               filteredPayments[i].f = filteredPayments[i].f - Number(Payments.limits.tendolaa);
               filteredPayments[i].s = filteredPayments[i].s - Number(Payments.limits.tendolab);
+              if(Number(filteredPayments[i].f)<0){
+                filteredPayments[i].f=0
+              }
+              if(Number(filteredPayments[i].s)<0){
+                filteredPayments[i].s=0
+              }
               if(alldraws.includes(filteredPayments[i].bundle)){
                 drawtosend[filteredPayments[i].bundle] ={bundle:filteredPayments[i].bundle,f:Number( drawtosend[filteredPayments[i].bundle].f )+filteredPayments[i].f,s:Number( drawtosend[filteredPayments[i].bundle].s )+filteredPayments[i].s}
             }else{
@@ -1110,6 +1141,12 @@ else if (values.dealer==="allcombined"){
             if (filteredPayments[i].bundle.length === 4) {
               filteredPayments[i].f = filteredPayments[i].f - Number(Payments.limits.panogadaa);
               filteredPayments[i].s = filteredPayments[i].s - Number(Payments.limits.panogadab);
+              if(Number(filteredPayments[i].f)<0){
+                filteredPayments[i].f=0
+              }
+              if(Number(filteredPayments[i].s)<0){
+                filteredPayments[i].s=0
+              }
               if(alldraws.includes(filteredPayments[i].bundle)){
                 drawtosend[filteredPayments[i].bundle] ={bundle:filteredPayments[i].bundle,f:Number( drawtosend[filteredPayments[i].bundle].f )+filteredPayments[i].f,s:Number( drawtosend[filteredPayments[i].bundle].s )+filteredPayments[i].s}
             }else{

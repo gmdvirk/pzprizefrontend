@@ -43,6 +43,11 @@ const navigate=useNavigate();
 
     if (response.ok) {
       const userData = await response.json();
+      if(userData.data.role!=="superadmin"){
+        setNoaccess(true)
+        setLoading(false)
+        return;
+      }
       setUserdata(userData.data)
       
     } else {

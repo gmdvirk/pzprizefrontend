@@ -54,6 +54,11 @@ const navigate=useNavigate();
 
     if (response.ok) {
       const userData = await response.json();
+      if(userData.data.role!=="merchant"){
+        setNoaccess(true)
+        setLoading(false)
+        return;
+      }
       setUserdata(userData.data)
       const response1 = await fetch(`${linkurl}/payment/getpaymentsbyid/${userData.data._id}`, {
         method: 'GET',

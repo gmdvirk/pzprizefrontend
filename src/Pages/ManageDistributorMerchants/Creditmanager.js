@@ -68,7 +68,7 @@ const EditProductForm = ({selectedProduct,setSelectedProduct,payment,setPayment}
           
           return;
         }
-        const response = await fetch(`${linkurl}/payment/addcredit`, {
+        const response = await fetch(`${linkurl}/payment/addcreditbydistributor`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',

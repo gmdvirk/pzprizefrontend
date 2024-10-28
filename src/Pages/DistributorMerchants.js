@@ -69,6 +69,11 @@ const navigate=useNavigate();
     if (response.ok) {
       const userData = await response.json();
       setUserdata(userData.data)
+      if(userData.data.role==="superadmin"){
+        setNoaccess(true)
+        setLoading(false)
+        return;
+      }
       const response1 = await fetch(`${linkurl}/user/getallmyMerchants`, {
         method: 'GET',
         headers: {
@@ -77,6 +82,7 @@ const navigate=useNavigate();
       });
       if (response1.ok) {
         const userData1 = await response1.json();
+       
         setEmployees(userData1)
       }
       const response2 = await fetch(`${linkurl}/user/getBalance`, {

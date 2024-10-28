@@ -510,11 +510,18 @@ const getExpiredOrNot=(users)=>{
                      >
                        <Select placeholder="Select sheet" 
                         onChange={(e)=>{
-                          const temp=sheets.find((obj)=>obj._id===e)
-                          setSelectedsheet(temp)
+                          if(e==="sjkngkfjgnfkj"){
+                            setSelectedsheet({_id:"sjkngkfjgnfkj",sheetname:"no save",drawid:drawdate._id})
+                          }else{
+                            const temp=sheets.find((obj)=>obj._id===e)
+                            setSelectedsheet(temp)
+                          }
+                          
                           }}
                        >
+                         {drawdate && <Option value={"sjkngkfjgnfkj"}>{(0)+"---"+" no save"}</Option>}
                         {
+                          
                           tempsheets.map((obj,index)=>{
                             return(
                               <>

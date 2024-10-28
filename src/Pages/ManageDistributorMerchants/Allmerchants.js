@@ -613,6 +613,7 @@ const handleLoginasanother =(record)=>{
                 <p>Available Balance:{completeuserdata.payment.availablebalance}</p>
               </Col>
             </Row>
+            <h1>Users : {products.length}</h1>
       <Table columns={columns} dataSource={products} rowKey="id"
       
       scroll={{ x: true }} // Enable horizontal scrolling

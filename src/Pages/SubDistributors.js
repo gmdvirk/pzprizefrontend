@@ -58,6 +58,12 @@ const navigate=useNavigate();
     if (response.ok) {
       const userData = await response.json();
       setUserdata(userData.data)
+      console.log(userData.data)
+      if(userData.data.role!=="distributor"){
+        setNoaccess(true)
+        setLoading(false)
+        return;
+      }
       const response1 = await fetch(`${linkurl}/user/getallmysubdistributors`, {
         method: 'GET',
         headers: {

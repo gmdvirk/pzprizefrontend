@@ -18,7 +18,7 @@ import { green } from '@mui/material/colors';
 const { Option } = Select;
 const { TabPane } = Tabs;
 const { TextArea } = Input;
-const App = ({ userdata, setProducts,credit,upline, products,balance,setBalance,setSelectedDraw,selecteddraw }) => {
+const App = ({isOnline, userdata, setProducts,credit,upline, products,balance,setBalance,setSelectedDraw,selecteddraw }) => {
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
   const [selectedRowKeys1, setSelectedRowKeys1] = useState([]);
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
@@ -845,6 +845,13 @@ const App = ({ userdata, setProducts,credit,upline, products,balance,setBalance,
           console.error('Token not found in local storage');
           return;
         }
+        if(!isOnline){
+          setErrormessage("No Internet")
+          showErormessage();
+          errorAudioRef?.current?.play();
+          setLoading(false);
+          return;
+        }
         const response = await fetch(`${linkurl}/sale/addsale`, {
           method: 'POST',
           headers: {
@@ -1536,7 +1543,13 @@ const handleSmsModalOk = async () => {
       console.error('Token not found in local storage');
       return;
     }
-
+    if(!isOnline){
+      setErrormessage("No Internet")
+      showErormessage();
+      errorAudioRef?.current?.play();
+      setLoading(false);
+      return;
+    }
     const response = await fetch(`${linkurl}/sale/addmultiplesale`, {
       method: 'POST',
       headers: {
@@ -1819,6 +1832,28 @@ useEffect(() => {
 setActiveInput('1')
   return () => clearTimeout(timer); // Cleanup the timer if the component unmounts
 }, [selecteddraw]);
+const getTableHeight = () => {
+  return !isMobile ? '350px' : '160px'; // Adjust these values as needed
+};
+const [tableHeight, setTableHeight] = useState(getTableHeight());
+// Add this near your other state declarations
+// const [isOnline, setIsOnline] = useState(navigator.onLine);
+// console.log(isOnline)
+// // Add this useEffect
+// useEffect(() => {
+// if(isOnline){
+//   console.log("Online")
+// }else{
+//   console.log("Offline")
+// }
+
+//   // Check initial state
+//   if (!navigator.onLine) {
+//     setErrormessage("No internet connection");
+//     showErormessage();
+//     errorAudioRef?.current?.play();
+//   }
+// }, []);
   return (
     <div className="App">
       {loading ? (
@@ -1843,20 +1878,29 @@ setActiveInput('1')
       <audio controls ref={oversaleAudioRef} style={{ display: "none" }}>
         <source src={oversaleAudio} type="audio/mp3" />
       </audio>
-      <DrawSelector 
+     <DrawSelector 
   completedraw={completedraw}
   products={products}
   getSaleDetail={getSaleDetail}
   setCompletedraw={setCompletedraw}
   setSelectedDraw={setSelectedDraw}
 />
-      <div style={{display:'flex',flexDirection:'row',marginTop:15, borderBottom: '2px solid black'}}>
+     <div style={{display:'flex',flexDirection:'row',marginTop:15, borderBottom: '2px solid black'}}>
       {<p style={{fontSize:14,marginLeft:10,marginRight:10}}>{userdata.username}</p>}
       {<p style={{fontSize:14,marginRight:10}}>Credit : {credit}</p>}
       {<p style={{fontSize:14}}>Balanace : {balance}</p>}
      { upline<0&&<p style={{fontSize:14,marginLeft:10,color:'red'}}>Upline : {upline}</p>}
       {upline>0&&<p style={{fontSize:14,marginLeft:10,color:'green'}}>Upline : {upline}</p>}
-   
+      {completedraw && !isMobile && 
+  <p style={{
+    zIndex: 9999,
+    color: "green",
+    marginTop: -30,
+    marginLeft: 50
+  }}>
+    {"Draw : "+completedraw.title+" "+completedraw.date+" "+completedraw.time}
+  </p>
+}
       </div>
      {draw&& <>
      
@@ -1896,7 +1940,7 @@ setActiveInput('1')
         bordered
         size="small"
         rowSelection={rowSelection}
-        scroll={{ y: '160px' }} // Adjust the height as needed
+        scroll={{ y: tableHeight }} // Adjust the height as needed
       />
       </div>
         </div>
@@ -1911,7 +1955,7 @@ setActiveInput('1')
                 rowKey="_id"
                 bordered
                 size="small"
-                scroll={{ y: '160px' }} 
+                scroll={{ y:tableHeight}} 
               />
             </div>
         </div>
@@ -1937,7 +1981,7 @@ setActiveInput('1')
   }}
   onChange={handleInputChange}
   onKeyPress={(e) => {
-    if (e.key === 'Enter') {
+    if (e.key === 'Enter' && inputValue!=="") {
       e.preventDefault();
       handleNext1()
     }

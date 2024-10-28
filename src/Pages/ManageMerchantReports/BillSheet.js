@@ -96,6 +96,17 @@ setLoading(false)
     sheet.prize
   ]);
 
+  // Calculate totals
+  const totalSale = data.reduce((sum, sheet) => sum + sheet.total, 0);
+  const totalPrize = data.reduce((sum, sheet) => sum + sheet.prize, 0);
+
+  // Add totals row
+  tableData.push([
+    'Total',
+    totalSale,
+    totalPrize
+  ]);
+
   // Second Prizes table
   doc.autoTable({
     startY: 50,
@@ -110,14 +121,27 @@ setLoading(false)
       fillColor: [240, 240, 240],
       textColor: 40,
       fontSize: 11,
+    },
+    footStyles: {
+      fillColor: [240, 240, 240],
+      textColor: 40,
+      fontSize: 11,
+      fontStyle: 'bold'
+    },
+    didDrawPage: function(data) {
+      footer(doc.internal.getNumberOfPages());
     }
   });
 
+  // Add summary below table
+  const finalY = doc.autoTable.previous.finalY + 10;
   doc.setFontSize(12);
-  doc.setTextColor(60, 60, 60);
+  doc.setTextColor(40, 40, 40);
+  doc.text(`Total Summary`, 14, finalY);
+  doc.setFontSize(10);
   doc.setTextColor(80, 80, 80);
-
-  footer(doc.internal.getNumberOfPages());
+  doc.text(`Total Sale Amount: ${totalSale.toFixed(2)}`, 14, finalY + 7);
+  doc.text(`Total Prize Amount: ${totalPrize.toFixed(2)}`, 14, finalY + 14);
 
   doc.save('AllSellBill.pdf');
 };

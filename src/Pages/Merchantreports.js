@@ -72,6 +72,11 @@ const navigate=useNavigate();
 
     if (response.ok) {
       const userData = await response.json();
+      if(userData.data.role!=="merchant"){
+        setNoaccess(true)
+        setLoading(false)
+        return;
+      }
       setUserdata(userData.data)
    
         const response2 = await fetch(`${linkurl}/draw/getlasttendrawsmerchant`, {
