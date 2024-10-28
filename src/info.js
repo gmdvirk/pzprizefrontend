@@ -1,4 +1,4 @@
 const Info={
-    name:"Prize Results",
+    name:"Pz Prize",
 }
 export default Info;

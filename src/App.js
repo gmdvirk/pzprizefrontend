@@ -19,6 +19,7 @@ import MerchantHome from "./Pages/Merchant"
 import DistributorDetail from "./Pages/Distributordetail"
 import ChangeKey from "./Pages/ChangeKey"
 import Changepassword from "./Pages/Changepassword"
+import NoAccess from "./Pages/NoAccess"
 import EditAdmin from "./Pages/Editadmin"
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 
@@ -50,6 +51,7 @@ const App = () => {
       <Route path="/detail/:userId" element={<AdminDetail />} />
       <Route path="/editadmin" element={<EditAdmin />} />
       <Route path="/changepassword" element={<Changepassword />} />
+      <Route path="/noaccess" element={<NoAccess />} />
 </Routes>
 
     </Router>
