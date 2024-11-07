@@ -91,7 +91,8 @@ const EditProductForm = ({selectedProduct,setSelectedProduct,payment,setPayment}
           let tempobj1={...selectedProduct,payment:{
             cash:tempobj.cash,
             credit:tempobj.credit,
-            balanceupline:tempobj.balanceupline
+            balanceupline:tempobj.balanceupline,
+            availablebalance:tempobj.availablebalance
           }}
           setSelectedProduct(tempobj1)
           form.resetFields();
@@ -159,7 +160,8 @@ const EditProductForm = ({selectedProduct,setSelectedProduct,payment,setPayment}
           let tempobj1={...selectedProduct,payment:{
             cash:tempobj.cash,
             credit:tempobj.credit,
-            balanceupline:tempobj.balanceupline
+            balanceupline:tempobj.balanceupline,
+            availablebalance:tempobj.availablebalance
           }}
           setSelectedProduct(tempobj1)
           form1.resetFields();
