@@ -69,7 +69,8 @@ const navigate=useNavigate();
     if (response.ok) {
       const userData = await response.json();
       setUserdata(userData.data)
-      if(userData.data.role==="superadmin"){
+      console.log(userData.data)
+      if(userData.data.role==="superadmin"||userData.data.role==="merchant"){
         setNoaccess(true)
         setLoading(false)
         return;
