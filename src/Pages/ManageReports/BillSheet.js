@@ -10,7 +10,7 @@ import 'jspdf-autotable';
 import { CheckCircleFilled, CloseCircleFilled, DeleteFilled, PlusCircleFilled, SaveFilled, ScanOutlined, SecurityScanFilled,SearchOutlined } from '@ant-design/icons';
 const { Option } = Select;
 
-const AddProductForm = ({ setProducts,draws,products}) => {
+const AddProductForm = ({ userdata,setProducts,draws,products}) => {
   const [form] = Form.useForm();
   const [successModalVisible, setSuccessModalVisible] = useState(false);
   const [errorModalVisible, setErrorModalVisible] = useState(false);
@@ -170,12 +170,15 @@ const AddProductForm = ({ setProducts,draws,products}) => {
       let totalSs = report.prize.tempobj.s;
       let totalF = report.prize.tempsale.f;
       let totalS = report.prize.tempsale.s;
+      let totalFfour = report.prize.tempsalefour.f;
+      let totalSfour = report.prize.tempsalefour.s;
+  
       const totalPrizes = Number(totalFp )+ Number(totalSs) 
       const commissionValue = report.comission.comission;
       const commissionAmount = commissionValue === 0 ? 0 : ((totalF + totalS) * commissionValue) / 100;
       const pcPercentageAmount = report.comission.pcpercentage === 0 ? 0 : ((totalF + totalS) * report.comission.pcpercentage) / 100;
       const pcPercentageValue = report.comission.pcpercentage;
-      const grandTotal = totalF + totalS;
+      const grandTotal = totalF + totalS + totalFfour +totalSfour;
       const safitotal = grandTotal - pcPercentageAmount - commissionAmount;
       const nettotal = grandTotal - pcPercentageAmount - commissionAmount- Number(totalPrizes);
       const name = report.name
@@ -197,7 +200,14 @@ const AddProductForm = ({ setProducts,draws,products}) => {
     });
   
     // Add header to PDF
+    // Add header to PDF
+    doc.setFontSize(10);
+    doc.text(`Draw: ${drawdate.date}`, 150, 30);
+    doc.text(`Draw Title: ${drawdate.title}`, 14, 35);
+    doc.text(`Username: ${userdata.username}`, 14, 40);
     header();
+
+    doc.setFontSize(14);
   
     // Define the table columns and rows
     const columns = [
@@ -218,7 +228,7 @@ const AddProductForm = ({ setProducts,draws,products}) => {
     doc.autoTable({
       columns: columns,
       body: rows,
-      startY: 40,
+      startY: 50,
       showHead: 'firstPage',
       didDrawPage: (data) => {
         // Footer
