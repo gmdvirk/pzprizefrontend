@@ -18,6 +18,8 @@ const AddProductForm = ({ setProducts,draws,products}) => {
   const [selectedsheetusername,setSelectedSheetusername]=useState("")
   const [selecteddraw,setSelectedDraw]=useState("")
   const [selected, setSelected] = useState([]);
+  const [totalf, setTotalF] = useState(0);
+  const [totals, setTotalS] = useState(0);
   const [deleteConfirmationVisible, setDeleteConfirmationVisible] = useState(false);
   const [deleteConfirmationVisible1, setDeleteConfirmationVisible1] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
@@ -62,8 +64,11 @@ const AddProductForm = ({ setProducts,draws,products}) => {
         }),
       });
       if (response.ok) {
-        let userData = await response.json();
-        userData=userData[0]
+        let userData1 = await response.json();
+        let temparr=[]
+        let temptotal={f:0,s:0}
+        for(let i=0;i<userData1.length;i++){
+        let userData=userData1[i]
         // let temparr=[]
         // for(let i=0;i<userData.length;i++){
         //   let temp={f:0,s:0}
@@ -75,7 +80,7 @@ const AddProductForm = ({ setProducts,draws,products}) => {
         // }
         // setAlldata(temparr)
         // form.resetFields();
-        let temparr=[]
+       
         for(let i=0;i<userData.length;i++){
           let temp={f:0,s:0}
           for(let j=0;j<userData[i].saledata.length;j++){
@@ -85,9 +90,14 @@ const AddProductForm = ({ setProducts,draws,products}) => {
             }
           }
           if(Number(temp.f)>0||Number(temp.s>0)){
+            temptotal.f=Number(temptotal.f)+Number(temp.f)
+            temptotal.s=Number(temptotal.s)+Number(temp.s)
             temparr.push({saledata:userData[i].saledata,username:userData[i].username,name:userData[i].name,f:temp.f,s:temp.s,bundle:values.bundle})
           }
          }
+        }
+        setTotalF(temptotal.f)
+        setTotalS(temptotal.s)
         setAlldata(temparr)
       } else {
         const userData = await response.json();
@@ -118,6 +128,12 @@ const AddProductForm = ({ setProducts,draws,products}) => {
     })
       .then(response => response.json())
       .then(data => {
+        if(!data.status){
+          alert(data.Message)
+          setSelectedRowKeys([]);
+          setLoading(false);
+          return;
+        }
         const tempproduct=[...selected]
         setSelected(tempproduct.filter(product => !selectedRowKeys.includes(product._id)));
         setSelectedRowKeys([]);
@@ -272,6 +288,11 @@ const AddProductForm = ({ setProducts,draws,products}) => {
       dataIndex: 'username',
       key: 'username',
       ...getColumnSearchProps('username'),
+    },{
+      title: 'Bundle',
+      dataIndex: 'bundle',
+      key: 'bundle',
+      ...getColumnSearchProps('bundle'),
     },
     {
       title: 'F',
@@ -478,7 +499,8 @@ color: "white"
       responsive={true} // Enable responsive behavior
       />
       </Modal>
-
+      <p>TotalF: {totalf}</p>
+      <p>TotalS: {totals}</p>
     <Table columns={columns}
      dataSource={alldata} rowKey="id"
       

@@ -17,6 +17,8 @@ const AddProductForm = ({ setProducts,draws,products}) => {
   const [deleteConfirmationVisible, setDeleteConfirmationVisible] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [totalf, setTotalF] = useState(0);
+  const [totals, setTotalS] = useState(0);
   
   const [searchText, setSearchText] = useState('');
   const [searchedColumn, setSearchedColumn] = useState('');
@@ -59,14 +61,20 @@ const AddProductForm = ({ setProducts,draws,products}) => {
       if (response.ok) {
         const userData = await response.json();
         let temparr=[]
+        let temptotal={f:0,s:0}
         for(let i=0;i<userData.length;i++){
           let temp={f:0,s:0}
           for(let j=0;j<userData[i].saledata.length;j++){
             temp.f=Number(temp.f)+Number(userData[i].saledata[j].f)
             temp.s=Number(temp.s)+Number(userData[i].saledata[j].s)
           }
-          temparr.push({saledata:userData[i].saledata,name:userData[i].name,username:userData[i].username,f:temp.f,s:temp.s})
+          temptotal.f=Number(temptotal.f)+Number(temp.f)
+          temptotal.s=Number(temptotal.s)+Number(temp.s)
+         
+          temparr.push({saledata:userData[i].saledata,bundle:values.bundle,name:userData[i].name,username:userData[i].username,f:temp.f,s:temp.s})
         }
+        setTotalF(temptotal.f)
+        setTotalS(temptotal.s)
         setAlldata(temparr)
         // form.resetFields();
       } else {
@@ -248,16 +256,16 @@ const AddProductForm = ({ setProducts,draws,products}) => {
   });
   const columns = [
     {
-      title: 'Name',
-      dataIndex: 'name',
-      key: 'name',
-      ...getColumnSearchProps('name'),
-    },
-    {
       title: 'Username',
       dataIndex: 'username',
       key: 'username',
       ...getColumnSearchProps('username'),
+    },
+    {
+      title: 'Bundle',
+      dataIndex: 'bundle',
+      key: 'bundle',
+      ...getColumnSearchProps('bundle'),
     },
     {
       title: 'f',
@@ -446,7 +454,8 @@ color: "white"
       responsive={true} // Enable responsive behavior
       />
       </Modal>
-
+<p>TotalF: {totalf}</p>
+<p>TotalS: {totals}</p>
     <Table columns={columns} dataSource={alldata} rowKey="_id"
       
       scroll={{ x: true }} // Enable horizontal scrolling

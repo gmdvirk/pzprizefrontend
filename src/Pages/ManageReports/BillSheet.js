@@ -185,6 +185,7 @@ const AddProductForm = ({ setProducts,draws,products}) => {
         commissionValue,
         commissionAmount: commissionAmount.toFixed(2),
         pcPercentageAmount: pcPercentageAmount.toFixed(2),
+        commissionAmountTotal:Number(commissionAmount.toFixed(2))+Number(pcPercentageAmount.toFixed(2)),
         pcPercentageValue,
         grandTotal: grandTotal.toFixed(2),
         safitotal: safitotal.toFixed(2),
@@ -200,14 +201,14 @@ const AddProductForm = ({ setProducts,draws,products}) => {
   
     // Define the table columns and rows
     const columns = [
-      { header: 'Name', dataKey: 'name' },
+      // { header: 'Name', dataKey: 'name' },
       { header: 'Username', dataKey: 'username' },
-      // { header: 'Commission Value', dataKey: 'commissionValue' },
-      { header: 'Commission', dataKey: 'commissionAmount' },
-      { header: 'PC Percentage', dataKey: 'pcPercentageAmount' },
-      { header: 'Prize', dataKey: 'totalPrizes' },
       { header: 'Grand Total', dataKey: 'grandTotal' },
+      // { header: 'Commission Value', dataKey: 'commissionValue' },
+      { header: 'Commission', dataKey: 'commissionAmountTotal' },
       { header: 'Safi Total', dataKey: 'safitotal' },
+      // { header: 'PC Percentage', dataKey: 'pcPercentageAmount' },
+      { header: 'Prize', dataKey: 'totalPrizes' },
       { header: 'Net Total', dataKey: 'nettotal' },
     ];
   

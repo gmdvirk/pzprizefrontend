@@ -99,7 +99,7 @@ const navigate=useNavigate();
         const userData1 = await response10.json();
         setAloud(userData1)
       }
-      const response1 = await fetch(`${linkurl}/user/getallmyMerchants`, {
+      const response1 = await fetch(`${linkurl}/user/getAllMyusers`, {
         method: 'GET',
         headers: {
           token: `${token}`,

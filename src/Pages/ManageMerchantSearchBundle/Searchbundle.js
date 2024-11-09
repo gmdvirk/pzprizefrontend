@@ -18,6 +18,8 @@ const AddProductForm = ({userdata, setProducts,draws,products}) => {
   const [selectedsheettotal,setSelectedSheettotal]=useState("")
   const [selecteddraw,setSelectedDraw]=useState("")
   const [loading, setLoading] = useState(false);
+  const [totalf, setTotalF] = useState(0);
+  const [totals, setTotalS] = useState(0);
   
   const [searchText, setSearchText] = useState('');
   const [searchedColumn, setSearchedColumn] = useState('');
@@ -47,6 +49,7 @@ const AddProductForm = ({userdata, setProducts,draws,products}) => {
       if (response.ok) {
         const userData = await response.json();
         let temparr=[]
+        let temptotal={f:0,s:0}
         for(let i=0;i<userData.length;i++){
           let temp={f:0,s:0}
           for(let j=0;j<userData[i].saledata.length;j++){
@@ -57,8 +60,13 @@ const AddProductForm = ({userdata, setProducts,draws,products}) => {
           }
           if(Number(temp.f)>0||Number(temp.s>0)){
             temparr.push({saledata:userData[i].saledata,name:userData[i].name,f:temp.f,s:temp.s,bundle:values.bundle})
+            temptotal.f=Number(temptotal.f)+Number(temp.f)
+            temptotal.s=Number(temptotal.s)+Number(temp.s)
+           
           }
          }
+         setTotalF(temptotal.f)
+         setTotalS(temptotal.s)
         setAlldata(temparr)
         // form.resetFields();
       } else {
@@ -410,6 +418,8 @@ color: "white"
       />
       </Modal>
 
+      <p>TotalF: {totalf}</p>
+<p>TotalS: {totals}</p>
     <Table columns={columns} dataSource={alldata} rowKey="id"
       
       scroll={{ x: true }} // Enable horizontal scrolling

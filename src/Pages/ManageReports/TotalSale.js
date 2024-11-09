@@ -40,9 +40,9 @@ const AddProductForm = ({userdata, draws,setProducts,products}) => {
       }
   
       if (type === 'a') {
-        temp[bundle].valuefirst = value;
+        temp[bundle].f = value;
       } else if (type === 'b') {
-        temp[bundle].valuesecond = value;
+        temp[bundle].s = value;
       }
     });
   
@@ -71,8 +71,8 @@ const AddProductForm = ({userdata, draws,setProducts,products}) => {
     const doc = new jsPDF();
     const columns = [
         { title: 'Bundle', dataKey: 'bundle' },
-        { title: 'First', dataKey: 'valuefirst' },
-        { title: 'Second', dataKey: 'valuesecond' },
+        { title: 'First', dataKey: 'f' },
+        { title: 'Second', dataKey: 's' },
     ];
   
     doc.setFontSize(16);
@@ -144,12 +144,12 @@ const AddProductForm = ({userdata, draws,setProducts,products}) => {
         }
   
         filteredPayments.forEach((pay) => {
-            totalFirst += parseFloat(pay.valuefirst) || 0;
-            totalSecond += parseFloat(pay.valuesecond) || 0;
-            total += (parseFloat(pay.valuefirst) || 0) + (parseFloat(pay.valuesecond) || 0);
-            totalFirst1 += parseFloat(pay.valuefirst) || 0;
-            totalSecond1 += parseFloat(pay.valuesecond) || 0;
-            total1 += (parseFloat(pay.valuefirst) || 0) + (parseFloat(pay.valuesecond) || 0);
+            totalFirst += parseFloat(pay.f) || 0;
+            totalSecond += parseFloat(pay.s) || 0;
+            total += (parseFloat(pay.f) || 0) + (parseFloat(pay.s) || 0);
+            totalFirst1 += parseFloat(pay.f) || 0;
+            totalSecond1 += parseFloat(pay.s) || 0;
+            total1 += (parseFloat(pay.f) || 0) + (parseFloat(pay.s) || 0);
   
             // Draw bundle block with grey background and dark blue/purplish border
             doc.setFillColor(211, 211, 211); // Grey background
@@ -162,13 +162,13 @@ const AddProductForm = ({userdata, draws,setProducts,products}) => {
             doc.setFillColor(255, 255, 255); // White background
             doc.setDrawColor(75, 0, 130); // Dark blue/purplish border
             doc.rect(startX + blockWidth, startY, blockWidth, blockHeight, 'FD');
-            doc.text(pay.valuefirst.toString(), startX + blockWidth + blockWidth / 2, startY + blockHeight / 2, { align: 'center' });
+            doc.text(pay.f.toString(), startX + blockWidth + blockWidth / 2, startY + blockHeight / 2, { align: 'center' });
   
             // Draw second value block with white background and dark blue/purplish border
             doc.setFillColor(255, 255, 255); // White background
             doc.setDrawColor(75, 0, 130); // Dark blue/purplish border
             doc.rect(startX + 2 * blockWidth, startY, blockWidth, blockHeight, 'FD');
-            doc.text(pay.valuesecond.toString(), startX + 2 * blockWidth + blockWidth / 2, startY + blockHeight / 2, { align: 'center' });
+            doc.text(pay.s.toString(), startX + 2 * blockWidth + blockWidth / 2, startY + blockHeight / 2, { align: 'center' });
   
             // Move to the next block position
             startX += 3 * blockWidth;
@@ -224,7 +224,7 @@ const AddProductForm = ({userdata, draws,setProducts,products}) => {
         
         return;
       }
-      const response = await fetch(`${linkurl}/report/getdrawbyid/${values.date}`, {
+      const response = await fetch(`${linkurl}/report/getTotalSaleforadmin/${values.date}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -233,11 +233,11 @@ const AddProductForm = ({userdata, draws,setProducts,products}) => {
       });
       if (response.ok) {
         const userData = await response.json();
-        let tempobj={...userData[0]};
-        setDrawComplete(tempobj)
-        let temp=combineSoldValues(getSoldKeys(tempobj.type));
-        downloadinvoice(temp,values)
-        setSoldValues(temp)
+        // let tempobj={...userData[0]};
+        // setDrawComplete(tempobj)
+        // let temp=combineSoldValues(getSoldKeys(tempobj.type));
+        downloadinvoice(userData,values)
+        setSoldValues(userData)
         // form.resetFields();
       } else {
         const userData = await response.json();

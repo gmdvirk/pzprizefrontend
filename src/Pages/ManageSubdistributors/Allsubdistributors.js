@@ -14,6 +14,7 @@ import jsPDF from 'jspdf';
 import { useNavigate } from 'react-router';
 import { linkurl } from '../../link';
 import 'jspdf-autotable';
+import moment from 'moment-timezone';
 
 const { Option } = Select;
 const { TabPane } = Tabs;
@@ -37,20 +38,18 @@ const ProductTable = ({ products, setProducts,userdata ,completeuserdata}) => {
   const searchInput = useRef(null);
   const [deleteConfirmationVisible, setDeleteConfirmationVisible] = useState(false); // New state for delete confirmation
   function getDateAndTime(isoString) {
-    
-    // Parse the ISO 8601 string into a Date object
-    const dateObj = new Date(isoString);
+    // Convert the ISO string to a moment object in Pakistan Standard Time
+    const dateObj = moment(isoString).tz('Asia/Karachi');
 
     // Extract the date components
-    const year = dateObj.getUTCFullYear();
-    const month = String(dateObj.getUTCMonth() + 1).padStart(2, '0');
-    const day = String(dateObj.getUTCDate()).padStart(2, '0');
-    
+    const year = dateObj.year();
+    const month = String(dateObj.month() + 1).padStart(2, '0');
+    const day = String(dateObj.date()).padStart(2, '0');
+
     // Extract the time components
-    const hours = String(dateObj.getUTCHours()).padStart(2, '0');
-    const minutes = String(dateObj.getUTCMinutes()).padStart(2, '0');
-    const seconds = String(dateObj.getUTCSeconds()).padStart(2, '0');
-    const milliseconds = String(dateObj.getUTCMilliseconds()).padStart(3, '0');
+    const hours = String(dateObj.hours()).padStart(2, '0');
+    const minutes = String(dateObj.minutes()).padStart(2, '0');
+    const seconds = String(dateObj.seconds()).padStart(2, '0');
 
     // Format the date and time
     const date = `${year}-${month}-${day}`;
@@ -58,6 +57,7 @@ const ProductTable = ({ products, setProducts,userdata ,completeuserdata}) => {
 
     return { date, time };
 }
+
   const showDeleteConfirmationModal =async (record) => {
     const token = localStorage.getItem('token');
     const response = await fetch(`${linkurl}/payment/getpaymentsbyid/${record._id}`, {
@@ -696,8 +696,8 @@ const ProductTable = ({ products, setProducts,userdata ,completeuserdata}) => {
             Credit
           </Button>
                
-       {creditopen&& <Creditmanager  selectedProduct={selectedProduct} setSelectedProduct={setSelectedProduct} payment={payment} setPayment={setPayment}/>}
-   {cashopen&& <Cashmanager selectedProduct={selectedProduct} setSelectedProduct={setSelectedProduct} payment={payment} setPayment={setPayment} />}
+       {creditopen&& <Creditmanager  selectedProduct={selectedProduct} setSelectedProduct={setSelectedProduct} payment={payment} setPayment={setPayment} products={products} setProducts={setProducts} />}
+   {cashopen&& <Cashmanager selectedProduct={selectedProduct} setSelectedProduct={setSelectedProduct} payment={payment} setPayment={setPayment} products={products} setProducts={setProducts}  />}
   
           <Form form={form} onFinish={onFinish} layout="vertical"
           initialValues={{

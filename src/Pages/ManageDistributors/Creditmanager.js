@@ -5,11 +5,12 @@ import Highlighter from 'react-highlight-words';
 import COLORS from '../../colors';
 import { linkurl } from '../../link';
 import { CheckCircleFilled, CloseCircleFilled,SearchOutlined, EditFilled, SaveFilled,PlusCircleFilled,DeleteFilled } from '@ant-design/icons';
-import moment from 'moment';
+// import moment from 'moment';
+import moment from 'moment-timezone';
 
 const { Option } = Select;
 
-const EditProductForm = ({selectedProduct,setSelectedProduct,payment,setPayment}) => {
+const EditProductForm = ({selectedProduct,setSelectedProduct,payment,setPayment,products,setProducts }) => {
   const [form] = Form.useForm();
   const [form1] = Form.useForm();
   const [modalVisible, setModalVisible] = useState(false);
@@ -21,20 +22,18 @@ const EditProductForm = ({selectedProduct,setSelectedProduct,payment,setPayment}
   // const [product, setProduct] = useState(props.initialValues);
 
   function getDateAndTime(isoString) {
-    
-    // Parse the ISO 8601 string into a Date object
-    const dateObj = new Date(isoString);
+    // Convert the ISO string to a moment object in Pakistan Standard Time
+    const dateObj = moment(isoString).tz('Asia/Karachi');
 
     // Extract the date components
-    const year = dateObj.getUTCFullYear();
-    const month = String(dateObj.getUTCMonth() + 1).padStart(2, '0');
-    const day = String(dateObj.getUTCDate()).padStart(2, '0');
-    
+    const year = dateObj.year();
+    const month = String(dateObj.month() + 1).padStart(2, '0');
+    const day = String(dateObj.date()).padStart(2, '0');
+
     // Extract the time components
-    const hours = String(dateObj.getUTCHours()).padStart(2, '0');
-    const minutes = String(dateObj.getUTCMinutes()).padStart(2, '0');
-    const seconds = String(dateObj.getUTCSeconds()).padStart(2, '0');
-    const milliseconds = String(dateObj.getUTCMilliseconds()).padStart(3, '0');
+    const hours = String(dateObj.hours()).padStart(2, '0');
+    const minutes = String(dateObj.minutes()).padStart(2, '0');
+    const seconds = String(dateObj.seconds()).padStart(2, '0');
 
     // Format the date and time
     const date = `${year}-${month}-${day}`;
@@ -42,7 +41,6 @@ const EditProductForm = ({selectedProduct,setSelectedProduct,payment,setPayment}
 
     return { date, time };
 }
-
 
   const onFinish = async (values) => {
     values.type="Draw"
@@ -95,6 +93,10 @@ const EditProductForm = ({selectedProduct,setSelectedProduct,payment,setPayment}
             availablebalance:tempobj.availablebalance
           }}
           setSelectedProduct(tempobj1)
+          const index=products.findIndex((obj)=>obj._id===selectedProduct._id)
+          let tempproducts=[...products]
+          tempproducts[index]=tempobj1
+          setProducts(tempproducts)
           form.resetFields();
           setMessage("The transaction was successful.")
         setSuccessModalVisible(true)

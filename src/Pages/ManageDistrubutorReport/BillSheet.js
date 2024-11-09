@@ -28,86 +28,99 @@ const AddProductForm = ({draws, setProducts,products}) => {
   const generateSummarisedreportpdf = async (arr) => {
     let dataarr = [];
     const doc = new jsPDF();
-  
+
     // Define header and footer
     const header = () => {
-      doc.setFontSize(18);
-      doc.setTextColor(40, 40, 40);
-      doc.text('Bill Sheet Report', 14, 22);
-      doc.setFontSize(10);
-      doc.setTextColor(100);
-      doc.text(`Generated on: ${new Date().toLocaleDateString()}`, 14, 28);
+        doc.setFontSize(18);
+        doc.setTextColor(40, 40, 40);
+        doc.text('Bill Sheet Report', 14, 22);
+        doc.setFontSize(10);
+        doc.setTextColor(100);
+        doc.text(`Generated on: ${new Date().toLocaleDateString()}`, 14, 28);
     };
-  
+
     const footer = (pageNumber) => {
-      doc.setFontSize(10);
-      doc.setTextColor(150);
-      doc.text(`Page ${pageNumber}`, doc.internal.pageSize.width - 20, doc.internal.pageSize.height - 10);
+        doc.setFontSize(10);
+        doc.setTextColor(150);
+        doc.text(`Page ${pageNumber}`, doc.internal.pageSize.width - 20, doc.internal.pageSize.height - 10);
     };
+
     arr.majorsalesreport.forEach((report) => {
-      let totalFp = report.prize.tempobj.f;
-      let totalSs = report.prize.tempobj.s;
-      let totalF = report.prize.tempsale.f;
-      let totalS = report.prize.tempsale.s;
-      const totalPrizes = Number(totalFp )+ Number(totalSs) 
-      const commissionValue = report.comission.comission;
-      const commissionAmount = commissionValue === 0 ? 0 : ((totalF + totalS) * commissionValue) / 100;
-      const pcPercentageAmount = report.comission.pcpercentage === 0 ? 0 : ((totalF + totalS) * report.comission.pcpercentage) / 100;
-      const pcPercentageValue = report.comission.pcpercentage;
-      const grandTotal = totalF + totalS;
-      const safitotal = grandTotal - pcPercentageAmount - commissionAmount;
-      const nettotal = grandTotal - pcPercentageAmount - commissionAmount- Number(totalPrizes);
-      const name = report.name
-      const username=report.username
-  
-      dataarr.push({
-        commissionValue,
-        commissionAmount: commissionAmount.toFixed(2),
-        pcPercentageAmount: pcPercentageAmount.toFixed(2),
-        pcPercentageValue,
-        grandTotal: grandTotal.toFixed(2),
-        safitotal: safitotal.toFixed(2),
-        nettotal: nettotal.toFixed(2),
-        name,
-        totalPrizes,
-        username
-      });
+        let totalFp = report.prize.tempobj.f;
+        let totalSs = report.prize.tempobj.s;
+        let totalF = report.prize.tempsale.f;
+        let totalS = report.prize.tempsale.s;
+        const totalPrizes = Number(totalFp) + Number(totalSs);
+        const commissionValue = report.comission.comission;
+        const commissionAmount = commissionValue === 0 ? 0 : ((totalF + totalS) * commissionValue) / 100;
+        const pcPercentageAmount = report.comission.pcpercentage === 0 ? 0 : ((totalF + totalS) * report.comission.pcpercentage) / 100;
+        const pcPercentageValue = report.comission.pcpercentage;
+        const grandTotal = totalF + totalS;
+        const safitotal = grandTotal - pcPercentageAmount - commissionAmount;
+        const nettotal = grandTotal - pcPercentageAmount - commissionAmount - Number(totalPrizes);
+        const name = report.name;
+        const username = report.username;
+
+        dataarr.push({
+            commissionValue,
+            commissionAmount: commissionAmount.toFixed(2),
+            pcPercentageAmount: pcPercentageAmount.toFixed(2),
+            commissionAmountTotal: (Number(commissionAmount.toFixed(2)) + Number(pcPercentageAmount.toFixed(2))).toFixed(2),
+            pcPercentageValue,
+            grandTotal: grandTotal.toFixed(2),
+            safitotal: safitotal.toFixed(2),
+            nettotal: nettotal.toFixed(2),
+            name,
+            totalPrizes: totalPrizes.toFixed(2),
+            username
+        });
     });
-  
+
+    // Calculate total net total excluding the first row
+    let totalNetTotal = 0;
+    for (let i = 1; i < dataarr.length; i++) {
+        totalNetTotal += parseFloat(dataarr[i].nettotal);
+    }
+
     // Add header to PDF
     header();
-  
-    // Define the table columns and rows
+
     const columns = [
-      { header: 'Name', dataKey: 'name' },
-      { header: 'Username', dataKey: 'username' },
-      // { header: 'Commission Value', dataKey: 'commissionValue' },
-      { header: 'Commission', dataKey: 'commissionAmount' },
-      { header: 'PC Percentage', dataKey: 'pcPercentageAmount' },
-      { header: 'Prize', dataKey: 'totalPrizes' },
-      { header: 'Grand Total', dataKey: 'grandTotal' },
-      { header: 'Safi Total', dataKey: 'safitotal' },
-      { header: 'Net Total', dataKey: 'nettotal' },
+        { header: 'Username', dataKey: 'username' },
+        { header: 'Grand Total', dataKey: 'grandTotal' },
+        { header: 'Commission', dataKey: 'commissionAmountTotal' },
+        { header: 'Safi Total', dataKey: 'safitotal' },
+        { header: 'Prize', dataKey: 'totalPrizes' },
+        { header: 'Net Total', dataKey: 'nettotal' }
     ];
-  
+
     const rows = dataarr;
-  
+
     // Generate the table
     doc.autoTable({
-      columns: columns,
-      body: rows,
-      startY: 40,
-      showHead: 'firstPage',
-      didDrawPage: (data) => {
-        // Footer
-        footer(doc.internal.getNumberOfPages());
-      },
+        columns: columns,
+        body: rows,
+        startY: 35,
+        didParseCell: (data) => {
+            // Make the first row bold
+            if (data.row.index === 0 && data.section === 'body') {
+                data.cell.styles.fontStyle = 'bold';
+            }
+        },
+        didDrawPage: (data) => {
+            footer(doc.internal.getNumberOfPages());
+        }
     });
-  
+
+    // Add the total net total to the PDF
+    doc.setFontSize(12);
+    doc.setTextColor(0);
+    doc.text(`Total Net Total: ${totalNetTotal.toFixed(2)}`, 14, doc.lastAutoTable.finalY + 10);
+
     // Save the PDF
-    doc.save('bill_sheet_report.pdf');
-  };
-  
+    doc.save('Bill_Sheet_Report.pdf');
+};
+
   const generateSummarisedreport = async () => {
    setLoading(true)
 try{
