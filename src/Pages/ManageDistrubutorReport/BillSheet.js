@@ -168,7 +168,6 @@ try{
 setLoading(false)
   }
   const generatePDFReport = (data) => {
-    console.log(data)
     const doc = new jsPDF();
   
     // Define header and footer

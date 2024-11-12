@@ -46,7 +46,8 @@ const EditProductForm = (props) => {
         },
         body: JSON.stringify({
           ...props.initialValues,
-          ...values
+          ...values,
+          comission:{comission:values.comission,pcpercentage:values.pcpercentage}
         }),
       });
       if (response.ok) {

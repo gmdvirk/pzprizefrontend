@@ -14,6 +14,16 @@ const AddProductForm = ({ userdata,draws,setProducts,products}) => {
   const [successModalVisible, setSuccessModalVisible] = useState(false);
   const [errorModalVisible, setErrorModalVisible] = useState(false);
   const [option, setOption] = useState("All");
+  const [limitsettings ,setLimitSettings ] = useState({
+    hindsaa:0,
+                            hindsab:0,
+                            akraa:0,
+                            akrab:0,
+                            tendolaa:0,
+                            tendolab:0,
+                            panogadaa:0,
+                            panogadab:0
+  });
   const [drawdate,setDrawdate]=useState(null)
   const [type,setType]=useState(null)
   const [loading, setLoading] = useState(false);
@@ -691,6 +701,133 @@ const AddProductForm = ({ userdata,draws,setProducts,products}) => {
 
     setLoading(false)
   };
+  const generatePDFReport = (data) => {
+    const doc = new jsPDF();
+  
+    // Define header and footer
+    const header = () => {
+      doc.setFontSize(18);
+      doc.setTextColor(40, 40, 40);
+      doc.text('Bill Sheet Report', 14, 22);
+      doc.setFontSize(10);
+      doc.setTextColor(100);
+      doc.text(`Generated on: ${new Date().toLocaleDateString()}`, 84, 28);
+    };
+    
+    const footer = (pageNumber) => {
+      doc.setFontSize(10);
+      doc.setTextColor(150);
+      doc.text(`Page ${pageNumber}`, doc.internal.pageSize.width - 20, doc.internal.pageSize.height - 10);
+    };
+  
+    data.majorsalesreport.forEach((report, index) => {
+      if (index !== 0) {
+        doc.addPage();
+      }
+  
+      header();
+        doc.setFontSize(10);
+        doc.text(`Draw: ${drawdate.date}`, 150, 30);
+        doc.text(`Draw Title: ${drawdate.title}`, 14, 35);
+  
+      doc.setFontSize(14);
+      doc.setTextColor(40, 40, 40);
+      doc.text(`Report ${index + 1}`, 14, 40);
+  
+      // Second Prizes table
+      doc.autoTable({
+        startY: 50,
+        head: [['firstprize','secondprize1', 'secondprize2', 'secondprize3', 'secondprize4', 'secondprize5']],
+        body: [
+          [
+            data.firstprize || 'N/A',
+            data.secondprize1,
+            data.secondprize2,
+            data.secondprize3,
+            data.secondprize4,
+            data.secondprize5
+          ]
+        ],
+        theme: 'grid',
+        styles: {
+          fontSize: 10,
+          textColor: 80,
+        },
+        headStyles: {
+          fillColor: [240, 240, 240],
+          textColor: 40,
+          fontSize: 11,
+        }
+      });
+      doc.autoTable({
+        startY: 80,
+        head: [['Name','Username', 'Comission', 'Pc percentage']],
+        body: [
+          [
+            report.name,
+            report.username,
+            report.comission.comission,
+            report.comission.pcpercentage
+          ]
+        ],
+        theme: 'grid',
+        styles: {
+          fontSize: 10,
+          textColor: 80,
+        },
+        headStyles: {
+          fillColor: [240, 240, 240],
+          textColor: 40,
+          fontSize: 11,
+        }
+      });
+      let totalFp = report.prize.tempobj.f;
+      let totalSs = report.prize.tempobj.s;
+      let totalF = report.prize.tempsale.f;
+      let totalS = report.prize.tempsale.s;
+      let totalFfour = report.prize.tempsalefour.f;
+      let totalSfour = report.prize.tempsalefour.s;
+  
+  
+      const totalPrizes = Number(totalFp )+ Number(totalSs) 
+      const commissionValue = report.comission.comission;
+      const commissionAmount = report.comission.comission===0?report.comission.comission:(((totalF + totalS)*Number(report.comission.comission))/100);
+      const pcPercentageAmount = report.comission.pcpercentage===0?report.comission.pcpercentage:(((totalFfour + totalSfour)*Number(report.comission.pcpercentage))/100);
+      const pcPercentageValue = report.comission.pcpercentage;
+  
+      doc.setFontSize(12);
+      doc.setTextColor(60, 60, 60);
+      // doc.text(`Totals:`, 14, doc.autoTable.previous.finalY + 10);
+      doc.setTextColor(80, 80, 80);
+      // doc.text(`Total F: ${totalF}`, 14, doc.autoTable.previous.finalY + 15);
+      // doc.text(`Total S: ${totalS}`, 14, doc.autoTable.previous.finalY + 20);
+      // doc.text(`Grand Total: ${totalF + totalS}`, 14, doc.autoTable.previous.finalY + 20);
+      // doc.text(`Total Prizes: ${totalPrizes}`, 14, doc.autoTable.previous.finalY + 25);
+      // // doc.text(`Commission: ${commissionValue}`, 14, doc.autoTable.previous.finalY + 35);
+      // // doc.text(`PC Percentage: ${pcPercentageValue}%`, 14, doc.autoTable.previous.finalY + 40);
+      // // doc.text(`Commission Amount: ${commissionAmount }%`, 14, doc.autoTable.previous.finalY + 45);
+      // // doc.text(`PC Percentage Amount: ${pcPercentageAmount}`, 14, doc.autoTable.previous.finalY + 50);
+      // doc.text(`Total Comsission: ${pcPercentageAmount+commissionAmount}`, 14, doc.autoTable.previous.finalY + 30);
+      // doc.text(`Safi Sale: ${(totalF + totalS)-pcPercentageAmount-commissionAmount}`, 14, doc.autoTable.previous.finalY + 35);
+      // doc.text(`Net Total: ${(totalF + totalS)- Number(totalPrizes)-pcPercentageAmount-commissionAmount}`, 14, doc.autoTable.previous.finalY + 40);
+      doc.text(`Total Sale: ${totalF + totalS+totalFfour+totalSfour}`, 14, doc.autoTable.previous.finalY + 25);
+      doc.text(`Total Comsission: ${pcPercentageAmount+commissionAmount}`, 14, doc.autoTable.previous.finalY + 30);
+      doc.text(`Safi Sale: ${(totalF + totalS+totalFfour+totalSfour)-pcPercentageAmount-commissionAmount}`, 14, doc.autoTable.previous.finalY + 35);
+      doc.text(`Total Prizes: ${totalPrizes}`, 14, doc.autoTable.previous.finalY + 40);
+      doc.text(`Bill: ${((totalF + totalS+totalFfour+totalSfour)- Number(totalPrizes)-pcPercentageAmount-commissionAmount).toFixed(2)}`, 14, doc.autoTable.previous.finalY + 45);
+    
+      // doc.text(`Total Sale: ${totalF + totalS}`, 14, doc.autoTable.previous.finalY + 25);
+      // doc.text(`Total Comsission: ${pcPercentageAmount+commissionAmount}`, 14, doc.autoTable.previous.finalY + 30);
+      // doc.text(`Safi Sale: ${(totalF + totalS)-pcPercentageAmount-commissionAmount}`, 14, doc.autoTable.previous.finalY + 35);
+      // doc.text(`Total Prizes: ${totalPrizes}`, 14, doc.autoTable.previous.finalY + 40);
+      // doc.text(`Bill: ${((totalF + totalS)- Number(totalPrizes)-pcPercentageAmount-commissionAmount).toFixed(2)}`, 14, doc.autoTable.previous.finalY + 45);
+      // // doc.text(`Net Total: ${(totalF + totalS)-pcPercentageAmount-commissionAmount}`, 14, doc.autoTable.previous.finalY + 60);
+
+      footer(doc.internal.getNumberOfPages());
+    });
+  
+    doc.save('BillSheetReport.pdf');
+  };
   const applymoreuplimit=(arr,values)=>{
     let filteredPayments = arr;
     for (let i=0;i<filteredPayments.length;i++){
@@ -753,6 +890,7 @@ const AddProductForm = ({ userdata,draws,setProducts,products}) => {
   }
   const gettheadminbillsheet=async()=>{
     try{
+   
       if(!drawdate){
         alert("Choose a draw first")
         return;
@@ -768,7 +906,6 @@ const AddProductForm = ({ userdata,draws,setProducts,products}) => {
         alert("Choose a limit type")
         return;
       }
-
     const response = await fetch(`${linkurl}/report/getHaddLimitReportforalldistributoradminbillsheet`, {
       method: 'POST',
       headers: {
@@ -777,14 +914,13 @@ const AddProductForm = ({ userdata,draws,setProducts,products}) => {
       },
       body: JSON.stringify({
         date:drawdate,
-        type:type
+        type:type,
+        limitsettings:limitsettings
       }),
     });
     if (response.ok) {
       const userData = await response.json();
-      
-      // generatePDFReport(userData)
-      // form.resetFields();
+      generatePDFReport(userData)
     } else {
       const userData = await response.json();
       alert(userData.Message)
@@ -857,42 +993,89 @@ const AddProductForm = ({ userdata,draws,setProducts,products}) => {
                     </Form.Item>
                     </Col>
       {(option==="All"||option==="A")&& <Col xs={12} sm={8}>
-      <Form.Item name="onedigita" label="First A" rules={[{ required: true, message: 'Please enter a number' }]}>
+      <Form.Item name="onedigita" onChange={(e)=>{
+        let temp={...limitsettings}
+        temp.hindsaa=e.target.value
+        setLimitSettings(temp)
+        }} label="First A" rules={[{ required: true, message: 'Please enter a number' }]}>
         <Input type='number' placeholder="Enter one digit first" />
       </Form.Item>
       </Col>}
     {(option==="All"||option==="A")&&  <Col xs={12} sm={8}>
-      <Form.Item name="onedigitb" label="Second A" rules={[{ required: true, message: 'Please enter a number' }]}>
+      <Form.Item name="onedigitb"
+      onChange={(e)=>{
+        let temp={...limitsettings}
+        temp.hindsab=e.target.value
+        setLimitSettings(temp)
+        }}
+      label="Second A" rules={[{ required: true, message: 'Please enter a number' }]}>
         <Input type='number' placeholder="Enter one digit second" />
       </Form.Item>
       </Col>}
       {(option==="All"||option==="B")&&<Col xs={12} sm={8}>
-      <Form.Item name="twodigita" label="First B" rules={[{ required: true, message: 'Please enter a number' }]}>
+      <Form.Item name="twodigita" 
+      onChange={(e)=>{
+        let temp={...limitsettings}
+        temp.akraa=e.target.value
+        setLimitSettings(temp)
+        }}
+      label="First B" rules={[{ required: true, message: 'Please enter a number' }]}>
         <Input type='number' placeholder="Enter two digit first" />
       </Form.Item>
       </Col>}
      {(option==="All"||option==="B")&& <Col xs={12} sm={8}>
-      <Form.Item name="twodigitb" label="Second B" rules={[{ required: true, message: 'Please enter a number' }]}>
+      <Form.Item name="twodigitb"
+      onChange={(e)=>{
+        let temp={...limitsettings}
+        temp.akrab=e.target.value
+        setLimitSettings(temp)
+        }}
+      
+      label="Second B" rules={[{ required: true, message: 'Please enter a number' }]}>
         <Input type='number' placeholder="Enter two digit second" />
       </Form.Item>
       </Col>}
       {(option==="All"||option==="C")&&<Col xs={12} sm={8}>
-      <Form.Item name="threedigita" label="First C" rules={[{ required: true, message: 'Please enter a number' }]}>
+      <Form.Item name="threedigita"
+      onChange={(e)=>{
+        let temp={...limitsettings}
+        temp.tendolaa=e.target.value
+        setLimitSettings(temp)
+        }}
+      label="First C" rules={[{ required: true, message: 'Please enter a number' }]}>
         <Input type='number' placeholder="Enter three digit first" />
       </Form.Item>
       </Col>}
       {(option==="All"||option==="C")&&<Col xs={12} sm={8}>
-      <Form.Item name="threedigitb" label="Second C" rules={[{ required: true, message: 'Please enter a number' }]}>
+      <Form.Item name="threedigitb"
+      onChange={(e)=>{
+        let temp={...limitsettings}
+        temp.tendolab=e.target.value
+        setLimitSettings(temp)
+        }}
+      label="Second C" rules={[{ required: true, message: 'Please enter a number' }]}>
         <Input type='number' placeholder="Enter three digit second" />
       </Form.Item>
       </Col>}
       {(option==="All"||option==="D")&&<Col xs={12} sm={8}>
-      <Form.Item name="fourdigita" label="First D" rules={[{ required: true, message: 'Please enter a number' }]}>
+      <Form.Item name="fourdigita" 
+      onChange={(e)=>{
+        let temp={...limitsettings}
+        temp.panogadaa=e.target.value
+        setLimitSettings(temp)
+        }}
+      label="First D" rules={[{ required: true, message: 'Please enter a number' }]}>
         <Input type='number' placeholder="Enter four digit first" />
       </Form.Item>
       </Col>}
      {(option==="All"||option==="D")&& <Col xs={12} sm={8}>
-      <Form.Item name="fourdigitb" label="Second D" rules={[{ required: true, message: 'Please enter a number' }]}>
+      <Form.Item name="fourdigitb"
+      onChange={(e)=>{
+        let temp={...limitsettings}
+        temp.panogadab=e.target.value
+        setLimitSettings(temp)
+        }}
+      label="Second D" rules={[{ required: true, message: 'Please enter a number' }]}>
         <Input type='number' placeholder="Enter four digit second" />
       </Form.Item>
       </Col>}

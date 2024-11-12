@@ -34,6 +34,8 @@ const ProductTable = ({ products, setProducts,userdata }) => {
   const [loginvisible,setLoginVisible] = useState(false)
   const [searchText, setSearchText] = useState('');
   const [creditopen,setCreditopen] = useState(false)
+  const [limits, setLimits] = useState([]);
+  const [alldraws, setAllDraws] = useState([]);
   const [cashopen,setCashopen] = useState(false)
   const [searchedColumn, setSearchedColumn] = useState('');
   const [payment, setPayment] = useState([]);
@@ -248,12 +250,6 @@ const ProductTable = ({ products, setProducts,userdata }) => {
      
       ),
     },
-    // {
-    //   title: 'Contact',
-    //   dataIndex: 'contact',
-    //   key: 'contact',
-    //   ...getColumnSearchProps('contact'),
-    // },
     {
       title: 'Username',
       dataIndex: 'username',
@@ -276,74 +272,7 @@ const ProductTable = ({ products, setProducts,userdata }) => {
      
       ),
     },
-    // {
-    //     title: 'Username',
-    //     dataIndex: 'username',
-    //     key: 'username',
-    //     ...getColumnSearchProps('username'),
-    //   },
-    // {
-    //   title: 'Security Deposit',
-    //   dataIndex: 'security',
-    //   key: 'security',
-    //   sorter: (a, b) => a.security - b.security,
-    // },
-//     {
-//       title: 'Actions',
-//       key: 'actions',
-//       render: (_, record) => (
-//         <Space size="middle">
-//        <Button
-//           icon={<EditFilled/>}
-//           style={{
-
-// borderRadius: 10,
-// background: COLORS.editgradient,
-// color: "white"
-//           }} onClick={() => handleEdit(record)}>
-//             Edit
-//           </Button>
-//        <Button
-//           icon={<InfoCircleFilled/>}
-//           style={{
-
-// borderRadius: 10,
-// background: COLORS.primarygradient,
-// color: "white"
-//           }} onClick={() => handleDetail(record)}>Detail</Button>
-//       <Button
-//             icon={<DollarCircleFilled />}
-//             style={{
-//               borderRadius: 10,
-//               background: COLORS.detailgradient,
-//               color: 'white',
-//             }}
-//             onClick={() => showDeleteConfirmationModal(record)}
-//           >
-//             Payment
-//           </Button>
-//           <Button
-//           icon={<InfoCircleFilled/>}
-//           style={{
-
-// borderRadius: 10,
-// background: COLORS.primarygradient,
-// color: "white"
-//           }} onClick={() => handleLoginasanother(record)}>Login</Button>
-//         </Space>
-//       ),
-//     },
-// {
-//   title: 'Actions',
-//   key: 'actions',
-//   render: (_, record) => (
-//     <Dropdown overlay={getActionMenu(record)} trigger={['click']}>
-//       <Tooltip title="Click for actions">
-//         <Button icon={<MoreOutlined />} style={{ borderRadius: 10 }} />
-//       </Tooltip>
-//     </Dropdown>
-//   ),
-// },
+    
   ];
   const paymentcolumns = [
     {
@@ -380,21 +309,6 @@ const ProductTable = ({ products, setProducts,userdata }) => {
         </span>
       ),
     },
-    // {
-    //   title: 'Type',
-    //   dataIndex: 'type',
-    //   key: 'type',
-    //   render: (type) => (
-    //     <span style={{ color: type === 'Withdraw' ? 'red' : 'green' }}>
-    //       {type === 'Withdraw' ? (
-    //         <MinusCircleFilled style={{ color: 'red' }} />
-    //       ) : (
-    //         <PlusCircleFilled style={{ color: 'green' }} />
-    //       )}{' '}
-    //       {type}
-    //     </span>
-    //   ),
-    // },
     {
       title: 'Cash',
       dataIndex: 'cash',
@@ -407,18 +321,6 @@ const ProductTable = ({ products, setProducts,userdata }) => {
       key: 'credit',
       ...getColumnSearchProps('credit'),
     },
-    // {
-    //   title: 'Balance Upline',
-    //   dataIndex: 'balanceupline',
-    //   key: 'balanceupline',
-    //   ...getColumnSearchProps('balanceupline'),
-    //   render: (balanceupline) => (
-    //     <span style={{ color: balanceupline < 0? 'red' : 'green' }}>
-          
-    //       {balanceupline}
-    //     </span>
-    //   ),
-    // },
     {
       title: 'Date',
       dataIndex: 'date',
@@ -437,9 +339,42 @@ const ProductTable = ({ products, setProducts,userdata }) => {
     },
     
   ];
-  const handleEdit = (product) => {
-    setSelectedProduct(product);
+  const handleEdit = async(product) => {
+
+    const token = localStorage.getItem('token');
+    if(!token){
+      alert("Sign in to proceed!")
+      return;
+    }
+try {
+  setSelectedProduct(product);
+    const response = await fetch(`${linkurl}/user/getLimitByUserId/${product._id}`, {
+      method: 'GET',
+      headers: {
+        token: `${token}`,
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error(`Error: ${response.statusText}`);
+    }
+    const response1 = await fetch(`${linkurl}/draw/getlasttendrawsmerchant`, {
+      method: 'GET',
+      headers: {
+        token: `${token}`,
+      },
+    });
+    if (response1.ok) {
+      const userData1 = await response1.json();
+      setAllDraws(userData1);
+    }
+    const data = await response.json();
+    setLimits(data)
     setVisible(true);
+  } catch (error) {
+    console.error('Error fetching limit by user ID:', error);
+  }
+    
   };
 
   const handleDetail = (record) => {
@@ -469,6 +404,10 @@ const ProductTable = ({ products, setProducts,userdata }) => {
       onCancel={() => setVisible(false)}
       setProducts={setProducts}
       products={products}
+      limits={limits}
+      alldraws={alldraws}
+      setLimits={setLimits}
+      setAllDraws={setAllDraws}
     />
     );
     const renderComission = () => (

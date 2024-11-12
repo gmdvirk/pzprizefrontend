@@ -274,74 +274,6 @@ const handleLoginasanother =(record)=>{
      
       ),
     },
-    // {
-    //     title: 'Username',
-    //     dataIndex: 'username',
-    //     key: 'username',
-    //     ...getColumnSearchProps('username'),
-    //   },
-    // {
-    //   title: 'Security Deposit',
-    //   dataIndex: 'security',
-    //   key: 'security',
-    //   sorter: (a, b) => a.security - b.security,
-    // },
-//     {
-//       title: 'Actions',
-//       key: 'actions',
-//       render: (_, record) => (
-//         <Space size="middle">
-//        <Button
-//           icon={<EditFilled/>}
-//           style={{
-
-// borderRadius: 10,
-// background: COLORS.editgradient,
-// color: "white"
-//           }} onClick={() => handleEdit(record)}>
-            
-//           </Button>
-//        <Button
-//           icon={<InfoCircleFilled/>}
-//           style={{
-
-// borderRadius: 10,
-// background: COLORS.primarygradient,
-// color: "white"
-//           }} onClick={() => handleDetail(record)}></Button>
-//       <Button
-//             icon={<DollarCircleFilled />}
-//             style={{
-//               borderRadius: 10,
-//               background: COLORS.detailgradient,
-//               color: 'white',
-//             }}
-//             onClick={() => showDeleteConfirmationModal(record)}
-//           >
-            
-//           </Button>
-//           <Button
-//           icon={<LoginOutlined/>}
-//           style={{
-
-// borderRadius: 10,
-// background: COLORS.primarygradient,
-// color: "white"
-//           }} onClick={() => handleLoginasanother(record)}></Button>
-//         </Space>
-//       ),
-//     },
-// {
-//   title: 'Actions',
-//   key: 'actions',
-//   render: (_, record) => (
-//     <Dropdown overlay={getActionMenu(record)} trigger={['click']}>
-//       <Tooltip title="Click for actions">
-//         <Button icon={<MoreOutlined />} style={{ borderRadius: 10 }} />
-//       </Tooltip>
-//     </Dropdown>
-//   ),
-// },
   ];
   const paymentcolumns = [
     {
@@ -378,21 +310,6 @@ const handleLoginasanother =(record)=>{
         </span>
       ),
     },
-    // {
-    //   title: 'Type',
-    //   dataIndex: 'type',
-    //   key: 'type',
-    //   render: (type) => (
-    //     <span style={{ color: type === 'Withdraw' ? 'red' : 'green' }}>
-    //       {type === 'Withdraw' ? (
-    //         <MinusCircleFilled style={{ color: 'red' }} />
-    //       ) : (
-    //         <PlusCircleFilled style={{ color: 'green' }} />
-    //       )}{' '}
-    //       {type}
-    //     </span>
-    //   ),
-    // },
     {
       title: 'Cash',
       dataIndex: 'cash',
@@ -423,9 +340,10 @@ const handleLoginasanother =(record)=>{
     },
     
   ];
-  const handleEdit = (product) => {
+  const handleEdit = async(product) => {
     setSelectedProduct(product);
-    setVisible(true);
+   
+  setVisible(true);
   };
 
   const handleDetail = (record) => {

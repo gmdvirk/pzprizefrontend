@@ -42,7 +42,7 @@ try {
     console.log(userData)
     let sheets=[]
     for(let i=0;i<userData.sheets.length;i++){
-      sheets.push({sheetname:userData.sheets[i].sheetname,total:Number(userData.sheets[i].result.tempsale.f)+Number(userData.sheets[i].result.tempsale.s)+Number(userData.sheets[i].result.tempsalefour.f)+Number(userData.sheets[i].result.tempsalefour.f),prize:Number(userData.sheets[i].result.tempobj.f)+Number(userData.sheets[i].result.tempobj.s)})
+      sheets.push({sheetname:userData.sheets[i].sheetname,total:Number(userData.sheets[i].result.tempsale.f)+Number(userData.sheets[i].result.tempsale.s)+Number(userData.sheets[i].result.tempsalefour.f)+Number(userData.sheets[i].result.tempsalefour.s),prize:Number(userData.sheets[i].result.tempobj.f)+Number(userData.sheets[i].result.tempobj.s)})
     }
     // let tempobj=userData.drawarrtosend;
     generatePDFReport1(sheets)

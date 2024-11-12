@@ -19,7 +19,6 @@ const AddProductForm = ({ userdata,setProducts,draws,products}) => {
   const [selecteddraw,setSelectedDraw]=useState(null)
  
   const generatePDFReport = (data) => {
-    console.log(data)
     const doc = new jsPDF();
   
     // Define header and footer
@@ -301,7 +300,6 @@ setLoading(false)
       });
       if (response.ok) {
         const userData = await response.json();
-        console.log(userData)
        
         generatePDFReport(userData)
         // form.resetFields();

@@ -1031,20 +1031,27 @@ else if (values.dealer==="allcombined"){
     let alldraws=[]
       let drawtosend={}
       if(values.limittype==="uplimit"){
+        
 
         userData.forEach((Payments) => {
           let filteredPayments=Payments.drawarrtosend
+          console.log(Payments)
       
           for (let i = 0; i < filteredPayments.length; i++) {
             if (filteredPayments[i].bundle.length === 1) {
-              filteredPayments[i].f = filteredPayments[i].f - Number(Payments.limits.hindsaa);
-              filteredPayments[i].s = filteredPayments[i].s - Number(Payments.limits.hindsab);
-              if(Number(filteredPayments[i].f)<0){
+              // filteredPayments[i].f = filteredPayments[i].f - Number(Payments.limits.hindsaa);
+              // filteredPayments[i].s = filteredPayments[i].s - Number(Payments.limits.hindsab);
+              if(Number(Payments.limits.hindsaa)>filteredPayments[i].f){
                 filteredPayments[i].f=0
+              }else{
+                filteredPayments[i].f= Number(filteredPayments[i].f)-Number(Payments.limits.hindsaa)
               }
-              if(Number(filteredPayments[i].s)<0){
-                filteredPayments[i].s=0
-              }
+             if(filteredPayments[i].s<Number(Payments.limits.hindsab)){
+              filteredPayments[i].s=0
+             }else{
+              filteredPayments[i].s= Number(filteredPayments[i].s)-Number(Payments.limits.hindsab)
+             }
+              
               if(alldraws.includes(filteredPayments[i].bundle)){
                 drawtosend[filteredPayments[i].bundle] ={bundle:filteredPayments[i].bundle,f:Number( drawtosend[filteredPayments[i].bundle].f )+filteredPayments[i].f,s:Number( drawtosend[filteredPayments[i].bundle].s )+filteredPayments[i].s}
             }else{
@@ -1053,13 +1060,16 @@ else if (values.dealer==="allcombined"){
             }
             }
             if (filteredPayments[i].bundle.length === 2) {
-              filteredPayments[i].f = filteredPayments[i].f - Number(Payments.limits.akraa);
-              filteredPayments[i].s = filteredPayments[i].s - Number(Payments.limits.akrab);
-              if(Number(filteredPayments[i].f)<0){
+              if(filteredPayments[i].f<Number(Payments.limits.akraa)){
                 filteredPayments[i].f=0
+              }else{
+                filteredPayments[i].f=Number(filteredPayments[i].f)-Number(Payments.limits.akraa)
               }
-              if(Number(filteredPayments[i].s)<0){
+              
+              if(filteredPayments[i].s<Number(Payments.limits.akrab)){
                 filteredPayments[i].s=0
+              }else{
+                filteredPayments[i].s=Number(filteredPayments[i].s)-Number(Payments.limits.akrab)
               }
               if(alldraws.includes(filteredPayments[i].bundle)){
                 drawtosend[filteredPayments[i].bundle] ={bundle:filteredPayments[i].bundle,f:Number( drawtosend[filteredPayments[i].bundle].f )+filteredPayments[i].f,s:Number( drawtosend[filteredPayments[i].bundle].s )+filteredPayments[i].s}
@@ -1069,13 +1079,16 @@ else if (values.dealer==="allcombined"){
             }
             }
             if (filteredPayments[i].bundle.length === 3) {
-              filteredPayments[i].f = filteredPayments[i].f - Number(Payments.limits.tendolaa);
-              filteredPayments[i].s = filteredPayments[i].s - Number(Payments.limits.tendolab);
-              if(Number(filteredPayments[i].f)<0){
+              if(filteredPayments[i].f<Number(Payments.limits.tendolaa)){
                 filteredPayments[i].f=0
+              }else{
+                filteredPayments[i].f=Number(filteredPayments[i].f)-Number(Payments.limits.tendolaa)
               }
-              if(Number(filteredPayments[i].s)<0){
+              
+              if(filteredPayments[i].s<Number(Payments.limits.tendolab)){
                 filteredPayments[i].s=0
+              }else{
+                filteredPayments[i].s=Number(filteredPayments[i].s)-Number(Payments.limits.tendolab)
               }
               if(alldraws.includes(filteredPayments[i].bundle)){
                 drawtosend[filteredPayments[i].bundle] ={bundle:filteredPayments[i].bundle,f:Number( drawtosend[filteredPayments[i].bundle].f )+filteredPayments[i].f,s:Number( drawtosend[filteredPayments[i].bundle].s )+filteredPayments[i].s}
@@ -1085,15 +1098,17 @@ else if (values.dealer==="allcombined"){
             }
             }
             if (filteredPayments[i].bundle.length === 4) {
-              filteredPayments[i].f = filteredPayments[i].f - Number(Payments.limits.panogadaa);
-              filteredPayments[i].s = filteredPayments[i].s - Number(Payments.limits.panogadab);
-           
-                if(Number(filteredPayments[i].f)<0){
-                  filteredPayments[i].f=0
-                }
-                if(Number(filteredPayments[i].s)<0){
-                  filteredPayments[i].s=0
-                }
+              if(filteredPayments[i].f<Number(Payments.limits.panogadaa)){
+                filteredPayments[i].f=0
+              }else{
+                filteredPayments[i].f=Number(filteredPayments[i].f)-Number(Payments.limits.panogadaa)
+              }
+              
+              if(filteredPayments[i].s<Number(Payments.limits.panogadab)){
+                filteredPayments[i].s=0
+              }else{
+                filteredPayments[i].s=Number(filteredPayments[i].s)-Number(Payments.limits.panogadab)
+              }
               if(alldraws.includes(filteredPayments[i].bundle)){
                 drawtosend[filteredPayments[i].bundle] ={bundle:filteredPayments[i].bundle,f:Number( drawtosend[filteredPayments[i].bundle].f )+filteredPayments[i].f,s:Number( drawtosend[filteredPayments[i].bundle].s )+filteredPayments[i].s}
             }else{

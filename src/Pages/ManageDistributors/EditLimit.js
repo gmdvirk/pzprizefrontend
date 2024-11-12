@@ -17,14 +17,33 @@ const EditProductForm = (props) => {
   const [errorModalVisible, setErrorModalVisible] = useState(false);
   const [message, setMessage] = useState("");
   const [errormessage, setErrorMessage] = useState("");
+  const [id, setId] = useState("");
   const [product, setProduct] = useState(props.initialValues);
+  const [limitsetting, setLimitsetting] = useState({
+    hindsaa:0,
+                            hindsab:0,
+                            akraa:0,
+                            akrab:0,
+                            tendolaa:0,
+                            tendolab:0,
+                            panogadaa:0,
+                            panogadab:0
+  });
+  
+  const [drawdate, setDrawdate] = useState(null);
 
+
+  // useEffect(() => {
+  
+
+  //   form.setFieldsValue(props.initialValues.limit);
+  // }, [props.initialValues, form]);
 
   useEffect(() => {
   
 
-    form.setFieldsValue(props.initialValues.limit);
-  }, [props.initialValues, form]);
+    form.setFieldsValue(limitsetting);
+  }, [limitsetting, form]);
 
 
   const onFinish = async (values) => {
@@ -37,24 +56,26 @@ const EditProductForm = (props) => {
         
         return;
       }
-      const response = await fetch(`${linkurl}/user/edituser`, {
-        method: 'PUT',
+      const response = await fetch(`${linkurl}/user/editLimit`, {
+        method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           token: token,
         },
         body: JSON.stringify({
-          ...props.initialValues,
+          _id:id,
+          userid:props.initialValues._id,
+          drawid:drawdate._id,
           limit:{...values}
         }),
       });
       if (response.ok) {
         const userData = await response.json();
-        let tempobj={...props.initialValues,...values};
-        let temp=[...props.products];
-        const index=temp.findIndex((obj)=>obj._id===props.initialValues._id);
-        temp[index]={...tempobj}
-        props.setProducts(temp)
+        // let tempobj={...props.initialValues,...values};
+        // let temp=[...props.products];
+        // const index=temp.findIndex((obj)=>obj._id===props.initialValues._id);
+        // temp[index]={...tempobj}
+        // props.setProducts(temp)
         // form.resetFields();
         setMessage("Successfully Updated")
         setSuccessModalVisible(true)
@@ -80,7 +101,23 @@ const EditProductForm = (props) => {
     setErrorModalVisible(false);
   };
 
-
+  const getExpiredOrNot=(users)=>{
+    // Parse the draw date and time from the users object
+    
+    const drawDateTime = new Date(`${users.date}T${users.time}Z`);
+    let currentDatetime = new Date();
+    let currentDate = currentDatetime.toLocaleDateString('en-CA'); // 'YYYY-MM-DD'
+    let currentTime = currentDatetime.toLocaleTimeString('en-GB', { hour12: false }).slice(0, 5); // 'HH:MM'
+    // Check if the current date and time are less than the draw date and time
+    const drawDateTime1 = new Date(`${currentDate}T${currentTime}Z`);
+    if (drawDateTime1 >= drawDateTime) {
+        return "expired"
+    }
+    if (users.status === 'active') {
+     return "active"
+ }
+    return "deactive"
+ }
   return (
     <div>
     {loading ? (
@@ -91,7 +128,48 @@ const EditProductForm = (props) => {
       </div>):
      <Form form={form} onFinish={onFinish} layout="vertical">
        <Row gutter={16}>
-      
+       <Col xs={24} sm={8}>
+       <Form.Item
+       label={"Select Draw"}
+                     name={ 'date'}
+                       rules={[{ required: true, message: 'Please select draw' }]}
+                       className="flex-item"
+                       fieldKey={ 'date'}
+                     >
+                    <Select placeholder="Select draw"  onChange={(e)=>{
+                        const temp=props.alldraws.draws.find((obj)=>obj.date===e)
+                        setDrawdate(temp)
+                        const index=props.limits.data.findIndex((obj)=>obj.drawid===temp._id)
+                        if(index===-1){
+                          setLimitsetting({
+                            hindsaa:0,
+                            hindsab:0,
+                            akraa:0,
+                            akrab:0,
+                            tendolaa:0,
+                            tendolab:0,
+                            panogadaa:0,
+                            panogadab:0
+                          })
+                          form.setFieldsValue(limitsetting);
+                        }else{
+                          setLimitsetting(props.limits.data[index])
+                          setId(props.limits.data[index]._id)
+                          form.setFieldsValue(props.limits.data[index]);
+                        }
+                        
+                      }
+                      }
+                        dropdownStyle={{ maxHeight: 150, overflow: 'auto' }}>
+                        
+                      {props.alldraws.draws.map((obj)=>{
+                        return(
+                          <Option style={{color:getExpiredOrNot(obj)==="active"?"green":'red'}} value={obj.date}>{obj.title+"---"+obj.date+"--"+getExpiredOrNot(obj)}</Option>
+                        )
+                      })  }
+                       </Select>
+                     </Form.Item>
+       </Col>
       <Col xs={12} sm={8}>
       <Form.Item name="hindsaa" label="Hindsy Ki Had (First)" rules={[{ required: true, message: 'Please enter a number' }]}>
         <Input type='number' placeholder="Enter number" />

@@ -21,6 +21,8 @@ const UserDetailsPage = ({ userdata }) => {
   const [loading, setLoading] = useState(true);
   const [payment, setPayment] = useState([]);
   const [loginvisible,setLoginVisible] = useState(false)
+  const [limits, setLimits] = useState([]);
+  const [alldraws, setAllDraws] = useState([]);
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [products, setProducts] = useState(null);
   
@@ -123,6 +125,10 @@ const UserDetailsPage = ({ userdata }) => {
       onCancel={() => setVisible(false)}
       setProducts={setProducts}
       products={products}
+      limits={limits}
+      alldraws={alldraws}
+      setLimits={setLimits}
+      setAllDraws={setAllDraws}
     />
     );
     const renderComission = () => (
@@ -172,10 +178,43 @@ const UserDetailsPage = ({ userdata }) => {
     </Tabs>
     );
   };
-  const handleEdit = (product) => {
+  const handleEdit =async(product) => {
     setSelectedProduct(product);
+    const token = localStorage.getItem('token');
+    if(!token){
+      alert("Sign in to proceed!")
+      return;
+    }
+try {
+  setSelectedProduct(product);
+    const response = await fetch(`${linkurl}/user/getLimitByUserId/${product._id}`, {
+      method: 'GET',
+      headers: {
+        token: `${token}`,
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error(`Error: ${response.statusText}`);
+    }
+    const response1 = await fetch(`${linkurl}/draw/getlasttendrawsmerchant`, {
+      method: 'GET',
+      headers: {
+        token: `${token}`,
+      },
+    });
+    if (response1.ok) {
+      const userData1 = await response1.json();
+      setAllDraws(userData1);
+    }
+    const data = await response.json();
+    setLimits(data)
     setProducts(referralusers)
     setVisible(true);
+  } catch (error) {
+    console.error('Error fetching limit by user ID:', error);
+  }
+    
   };
   const handleLoginasanother =(record)=>{
     setSelectedProduct(record);
