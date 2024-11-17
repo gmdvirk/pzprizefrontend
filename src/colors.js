@@ -3,7 +3,8 @@ const COLORS={
     editgradient:'linear-gradient(to right,#000000, #5F6464 )',
     deletegradient:'linear-gradient(to right, #2B0702, #920909)',
     detailgradient:'linear-gradient(to right, #1B6692, #38B6FF)',
-    savegradient:'linear-gradient(to right, #000000, #246D46)'
+    savegradient:'linear-gradient(to right, #000000, #246D46)',
+    distributorcolor:'#e7d1f0'
 }
 export default COLORS;
 

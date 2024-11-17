@@ -60,6 +60,7 @@ const SidebarDrawer = (props) => {
             <div style={{ padding: '16px', background: 'white' }}>
               <Avatar size={64} src={imageUrl} icon={<UserOutlined />} />
               <Title level={4}>{Info.name}</Title>
+              {props.userdata  && (<Title level={4}>User : {props.userdata.username}</Title>)}
             </div>
             <Menu
               theme="dark"
@@ -68,7 +69,7 @@ const SidebarDrawer = (props) => {
               onClick={handleMenuClick}
               style={{ background: 'white' }}
             >
-               <Menu.Item
+               {/* <Menu.Item
               key="profile"
               icon={<UserOutlined />}
               style={{
@@ -78,7 +79,22 @@ const SidebarDrawer = (props) => {
               }}
             >
               Profile
-            </Menu.Item>
+            </Menu.Item> */}
+            {/* {props.userdata && (
+           <p><strong>{props.userdata.username}</strong></p>
+           )} */}
+            {/* {props.userdata.role !== 'merchant' && (
+            <Menu.Item
+              key="profile"
+              icon={<UserOutlined />}
+              style={{
+                color: selectedMenuKey === 'profile' ? 'white' : 'black',
+                background: selectedMenuKey === 'profile' ? COLORS.primarygradient : 'white',
+                width: '100%',
+              }}
+            >
+              Profile
+            </Menu.Item>)} */}
             {props.userdata.role === 'superadmin' && (
               <Menu.Item
                 key="admindraws"
@@ -340,7 +356,7 @@ const SidebarDrawer = (props) => {
               icon={<MenuOutlined />}
               onClick={() => setDrawerVisible(true)}
             ></Button>
-            {selectedMenuKey==="merchant"&&props.draw&&<p style={{zIndex:9999,color:"green",marginTop:-30,marginLeft:50}}>{"Draw : "+props.draw.title+" "+props.draw.date+" "+props.draw.time}</p>}
+            {selectedMenuKey==="merchant"&&props.draw&&<p style={{zIndex:9999,color:"green",marginTop:-30,marginLeft:50}}>{props.draw.title+" "+props.draw.date}</p>}
           </Card>
         </>
       ) : (
@@ -356,6 +372,7 @@ const SidebarDrawer = (props) => {
           <div style={{ padding: '16px', background: 'white' }}>
             <Avatar size={64} src={imageUrl} icon={<UserOutlined />} />
             <Title level={4}>{Info.name}</Title>
+            {props.userdata && (<Title level={4}>User : {props.userdata.username}</Title>)}
           </div>
           <Menu
             theme="dark"
@@ -364,6 +381,10 @@ const SidebarDrawer = (props) => {
             onClick={handleMenuClick}
             style={{ background: 'white' }}
           >
+             {/* {props.userdata.role === 'merchant' && (
+           <p><strong>{props.userdata.usrname}</strong></p>
+           )} */}
+            {/* {props.userdata.role !== 'merchant' && (
             <Menu.Item
               key="profile"
               icon={<UserOutlined />}
@@ -374,7 +395,7 @@ const SidebarDrawer = (props) => {
               }}
             >
               Profile
-            </Menu.Item>
+            </Menu.Item>)} */}
             {props.userdata.role === 'superadmin' && (
               <Menu.Item
                 key="admindraws"
