@@ -56,11 +56,11 @@
     margin-bottom: 8px;
     border-radius: 20px;
     /* border: 2 solid #000000 ; */
-    border-style: solid;
-    border-width: 1;
+    /* border-style: solid; */
+    /* border-width: 1; */
     /* border-color: #000000 !important; */
     background-color: #ffffff;
-    border-width: 2px;
+    /* border-width: 2px; */
     text-align: center;
     display: flex;
     align-items: center; /* Centers the text vertically */
@@ -224,5 +224,24 @@
 @media screen and (min-width: 1024px) {
   .laptop-large-font {
     font-size: 18px !important;
+  }
+}
+.custom-input {
+  will-change: transform;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  perspective: 1000;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.custom-input:focus {
+  transition: border-color 0.2s ease;
+}
+
+/* Optimize for touch devices */
+@media (hover: none) {
+  .custom-input {
+    touch-action: manipulation;
   }
 }

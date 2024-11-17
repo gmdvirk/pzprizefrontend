@@ -370,6 +370,7 @@ try {
     }
     const data = await response.json();
     setLimits(data)
+    console.log(data)
     setVisible(true);
   } catch (error) {
     console.error('Error fetching limit by user ID:', error);

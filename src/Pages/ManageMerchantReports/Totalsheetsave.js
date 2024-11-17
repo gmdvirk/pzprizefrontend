@@ -33,10 +33,10 @@ const AddProductForm = ({draws,sheets,userdata, setProducts,products}) => {
   
     doc.setFontSize(16);
     doc.setTextColor(40);
-    if(values.report==="sale"){
-      doc.text('Total General Sale Report', 14, 22);
+    if(values.report==="generalsale"){
+      doc.text('Save Sheet General Report', 14, 22);
     }else{
-      doc.text('Total Over Sale Report', 14, 22);
+      doc.text('Save Sheet Oversale Report', 14, 22);
 
     }
   
@@ -175,10 +175,10 @@ const AddProductForm = ({draws,sheets,userdata, setProducts,products}) => {
     // doc.text(`Total of Second: ${totalSecond1.toFixed(2)}`, 84, startY);
     // doc.text(`Total: ${total1.toFixed(2)}`, 154, startY);
   
-    if(values.report==="sale"){
-      doc.save('merchant_total_general_sale_report.pdf');
+    if(values.report==="generalsale"){
+      doc.save('merchant_save_sheet_general_report.pdf');
     }else{
-      doc.save('merchant_total_over_sale_report.pdf');
+      doc.save('merchant_save_sheet_oversale_report.pdf');
 
     }
   };
@@ -222,7 +222,7 @@ const AddProductForm = ({draws,sheets,userdata, setProducts,products}) => {
   
     doc.setFontSize(16);
     doc.setTextColor(40);
-    doc.text('Total Sale Report', 14, 22);
+    doc.text('Save Sheet Report', 14, 22);
   
     doc.setFontSize(10);
     if (userdata && userdata.username) {
@@ -381,7 +381,7 @@ const AddProductForm = ({draws,sheets,userdata, setProducts,products}) => {
     }
     
    
-    doc.save('merchant_total_combined_sale_report.pdf');
+    doc.save('merchant_save_sheet_report.pdf');
   };
   
   const onFinish = async (values) => {

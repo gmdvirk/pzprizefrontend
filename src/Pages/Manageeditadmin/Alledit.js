@@ -3,13 +3,14 @@ import {Select,Tabs,Spin} from 'antd';
 import AddUserForm from './Editdistributor';
 import EditComission from "./Editcomission"
 import Editprize from "./EditPrize"
+import EditLimit from "./EditLimit"
 import 'jspdf-autotable';
 
 const { Option } = Select;
 const { TabPane } = Tabs;
 
 
-const ProductTable = ({ products, setProducts,userdata,setUserdata }) => {
+const ProductTable = ({ products, setProducts,userdata,setUserdata,limits,  setLimits,  alldraws,  setAllDraws }) => {
   const [visible, setVisible] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState(userdata);
   const [loading,setLoading]=useState(false)
@@ -46,7 +47,19 @@ const ProductTable = ({ products, setProducts,userdata,setUserdata }) => {
       setUserdata={setUserdata}
     />
   );
-  
+  const renderLimit = () => (
+    <EditLimit
+    initialValues={selectedProduct}
+    userdata={userdata}
+    onCancel={() => setVisible(false)}
+    setProducts={setProducts}
+    products={products}
+    limits={limits}
+    setLimits={setLimits}
+    alldraws={alldraws}
+    setAllDraws={setAllDraws}
+  />
+  );
     return (
       <Tabs defaultActiveKey="mobile" type="card">
       <TabPane tab="Comission Settings" key="comission">
@@ -57,6 +70,9 @@ const ProductTable = ({ products, setProducts,userdata,setUserdata }) => {
       </TabPane>
       <TabPane tab="Prize Setting" key="prize">
         {renderPrize()}
+      </TabPane>
+      <TabPane tab="Limit Cutting" key="limitprize">
+        {renderLimit()}
       </TabPane>
     </Tabs>
     );

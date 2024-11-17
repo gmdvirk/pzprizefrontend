@@ -1,6 +1,6 @@
 
 import React ,{useEffect,useState}from 'react';
-import { Tabs,Card,Spin } from 'antd';
+import { Tabs,Card,Spin,Button } from 'antd';
 import AdminSideBar from "../components/AdminSidebar"
 import { useMedia } from 'react-use';
 import AllUsers from './ManageSubdistributors/Allsubdistributors'
@@ -8,6 +8,8 @@ import AddUserForm from './ManageSubdistributors/Addsubdistributors';
 import { useNavigate } from 'react-router';
 import {linkurl} from "../link"
 import Noaccesspage from "./NoAccess"
+import COLORS from '../colors';
+import { PlusOutlined } from '@ant-design/icons';
 
 const AdminHomePage = () => {
 const navigate=useNavigate();
@@ -146,7 +148,20 @@ marginBottom:20,
 
      <Card
       title="Distributors"
-      style={{ boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)' }}
+      style={{ boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',backgroundColor:COLORS.distributorcolor }}
+      extra={
+        <Button
+          onClick={()=>{navigate("/distributorsmerchants")}}
+          style={{
+            borderRadius: 10,
+            background: COLORS.primarygradient,
+            color: "white"
+          }}
+          icon={<PlusOutlined />}
+        >
+          Users
+        </Button>
+      }
     >
      <Tabs
     onChange={onChange}

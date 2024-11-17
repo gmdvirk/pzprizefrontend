@@ -20,7 +20,7 @@ const AddProductForm = ({ userdata,draws, setProducts, products }) => {
     const doc = new jsPDF();
     doc.setFontSize(10);
     doc.setTextColor(40);
-    doc.text('Total Sale Report', 14, 22);
+    doc.text('Distributor Sale Report', 14, 22);
   
 
 
@@ -289,6 +289,7 @@ const AddProductForm = ({ userdata,draws, setProducts, products }) => {
                 rules={[{ required: true, message: 'Please select dealer' }]}
                 className="flex-item"
                 fieldKey={'dealer'}
+                initialValue={"alldistributors"}
               >
                 <Select placeholder="Select dealer">
                   <Option value={"alldistributors"}>All Distributors</Option>

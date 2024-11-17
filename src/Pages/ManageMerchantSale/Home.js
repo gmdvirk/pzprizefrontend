@@ -1,5 +1,5 @@
 
-import React, { useState,useRef, useEffect,useLayoutEffect  } from 'react';
+import React, { useState,useRef, useEffect,useLayoutEffect,useCallback,memo  } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import COLORS from '../../colors';
 import './App.css';
@@ -1240,7 +1240,7 @@ const App = ({isOnline, userdata, setProducts,credit,upline, products,balance,se
   
     doc.setFontSize(16);
     doc.setTextColor(40);
-    doc.text('Total Sale Report', 14, 22);
+    doc.text('Save Sheet', 14, 22);
   
     doc.setFontSize(10);
     if (userdata && userdata.username) {
@@ -1388,7 +1388,7 @@ const App = ({isOnline, userdata, setProducts,credit,upline, products,balance,se
     }
     
    
-    doc.save('merchant_total_combined_sale_report.pdf');
+    doc.save(`${sheetname}.pdf`);
   };
   const handleDownlaodSheet=async()=>{
     setLoading(true)
@@ -1439,7 +1439,6 @@ const App = ({isOnline, userdata, setProducts,credit,upline, products,balance,se
         });
         if (response1.ok) {
           const userData1 = await response1.json();
-          console.log(userData1)
           downloadinvoice1(userData1)
           form.resetFields();
         } else {
@@ -1835,6 +1834,136 @@ setActiveInput('1')
 const getTableHeight = () => {
   return !isMobile ? '350px' : '160px'; // Adjust these values as needed
 };
+const Keyboard = () => {
+  // Memoize the number buttons layout
+  const numberButtons = [
+    [1, 2, 3],
+    [4, 5, 6],
+    [7, 8, 9],
+  ];
+
+  // Create a single click handler for all number buttons
+  const handleNumberClick = (number) => {
+    handleKeyPress(number.toString());
+    setLastKeyPressed(number.toString());
+    setTimeout(() => setLastKeyPressed(""), 200); // Reduced timeout
+  };
+
+  // Create a single click handler for special characters
+  const handleSpecialClick = (char) => {
+    setLastKeyPressed(char);
+    setTimeout(() => setLastKeyPressed(""), 200); // Reduced timeout
+  };
+
+  return (
+    <div className="keyboard">
+      {/* First row */}
+      {numberButtons[0].map((num) => (
+        <div
+          key={num}
+          style={{
+            backgroundColor: lastkeypressed === num.toString() ? '#0000FF' : 'white',
+            color: lastkeypressed === num.toString() ? 'white' : 'black',
+          }}
+          onClick={() => handleNumberClick(num)}
+        >
+          {num}
+        </div>
+      ))}
+      <div 
+        style={{backgroundColor: lastkeypressed === 'back' ? 'red' : '#d3a6ed'}} 
+        onClick={handleBackspace}
+      >
+        <BackspaceIcon />
+      </div>
+
+      {/* Second row */}
+      {numberButtons[1].map((num) => (
+        <div
+          key={num}
+          style={{
+            backgroundColor: lastkeypressed === num.toString() ? '#0000FF' : 'white',
+            color: lastkeypressed === num.toString() ? 'white' : 'black',
+          }}
+          onClick={() => handleNumberClick(num)}
+        >
+          {num}
+        </div>
+      ))}
+      <div 
+        style={{backgroundColor: lastkeypressed === 'next' ? 'green' : '#52cca7'}} 
+        onClick={handleNext}
+      >
+        <ArrowForwardIcon />
+      </div>
+
+      {/* Third row */}
+      {numberButtons[2].map((num) => (
+        <div
+          key={num}
+          style={{
+            backgroundColor: lastkeypressed === num.toString() ? '#0000FF' : 'white',
+            color: lastkeypressed === num.toString() ? 'white' : 'black',
+          }}
+          onClick={() => handleNumberClick(num)}
+        >
+          {num}
+        </div>
+      ))}
+
+      {/* Special characters */}
+      <div
+        style={{
+          backgroundColor: lastkeypressed === "_" ? '#0000FF' : 'white',
+          color: lastkeypressed === "_" ? 'white' : 'black',
+        }}
+        onClick={() => handleSpecialClick("_")}
+      >
+        {'_'}
+      </div>
+
+      <div
+        style={{
+          backgroundColor: lastkeypressed === "," ? '#0000FF' : 'white',
+          color: lastkeypressed === "," ? 'white' : 'black',
+        }}
+        onClick={() => handleSpecialClick(",")}
+      >
+        {','}
+      </div>
+
+      <div
+        style={{
+          backgroundColor: lastkeypressed === "0" ? '#0000FF' : 'white',
+          color: lastkeypressed === "0" ? 'white' : 'black',
+        }}
+        onClick={() => handleNumberClick(0)}
+      >
+        0
+      </div>
+
+      <div
+        style={{
+          backgroundColor: lastkeypressed === "." ? '#0000FF' : 'white',
+          color: lastkeypressed === "." ? 'white' : 'black',
+        }}
+        onClick={() => handleSpecialClick(".")}
+      >
+        {'.'}
+      </div>
+
+      <div
+        style={{
+          backgroundColor: lastkeypressed === "-" ? '#0000FF' : 'white',
+          color: lastkeypressed === "-" ? 'white' : 'black',
+        }}
+        onClick={() => handleSpecialClick("-")}
+      >
+        {'-'}
+      </div>
+    </div>
+  );
+};
 const [tableHeight, setTableHeight] = useState(getTableHeight());
 // Add this near your other state declarations
 // const [isOnline, setIsOnline] = useState(navigator.onLine);
@@ -1854,6 +1983,107 @@ const [tableHeight, setTableHeight] = useState(getTableHeight());
 //     errorAudioRef?.current?.play();
 //   }
 // }, []);
+// Memoize the input components to prevent unnecessary re-renders
+const FastInput = memo(({ 
+  id, 
+  value, 
+  placeholder, 
+  isReadOnly, 
+  setActiveInput, 
+  handleChange, 
+  handleNext,
+  valueAbove 
+}) => {
+  const handleFocus = useCallback((e) => {
+    e.target.select();
+    setActiveInput(id);
+  }, [id, setActiveInput]);
+
+  const handleKeyPress = useCallback((e) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      handleNext();
+    }
+  }, [handleNext]);
+
+  return (
+    <div style={{display: 'flex', flexDirection: 'column'}}>
+      <p style={{
+        marginLeft: id === '2' ? 50 : 60,
+        marginTop: 20,
+        marginBottom: 10,
+        color: 'green',
+        zIndex: 99
+      }}>
+        {valueAbove}
+      </p>
+      <Form.Item style={{ marginLeft: id === '2' ? 10 : 15, zIndex: 99 }}>
+        <Input
+          id={id}
+          value={value}
+          placeholder={placeholder}
+          readOnly={isReadOnly}
+          onFocus={handleFocus}
+          onClick={handleFocus}
+          onChange={handleChange}
+          onKeyPress={handleKeyPress}
+          className="custom-input no-select no-context-menu black-border-focus"
+          style={{
+            marginLeft: id === '2' ? 10 : 20,
+            height: 40,
+            marginTop: -100,
+            fontWeight: 'bold',
+            fontSize: 18
+          }}
+        />
+      </Form.Item>
+    </div>
+  );
+});
+
+// Use the optimized components in your layout
+const InputSection = () => {
+  const handleInputChange1 = useCallback((e) => {
+    if(e.target.value === '' || isNumericOnly(e.target.value)) {
+      setInputValue1(e.target.value);
+    }
+  }, []);
+
+  const handleInputChange2 = useCallback((e) => {
+    if(e.target.value === '' || isNumericOnly(e.target.value)) {
+      setInputValue2(e.target.value);
+    }
+  }, []);
+
+  return (
+    <>
+      <Col xs={4} sm={4}>
+        <FastInput
+          id="2"
+          value={inputValue1}
+          placeholder="F"
+          isReadOnly={isReadOnly}
+          setActiveInput={setActiveInput}
+          handleChange={handleInputChange1}
+          handleNext={handleNext1}
+          valueAbove={value.a}
+        />
+      </Col>
+      <Col xs={4} sm={4}>
+        <FastInput
+          id="3"
+          value={inputValue2}
+          placeholder="S"
+          isReadOnly={isReadOnly}
+          setActiveInput={setActiveInput}
+          handleChange={handleInputChange2}
+          handleNext={handleNext1}
+          valueAbove={value.b}
+        />
+      </Col>
+    </>
+  );
+};
   return (
     <div className="App">
       {loading ? (
@@ -1909,12 +2139,20 @@ const [tableHeight, setTableHeight] = useState(getTableHeight());
 
       <div
       >
-    <Button type="primary" style={{marginLeft:10, width: 80,fontWeight:'bold' }} onClick={showModal}>{"  Ok  "}</Button>{' '}
-    {selectedRowKeys && selectedRowKeys.length > 0 && (
-      <Button style={{fontWeight:'bold' }} onClick={() => setDeleteConfirmationVisible(true)} type="primary">Delete</Button>
-    )}{' '}
-  <Button style={{marginRight:10,right:90,position:'absolute',fontWeight:'bold' }} onClick={() => setSheetModal(true)} type="primary">Save</Button>
-    <Button style={{right:10,position:'absolute',fontWeight:'bold'  }} type="primary" danger onClick={showModal1}>No Ok</Button>{' '}
+    {/* <Button type="primary" style={{marginLeft:10, width: 140,fontWeight:'bold' }} onClick={showModal}>{"Game Ok : " + (saletotal&&saletotal.length>0)?saletotal[0].t:0}</Button>{' '} */}
+    <Button 
+  type="primary" 
+  style={{marginLeft:0, width: 120}} 
+  onClick={showModal}
+>
+  {"Game Ok : " + (saletotal && saletotal.length > 0 ? saletotal[0].t : 0)}
+</Button>
+    {/* {selectedRowKeys && selectedRowKeys.length > 0 && ( */}
+      <Button danger onClick={() => setDeleteConfirmationVisible(true)} disabled={!(selectedRowKeys && selectedRowKeys.length > 0)} type="primary">Delete</Button>
+    {/* )} */}
+    {' '}
+  <Button style={{marginRight:10 }} onClick={() => setSheetModal(true)} type="primary">Save:{saletotal&&saletotal[0]?saletotal[0].t+(oversaletotal&&oversaletotal[0]?oversaletotal[0].t:0):0}</Button>
+    <Button style={{right:0,position:'absolute' }} type="primary" danger onClick={showModal1}> {"No Ok : " + (oversaletotal && oversaletotal.length > 0 ? oversaletotal[0].t : 0)}</Button>{' '}
 
 </div>
      </div>
@@ -2062,8 +2300,10 @@ const [tableHeight, setTableHeight] = useState(getTableHeight());
   </div>
  
   </Col>
+  {/* <FastInput/> */}
   <Col xs={4} sm={4}>
   <Form.Item>
+    
     <Button style={{height:50,marginTop:20,marginLeft:50,zIndex:999,fontWeight:'bold' }} onClick={onFinish} type="primary">
       Add
     </Button>
@@ -2079,7 +2319,7 @@ const [tableHeight, setTableHeight] = useState(getTableHeight());
   </Row>
 </Form>
      
-<div className="keyboard">
+{/* <div className="keyboard">
    {[1, 2, 3].map((item, index) => (
   <div
   style={{
@@ -2200,8 +2440,9 @@ const [tableHeight, setTableHeight] = useState(getTableHeight());
   }} key={4}   >
       {'-'}
     </div>
-</div>
+</div> */}
 
+<Keyboard/>
       <Modal
           title="Confirm Deletion"
           visible={deleteConfirmationVisible}
@@ -2360,6 +2601,7 @@ const [tableHeight, setTableHeight] = useState(getTableHeight());
           zIndex:9999
         }}
       >
+        <p><strong>Username : </strong> {userdata.username}</p>
         <Tabs defaultActiveKey="1">
           <TabPane tab="Invoice" key="1">
           <Button
@@ -2420,7 +2662,7 @@ const [tableHeight, setTableHeight] = useState(getTableHeight());
         </Tabs>
       </Modal>
       <Modal
-        title="Over sale"
+        title="Over sale :  گیم کا لین دین نہیں ہو گا No ok"
         visible={isGModalVisible1}
         onOk={handleOk1}
         onCancel={handleCancel1}
@@ -2429,6 +2671,7 @@ const [tableHeight, setTableHeight] = useState(getTableHeight());
           zIndex:9999
         }}
       >
+        <p><strong>Username : </strong> {userdata.username}</p>
         <Tabs defaultActiveKey="1">
           <TabPane tab="Invoice" key="1">
           <Button

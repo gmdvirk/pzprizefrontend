@@ -20,7 +20,7 @@ const AddProductForm = ({ userdata,draws, setProducts, products }) => {
     const doc = new jsPDF();
     doc.setFontSize(10);
     // doc.setTextColor(40);
-    doc.text('Total Sale Report', 14, 22);
+    doc.text('Dealer Sale Report', 14, 22);
     // doc.setFontSize(12);
 
 

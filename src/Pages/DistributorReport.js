@@ -182,6 +182,7 @@ marginBottom:20,
       title="Reports"
       style={{ boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)' }}
     >
+      <p><strong>Username : </strong> {userdata.username}  </p>
      <Tabs
     onChange={onChange}
     type="card"

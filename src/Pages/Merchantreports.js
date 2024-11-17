@@ -90,6 +90,18 @@ const navigate=useNavigate();
           setDraws(userData1.draws)
           setSheets(userData1.sheets)
         }
+        // const response3 = await fetch(`${linkurl}/user/getLimitByUserId/${userData._id}`, {
+        //   method: 'GET',
+        //   headers: {
+        //     token: `${token}`,
+        //   },
+        // });
+    
+        // if (!response3.ok) {
+        //   throw new Error(`Error: ${response3.statusText}`);
+        // }
+        // const data = await response3.json();
+        // setLimits(data)
     } else {
       console.error('Failed to fetch user data:', response.statusText);
       navigate("/login");
@@ -153,6 +165,7 @@ marginBottom:20,
       title="Reports"
       style={{ boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)' }}
     >
+      <p><strong>Username : </strong> {userdata.username}  </p>
      <Tabs
     onChange={onChange}
     type="card"

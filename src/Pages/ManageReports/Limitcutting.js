@@ -9,20 +9,30 @@ import { linkurl } from '../../link';
 import { CheckCircleFilled, CloseCircleFilled, DeleteFilled, PlusCircleFilled, SaveFilled, ScanOutlined, SecurityScanFilled,SearchOutlined } from '@ant-design/icons';
 const { Option } = Select;
 
-const AddProductForm = ({ userdata,draws,setProducts,products}) => {
+const AddProductForm = ({ userdata,draws,setProducts,products,limits}) => {
   const [form] = Form.useForm();
   const [successModalVisible, setSuccessModalVisible] = useState(false);
   const [errorModalVisible, setErrorModalVisible] = useState(false);
   const [option, setOption] = useState("All");
+  const [tempvalues,setTempvalues]=useState({
+    onedigita:0,
+    onedigitb:0,
+    twodigita:0,
+    twodigitb:0,
+    threedigita:0,
+    threedigitb:0,
+    fourdigita:0,
+    fourdigitb:0
+  })
   const [limitsettings ,setLimitSettings ] = useState({
     hindsaa:0,
-                            hindsab:0,
-                            akraa:0,
-                            akrab:0,
-                            tendolaa:0,
-                            tendolab:0,
-                            panogadaa:0,
-                            panogadab:0
+    hindsab:0,
+    akraa:0,
+    akrab:0,
+    tendolaa:0,
+    tendolab:0,
+    panogadaa:0,
+    panogadab:0
   });
   const [drawdate,setDrawdate]=useState(null)
   const [type,setType]=useState(null)
@@ -938,6 +948,15 @@ const AddProductForm = ({ userdata,draws,setProducts,products}) => {
   };
 
 
+
+  useEffect(() => {
+    form.setFieldsValue(tempvalues);
+  }, [tempvalues, form]);
+  useEffect(() => {
+    setTempvalues({...limitsettings})
+  }, [limitsettings, form]);
+
+
   return (
     <div>
 
@@ -962,9 +981,47 @@ const AddProductForm = ({ userdata,draws,setProducts,products}) => {
                        className="flex-item"
                        fieldKey={ 'date'}
                      >
-                           <Select placeholder="Select draw"  onChange={(e)=>{
-                        const temp=draws.find((obj)=>obj.date===e)
-                        setDrawdate(temp)}}>
+                           <Select placeholder="Select draw" 
+                           onChange={(e)=>{
+                            const temp=draws.find((obj)=>obj.date===e)
+                            setDrawdate(temp)
+                            const index=limits.data.findIndex((obj)=>obj.drawid===temp._id)
+                            if(index===-1){
+                              setLimitSettings({
+                                hindsaa:0,
+                                hindsab:0,
+                                akraa:0,
+                                akrab:0,
+                                tendolaa:0,
+                                tendolab:0,
+                                panogadaa:0,
+                                panogadab:0
+                              })
+                              // form.setFieldsValue(limitsettings);
+                            }else{
+                              setLimitSettings(limits.data[index])
+                              let tempobj={
+                                onedigita:limits.data[index].hindsaa,
+                                onedigitb:limits.data[index].hindsab,
+                                twodigita:limits.data[index].akraa,
+                                twodigitb:limits.data[index].akrab,
+                                threedigita:limits.data[index].tendolaa,
+                                threedigitb:limits.data[index].tendolab,
+                                fourdigita:limits.data[index].panogadaa,
+                                fourdigitb:limits.data[index].panogadab
+                              }
+                              // setId(props.limits.data[index]._id)
+                              form.setFieldsValue(tempobj);
+                            }
+                            
+                          }
+                          }
+                        //    onChange={(e)=>{
+                        // const temp=draws.find((obj)=>obj.date===e)
+                        // setDrawdate(temp)}}
+                        
+                        
+                        >
                         
                         
                       {draws.map((obj)=>{

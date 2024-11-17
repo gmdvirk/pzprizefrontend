@@ -1403,6 +1403,7 @@ else if (values.dealer==="allcombined"){
                        rules={[{ required: true, message: 'Please select dealer' }]}
                        className="flex-item"
                        fieldKey={ 'dealer'}
+                       initialValue={"allcombined"}
                      >
                        <Select placeholder="Select dealer" >
                          <Option value={"allcombined"}>All Distributors Combined</Option>
@@ -1423,6 +1424,7 @@ else if (values.dealer==="allcombined"){
                        rules={[{ required: true, message: 'Please select limit type' }]}
                        className="flex-item"
                        fieldKey={ 'limittype'}
+                       initialValue={"uplimit"}
                      >
                        <Select placeholder="Select limit type" onChange={(e)=>setType(e)} >
                          <Option value={"uplimit"}>Up Limit</Option>

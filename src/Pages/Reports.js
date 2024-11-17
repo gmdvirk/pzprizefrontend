@@ -20,6 +20,7 @@ const navigate=useNavigate();
   const [loading, setLoading] = useState(true);
   const [userdata,setUserdata]=useState(null)
   const [noaccess,setNoaccess]=useState(false)
+  const [limits, setLimits] = useState([]);
   const isMobile = useMedia('(max-width: 768px)'); // Adjust the breakpoint as needed
   let marginLeft=280
   let marginRight=10
@@ -65,6 +66,8 @@ const navigate=useNavigate();
         userdata={userdata}
         draws={draws}
         products={employees}
+        limits={limits}
+        alldraws={draws}
         setProducts={setEmployees}/>
     },
     {
@@ -74,6 +77,7 @@ const navigate=useNavigate();
         userdata={userdata}
         draws={draws}
         products={employees}
+        limits={limits}
         setProducts={setEmployees}/>
     }
 
@@ -128,6 +132,19 @@ const navigate=useNavigate();
         const userData1 = await response2.json();
         setDraws(userData1)
       }
+      console.log(userData)
+      const response3 = await fetch(`${linkurl}/user/getLimitByUserId/${userData.data._id}`, {
+        method: 'GET',
+        headers: {
+          token: `${token}`,
+        },
+      });
+  
+      if (!response3.ok) {
+        throw new Error(`Error: ${response3.statusText}`);
+      }
+      const data = await response3.json();
+      setLimits(data)
     } else {
       console.error('Failed to fetch user data:', response.statusText);
       navigate("/login");

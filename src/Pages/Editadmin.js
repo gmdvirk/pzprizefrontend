@@ -13,6 +13,8 @@ const AdminHomePage = () => {
 const navigate=useNavigate();
   const [employees, setEmployees] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [alldraws, setAllDraws] = useState([]);
+  const [limits, setLimits] = useState([]);
   const [userdata,setUserdata]=useState(null)
   const [noaccess,setNoaccess]=useState(false)
   const isMobile = useMedia('(max-width: 768px)'); // Adjust the breakpoint as needed
@@ -38,6 +40,28 @@ const navigate=useNavigate();
         setLoading(false)
         return;
       }
+      const response2 = await fetch(`${linkurl}/user/getLimitByUserId/${userData._id}`, {
+        method: 'GET',
+        headers: {
+          token: `${token}`,
+        },
+      });
+  
+      if (!response2.ok) {
+        throw new Error(`Error: ${response2.statusText}`);
+      }
+      const response1 = await fetch(`${linkurl}/draw/getlasttendrawsmerchant`, {
+        method: 'GET',
+        headers: {
+          token: `${token}`,
+        },
+      });
+      if (response1.ok) {
+        const userData1 = await response1.json();
+        setAllDraws(userData1);
+      }
+      const data = await response2.json();
+      setLimits(data)
       setUserdata(userData)
    
     } else {
@@ -50,7 +74,6 @@ const navigate=useNavigate();
   useEffect(() => {
     listener()
   }, []);
-
   const sidebarStyle = {
     color: 'white',
     width: '260px',
@@ -107,6 +130,10 @@ marginBottom:20,
         products={employees}
         setProducts={setEmployees}
         setUserdata={setUserdata}
+        limits={limits}
+        setLimits={setLimits}
+        alldraws={alldraws}
+        setAllDraws={setAllDraws}
         />
   </Card>
 
