@@ -25,6 +25,24 @@ const AddProductForm = ({userdata, draws,setProducts,products}) => {
     const specialCharsAndSpacesRegex = /[^a-zA-Z0-9]/;
     return !specialCharsAndSpacesRegex.test(password);
   }
+  
+  const getExpiredOrNot=(users)=>{
+    // Parse the draw date and time from the users object
+    
+    const drawDateTime = new Date(`${users.date}T${users.time}Z`);
+    let currentDatetime = new Date();
+    let currentDate = currentDatetime.toLocaleDateString('en-CA'); // 'YYYY-MM-DD'
+    let currentTime = currentDatetime.toLocaleTimeString('en-GB', { hour12: false }).slice(0, 5); // 'HH:MM'
+    // Check if the current date and time are less than the draw date and time
+    const drawDateTime1 = new Date(`${currentDate}T${currentTime}Z`);
+    if (drawDateTime1 >= drawDateTime) {
+        return "expired"
+    }
+    if (users.status === 'active') {
+     return "active"
+ }
+    return "deactive"
+ }
   function combineSoldValues(arr) {
     const result = [];
     const temp = {};
@@ -65,7 +83,7 @@ const AddProductForm = ({userdata, draws,setProducts,products}) => {
     
     return soldKeys;
   }
-  const downloadinvoice = (arr, values) => {
+  const downloadinvoice = (arr, values,userData1) => {
     let filteredPayments = [...arr];
   
     const doc = new jsPDF();
@@ -162,11 +180,24 @@ const AddProductForm = ({userdata, draws,setProducts,products}) => {
             doc.setFillColor(255, 255, 255); // White background
             doc.setDrawColor(75, 0, 130); // Dark blue/purplish border
             doc.rect(startX + blockWidth, startY, blockWidth, blockHeight, 'FD');
+             // Check if the bundle matches any entry in firstprefixes
+             const isFirstInRed = userData1.firstprefixes.includes(pay.bundle);
+             if (isFirstInRed) {
+                 doc.setTextColor(255, 0, 0); // Red text
+             } else {
+                 doc.setTextColor(0, 0, 0); // Black text
+             }
             doc.text(pay.f.toString(), startX + blockWidth + blockWidth / 2, startY + blockHeight / 2, { align: 'center' });
   
             // Draw second value block with white background and dark blue/purplish border
             doc.setFillColor(255, 255, 255); // White background
             doc.setDrawColor(75, 0, 130); // Dark blue/purplish border
+            let isFSecondInRed = userData1.secondprefixes1.includes(pay.bundle) || userData1.secondprefixes2.includes(pay.bundle)||userData1.secondprefixes3.includes(pay.bundle)||userData1.secondprefixes4.includes(pay.bundle)||userData1.secondprefixes5.includes(pay.bundle);
+             if (isFSecondInRed) {
+              doc.setTextColor(0, 0, 255); // Blue text
+             } else {
+                 doc.setTextColor(0, 0, 0); // Black text
+             }
             doc.rect(startX + 2 * blockWidth, startY, blockWidth, blockHeight, 'FD');
             doc.text(pay.s.toString(), startX + 2 * blockWidth + blockWidth / 2, startY + blockHeight / 2, { align: 'center' });
   
@@ -233,16 +264,26 @@ const AddProductForm = ({userdata, draws,setProducts,products}) => {
       });
       if (response.ok) {
         const userData = await response.json();
-        // let tempobj={...userData[0]};
-        // setDrawComplete(tempobj)
-        // let temp=combineSoldValues(getSoldKeys(tempobj.type));
-        downloadinvoice(userData,values)
+        const response1 = await fetch(`${linkurl}/report/getPrefixes/${values.date}`, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            token: token,
+          }
+        });
+        if (response1.ok) {
+          const userData1 = await response1.json();
+          downloadinvoice(userData,values,userData1)
         setSoldValues(userData)
-        // form.resetFields();
+        } else {
+          const userData = await response.json();
+          alert(userData.Message)
+        }
       } else {
         const userData = await response.json();
         alert(userData.Message)
       }
+     
 
     }catch(error){
       alert(error.message)
@@ -288,7 +329,7 @@ const AddProductForm = ({userdata, draws,setProducts,products}) => {
                         
                       {draws.map((obj)=>{
                         return(
-                          <Option value={obj.date}>{obj.title+"---"+obj.date}</Option>
+                          <Option style={{color:getExpiredOrNot(obj)==="active"?"green":'red'}} value={obj.date}>{obj.title+"---"+obj.date+"--"+getExpiredOrNot(obj)}</Option>
                         )
                       })  }
                        </Select>

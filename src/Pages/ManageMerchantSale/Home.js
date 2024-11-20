@@ -1862,7 +1862,7 @@ const Keyboard = () => {
         <div
           key={num}
           style={{
-            backgroundColor: lastkeypressed === num.toString() ? '#0000FF' : 'white',
+            backgroundColor: lastkeypressed === num.toString() ? '#d2d5d9' : 'white',
             color: lastkeypressed === num.toString() ? 'white' : 'black',
           }}
           onClick={() => handleNumberClick(num)}
@@ -1882,7 +1882,7 @@ const Keyboard = () => {
         <div
           key={num}
           style={{
-            backgroundColor: lastkeypressed === num.toString() ? '#0000FF' : 'white',
+            backgroundColor: lastkeypressed === num.toString() ? '#d2d5d9' : 'white',
             color: lastkeypressed === num.toString() ? 'white' : 'black',
           }}
           onClick={() => handleNumberClick(num)}
@@ -1902,7 +1902,7 @@ const Keyboard = () => {
         <div
           key={num}
           style={{
-            backgroundColor: lastkeypressed === num.toString() ? '#0000FF' : 'white',
+            backgroundColor: lastkeypressed === num.toString() ? '#d2d5d9' : 'white',
             color: lastkeypressed === num.toString() ? 'white' : 'black',
           }}
           onClick={() => handleNumberClick(num)}
@@ -1914,7 +1914,7 @@ const Keyboard = () => {
       {/* Special characters */}
       <div
         style={{
-          backgroundColor: lastkeypressed === "_" ? '#0000FF' : 'white',
+          backgroundColor: lastkeypressed === "_" ? '#d2d5d9' : 'white',
           color: lastkeypressed === "_" ? 'white' : 'black',
         }}
         onClick={() => handleSpecialClick("_")}
@@ -1924,7 +1924,7 @@ const Keyboard = () => {
 
       <div
         style={{
-          backgroundColor: lastkeypressed === "," ? '#0000FF' : 'white',
+          backgroundColor: lastkeypressed === "," ? '#d2d5d9' : 'white',
           color: lastkeypressed === "," ? 'white' : 'black',
         }}
         onClick={() => handleSpecialClick(",")}
@@ -1934,7 +1934,7 @@ const Keyboard = () => {
 
       <div
         style={{
-          backgroundColor: lastkeypressed === "0" ? '#0000FF' : 'white',
+          backgroundColor: lastkeypressed === "0" ? '#d2d5d9' : 'white',
           color: lastkeypressed === "0" ? 'white' : 'black',
         }}
         onClick={() => handleNumberClick(0)}
@@ -1944,7 +1944,7 @@ const Keyboard = () => {
 
       <div
         style={{
-          backgroundColor: lastkeypressed === "." ? '#0000FF' : 'white',
+          backgroundColor: lastkeypressed === "." ? '#d2d5d9' : 'white',
           color: lastkeypressed === "." ? 'white' : 'black',
         }}
         onClick={() => handleSpecialClick(".")}
@@ -1954,7 +1954,7 @@ const Keyboard = () => {
 
       <div
         style={{
-          backgroundColor: lastkeypressed === "-" ? '#0000FF' : 'white',
+          backgroundColor: lastkeypressed === "-" ? '#d2d5d9' : 'white',
           color: lastkeypressed === "-" ? 'white' : 'black',
         }}
         onClick={() => handleSpecialClick("-")}
@@ -2117,7 +2117,7 @@ const InputSection = () => {
 />
      <div style={{display:'flex',flexDirection:'row',marginTop:15, borderBottom: '2px solid black'}}>
       {<p style={{fontSize:14,marginLeft:10,marginRight:10}}>{userdata.username}</p>}
-      {<p style={{fontSize:14,marginRight:10}}>Credit : {credit}</p>}
+      {/* {<p style={{fontSize:14,marginRight:10}}>Credit : {credit}</p>} */}
       {<p style={{fontSize:14}}>Balanace : {balance}</p>}
      { upline<0&&<p style={{fontSize:14,marginLeft:10,color:'red'}}>Upline : {upline}</p>}
       {upline>0&&<p style={{fontSize:14,marginLeft:10,color:'green'}}>Upline : {upline}</p>}
@@ -2145,14 +2145,14 @@ const InputSection = () => {
   style={{marginLeft:0, width: 120}} 
   onClick={showModal}
 >
-  {"Game Ok : " + (saletotal && saletotal.length > 0 ? saletotal[0].t : 0)}
+  {"G:" + (saletotal && saletotal.length > 0 ? saletotal[0].t : 0)}
 </Button>
     {/* {selectedRowKeys && selectedRowKeys.length > 0 && ( */}
-      <Button danger onClick={() => setDeleteConfirmationVisible(true)} disabled={!(selectedRowKeys && selectedRowKeys.length > 0)} type="primary">Delete</Button>
+      <Button style={{width:50,paddingLeft:-10,fontSize:10 }} danger onClick={() => setDeleteConfirmationVisible(true)} disabled={!(selectedRowKeys && selectedRowKeys.length > 0)} type="primary">Delete</Button>
     {/* )} */}
     {' '}
   <Button style={{marginRight:10 }} onClick={() => setSheetModal(true)} type="primary">Save:{saletotal&&saletotal[0]?saletotal[0].t+(oversaletotal&&oversaletotal[0]?oversaletotal[0].t:0):0}</Button>
-    <Button style={{right:0,position:'absolute' }} type="primary" danger onClick={showModal1}> {"No Ok : " + (oversaletotal && oversaletotal.length > 0 ? oversaletotal[0].t : 0)}</Button>{' '}
+    <Button style={{right:0,position:'absolute' }} type="primary" danger onClick={showModal1}> {"No Ok:" + (oversaletotal && oversaletotal.length > 0 ? oversaletotal[0].t : 0)}</Button>{' '}
 
 </div>
      </div>

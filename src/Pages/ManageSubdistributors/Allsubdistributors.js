@@ -233,12 +233,10 @@ const ProductTable = ({ products, setProducts,userdata ,completeuserdata}) => {
         <span>
          
    <Dropdown overlay={getActionMenu(record)} trigger={['click']}>
-          <Tooltip title="Click for actions">
           <Button 
   icon={<ArrowDownOutlined style={{ fontSize: '12px', color: 'blue'  }} />} 
   style={{ height: 25, borderRadius: 10, padding: '0 8px' }} 
 />
-          </Tooltip>
         </Dropdown>
         {' '}
         {record.name}

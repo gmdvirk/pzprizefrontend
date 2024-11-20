@@ -1,6 +1,6 @@
 
 import React ,{useEffect,useState}from 'react';
-import { Tabs,Card,Spin } from 'antd';
+import { Tabs,Card,Spin,Row,Col } from 'antd';
 import AdminSideBar from "../components/AdminSidebar"
 import { useMedia } from 'react-use';
 import AllUsers from './ManageMerchantTransaction/Alltransactions'
@@ -16,6 +16,7 @@ const navigate=useNavigate();
   const [loading, setLoading] = useState(true);
   const [userdata,setUserdata]=useState(null)
   const [noaccess,setNoaccess]=useState(false)
+  const [paymentfigures,setPaymentFigures]=useState(null)
   const isMobile = useMedia('(max-width: 768px)'); // Adjust the breakpoint as needed
   let marginLeft=280
   let marginRight=10
@@ -60,6 +61,18 @@ const navigate=useNavigate();
         return;
       }
       setUserdata(userData.data)
+      const response2 = await fetch(`${linkurl}/user/getbalance`, {
+        method: 'GET',
+        headers: {
+          token: `${token}`,
+        },
+      });
+  
+      if (response2.ok) {
+        let userData2 = await response2.json();   
+       
+        setPaymentFigures(userData2.payment)
+      }
       const response1 = await fetch(`${linkurl}/payment/getpaymentsbyid/${userData.data._id}`, {
         method: 'GET',
         headers: {
@@ -76,7 +89,9 @@ const navigate=useNavigate();
         } 
        
         setPayment(userData)
+        
       }
+    
     } else {
       console.error('Failed to fetch user data:', response.statusText);
       navigate("/login");
@@ -140,6 +155,22 @@ marginBottom:20,
       title="Book Detail"
       style={{ boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)' }}
     >
+      {paymentfigures&&  <div style={{ padding: '24px' }}>
+      <Row gutter={16}>
+<Col xs={24} sm={12} md={6}>
+  <p><strong>Cash:</strong> {paymentfigures.cash}</p>
+</Col>
+<Col xs={24} sm={12} md={6}>
+  <p><strong>Credit:</strong> {paymentfigures.credit}</p>
+</Col>
+<Col xs={24} sm={12} md={6}>
+  <p style={{color:paymentfigures.balanceupline<0? "red":"green"}}><strong style={{color:paymentfigures.balanceupline<0?  "red":"green"}}>Balance Upline:</strong> {paymentfigures.balanceupline}</p>
+</Col>
+<Col xs={24} sm={12} md={6}>
+  <p><strong>Available Balance:</strong> {paymentfigures.availablebalance}</p>
+</Col>
+</Row>
+    </div>}
    <AllUsers
         userdata={userdata}
         payment={payment}

@@ -368,11 +368,10 @@ const updateBalance=async()=>{
     });
     if (response.ok) {
       const userData = await response.json();
-      console.log(userData)
       // form.resetFields();
     } else {
       const userData = await response.json();
-      alert(userData.Message)
+      alert(userData.message)
     }
   }catch(e){
     alert(e.message)
@@ -380,6 +379,23 @@ const updateBalance=async()=>{
   setLoading(false)
 }
 
+const getExpiredOrNot=(users)=>{
+  // Parse the draw date and time from the users object
+  
+  const drawDateTime = new Date(`${users.date}T${users.time}Z`);
+  let currentDatetime = new Date();
+  let currentDate = currentDatetime.toLocaleDateString('en-CA'); // 'YYYY-MM-DD'
+  let currentTime = currentDatetime.toLocaleTimeString('en-GB', { hour12: false }).slice(0, 5); // 'HH:MM'
+  // Check if the current date and time are less than the draw date and time
+  const drawDateTime1 = new Date(`${currentDate}T${currentTime}Z`);
+  if (drawDateTime1 >= drawDateTime) {
+      return "expired"
+  }
+  if (users.status === 'active') {
+   return "active"
+}
+  return "deactive"
+}
   return (
     <div>
 
@@ -407,7 +423,7 @@ const updateBalance=async()=>{
                         
                       {draws.map((obj)=>{
                         return(
-                          <Option value={obj.date}>{obj.title+"---"+obj.date}</Option>
+                          <Option style={{color:getExpiredOrNot(obj)==="active"?"green":'red'}} value={obj.date}>{obj.title+"---"+obj.date+"--"+getExpiredOrNot(obj)}</Option>
                         )
                       })  }
                        </Select>

@@ -246,6 +246,23 @@ const AddProductForm = ({ userdata,draws,setProducts,products,limits}) => {
     doc.save('admin_total_sale_report.pdf');
   };
 
+  const getExpiredOrNot=(users)=>{
+    // Parse the draw date and time from the users object
+    
+    const drawDateTime = new Date(`${users.date}T${users.time}Z`);
+    let currentDatetime = new Date();
+    let currentDate = currentDatetime.toLocaleDateString('en-CA'); // 'YYYY-MM-DD'
+    let currentTime = currentDatetime.toLocaleTimeString('en-GB', { hour12: false }).slice(0, 5); // 'HH:MM'
+    // Check if the current date and time are less than the draw date and time
+    const drawDateTime1 = new Date(`${currentDate}T${currentTime}Z`);
+    if (drawDateTime1 >= drawDateTime) {
+        return "expired"
+    }
+    if (users.status === 'active') {
+     return "active"
+ }
+    return "deactive"
+ }
   const downloadinvoice5 = (arr,values) => {
     let filteredPayments = arr;
     for (let i=0;i<filteredPayments.length;i++){
@@ -1026,7 +1043,7 @@ const AddProductForm = ({ userdata,draws,setProducts,products,limits}) => {
                         
                       {draws.map((obj)=>{
                         return(
-                          <Option value={obj.date}>{obj.title+"---"+obj.date}</Option>
+                          <Option style={{color:getExpiredOrNot(obj)==="active"?"green":'red'}} value={obj.date}>{obj.title+"---"+obj.date+"--"+getExpiredOrNot(obj)}</Option>
                         )
                       })  }
                        </Select>

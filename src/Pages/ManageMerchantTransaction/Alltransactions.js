@@ -312,9 +312,9 @@ const ProductTable = ({ payment, setPayment,userdata }) => {
   
     // Add username and subtitle with date range
     doc.setFontSize(12);
-    if (selectedProduct && selectedProduct.username) {
-      doc.text(`User: ${selectedProduct.name}`, 14, 30);
-      doc.text(`Username: ${selectedProduct.username}`, 80, 30);
+    if (userdata && userdata.username) {
+      doc.text(`User: ${userdata.name}`, 14, 30);
+      doc.text(`Username: ${userdata.username}`, 80, 30);
     }
     doc.text(`Report from ${startdate} to ${enddate}`, 14, 36);
   
