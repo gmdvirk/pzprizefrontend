@@ -71,7 +71,6 @@ const navigate=useNavigate();
     if (response.ok) {
       const userData = await response.json();
       setUserdata(userData.data)
-      console.log(userData.data)
       if(userData.data.role==="superadmin"||userData.data.role==="merchant"){
         setNoaccess(true)
         setLoading(false)
@@ -160,7 +159,7 @@ marginBottom:20,
       title="Users"
       style={{ boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)' }}
       extra={
-        <Button
+       userdata.role != "subdistributor"? <Button
           onClick={()=>{navigate("/subdistributors")}}
           style={{
             borderRadius: 10,
@@ -170,7 +169,7 @@ marginBottom:20,
           icon={<PlusOutlined />}
         >
           Distributors
-        </Button>
+        </Button>:<></>
       }
     >
      <Tabs

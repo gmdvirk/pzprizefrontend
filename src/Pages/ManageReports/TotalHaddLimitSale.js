@@ -25,7 +25,7 @@ const AddProductForm = ({userdata,draws, setProducts,products}) => {
     return !specialCharsAndSpacesRegex.test(password);
   }
 
-  const downloadinvoice = (arr,values,limits,useritself) => {
+  const downloadinvoice = (arr,values,limits,useritself,userData1) => {
     let filteredPayments = arr;
     for (let i=0;i<filteredPayments.length;i++){
       if(filteredPayments[i].bundle.length===1){
@@ -144,11 +144,24 @@ const AddProductForm = ({userdata,draws, setProducts,products}) => {
             doc.setFillColor(255, 255, 255); // White background
             doc.setDrawColor(75, 0, 130); // Dark blue/purplish border
             doc.rect(startX + blockWidth, startY, blockWidth, blockHeight, 'FD');
+            // Check if the bundle matches any entry in firstprefixes
+            const isFirstInRed = userData1.firstprefixes.includes(pay.bundle);
+            if (isFirstInRed) {
+                doc.setTextColor(255, 0, 0); // Red text
+            } else {
+                doc.setTextColor(0, 0, 0); // Black text
+            }
             doc.text(pay.f.toString(), startX + blockWidth + blockWidth / 2, startY + blockHeight / 2, { align: 'center' });
   
             // Draw second value block with white background and dark blue/purplish border
             doc.setFillColor(255, 255, 255); // White background
             doc.setDrawColor(75, 0, 130); // Dark blue/purplish border
+            let isFSecondInRed = userData1.secondprefixes1.includes(pay.bundle) || userData1.secondprefixes2.includes(pay.bundle)||userData1.secondprefixes3.includes(pay.bundle)||userData1.secondprefixes4.includes(pay.bundle)||userData1.secondprefixes5.includes(pay.bundle);
+            if (isFSecondInRed) {
+             doc.setTextColor(0, 0, 255); // Blue text
+            } else {
+                doc.setTextColor(0, 0, 0); // Black text
+            }
             doc.rect(startX + 2 * blockWidth, startY, blockWidth, blockHeight, 'FD');
             doc.text(pay.s.toString(), startX + 2 * blockWidth + blockWidth / 2, startY + blockHeight / 2, { align: 'center' });
   
@@ -194,7 +207,7 @@ const AddProductForm = ({userdata,draws, setProducts,products}) => {
     doc.text(`Total: ${total1.toFixed(2)}`, 154, startY);
     doc.save('admin_total_sale_report.pdf');
   };
-  const downloadinvoice4 = (arrList) => {
+  const downloadinvoice4 = (arrList,values,userData1) => {
     const doc = new jsPDF();
   let filteredPayments=[...arrList]
     doc.setFontSize(16);
@@ -284,11 +297,23 @@ const AddProductForm = ({userdata,draws, setProducts,products}) => {
             doc.setFillColor(255, 255, 255); // White background
             doc.setDrawColor(75, 0, 130); // Dark blue/purplish border
             doc.rect(startX + blockWidth, startY, blockWidth, blockHeight, 'FD');
+            const isFirstInRed = userData1.firstprefixes.includes(pay.bundle);
+             if (isFirstInRed) {
+                 doc.setTextColor(255, 0, 0); // Red text
+             } else {
+                 doc.setTextColor(0, 0, 0); // Black text
+             }
             doc.text(pay.f.toString(), startX + blockWidth + blockWidth / 2, startY + blockHeight / 2, { align: 'center' });
   
             // Draw second value block with white background and dark blue/purplish border
             doc.setFillColor(255, 255, 255); // White background
             doc.setDrawColor(75, 0, 130); // Dark blue/purplish border
+            let isFSecondInRed = userData1.secondprefixes1.includes(pay.bundle) || userData1.secondprefixes2.includes(pay.bundle)||userData1.secondprefixes3.includes(pay.bundle)||userData1.secondprefixes4.includes(pay.bundle)||userData1.secondprefixes5.includes(pay.bundle);
+             if (isFSecondInRed) {
+              doc.setTextColor(0, 0, 255); // Blue text
+             } else {
+                 doc.setTextColor(0, 0, 0); // Black text
+             }
             doc.rect(startX + 2 * blockWidth, startY, blockWidth, blockHeight, 'FD');
             doc.text(pay.s.toString(), startX + 2 * blockWidth + blockWidth / 2, startY + blockHeight / 2, { align: 'center' });
   
@@ -337,7 +362,7 @@ const AddProductForm = ({userdata,draws, setProducts,products}) => {
   
     
 
-  const downloadinvoice2 = (dataArrays, values) => {
+  const downloadinvoice2 = (dataArrays, values,userData1) => {
     const doc = new jsPDF();
     const columns = [
       { title: 'Bundle', dataKey: 'bundle' },
@@ -467,12 +492,24 @@ const AddProductForm = ({userdata,draws, setProducts,products}) => {
           doc.setFillColor(255, 255, 255); // White background
           doc.setDrawColor(75, 0, 130); // Dark blue/purplish border
           doc.rect(startX + blockWidth, startY, blockWidth, blockHeight, 'FD');
+          const isFirstInRed = userData1.firstprefixes.includes(pay.bundle);
+             if (isFirstInRed) {
+                 doc.setTextColor(255, 0, 0); // Red text
+             } else {
+                 doc.setTextColor(0, 0, 0); // Black text
+             }
           doc.text(pay.f.toString(), startX + blockWidth + blockWidth / 2, startY + blockHeight / 2, { align: 'center' });
 
           // Draw second value block with white background and dark blue/purplish border
           doc.setFillColor(255, 255, 255); // White background
           doc.setDrawColor(75, 0, 130); // Dark blue/purplish border
           doc.rect(startX + 2 * blockWidth, startY, blockWidth, blockHeight, 'FD');
+          let isFSecondInRed = userData1.secondprefixes1.includes(pay.bundle) || userData1.secondprefixes2.includes(pay.bundle)||userData1.secondprefixes3.includes(pay.bundle)||userData1.secondprefixes4.includes(pay.bundle)||userData1.secondprefixes5.includes(pay.bundle);
+             if (isFSecondInRed) {
+              doc.setTextColor(0, 0, 255); // Blue text
+             } else {
+                 doc.setTextColor(0, 0, 0); // Black text
+             }
           doc.text(pay.s.toString(), startX + 2 * blockWidth + blockWidth / 2, startY + blockHeight / 2, { align: 'center' });
 
           // Move to the next block position
@@ -527,7 +564,7 @@ const AddProductForm = ({userdata,draws, setProducts,products}) => {
   
     doc.save('admin_total_sale_report.pdf');
   };
-  const downloadinvoice3 = (dataArrays, values) => {
+  const downloadinvoice3 = (dataArrays, values,userData1) => {
     const doc = new jsPDF();
     const columns = [
       { title: 'Bundle', dataKey: 'bundle' },
@@ -689,11 +726,23 @@ const AddProductForm = ({userdata,draws, setProducts,products}) => {
           doc.setFillColor(255, 255, 255); // White background
           doc.setDrawColor(75, 0, 130); // Dark blue/purplish border
           doc.rect(startX + blockWidth, startY, blockWidth, blockHeight, 'FD');
+          const isFirstInRed = userData1.firstprefixes.includes(pay.bundle);
+             if (isFirstInRed) {
+                 doc.setTextColor(255, 0, 0); // Red text
+             } else {
+                 doc.setTextColor(0, 0, 0); // Black text
+             }
           doc.text(pay.f.toString(), startX + blockWidth + blockWidth / 2, startY + blockHeight / 2, { align: 'center' });
 
           // Draw second value block with white background and dark blue/purplish border
           doc.setFillColor(255, 255, 255); // White background
           doc.setDrawColor(75, 0, 130); // Dark blue/purplish border
+          let isFSecondInRed = userData1.secondprefixes1.includes(pay.bundle) || userData1.secondprefixes2.includes(pay.bundle)||userData1.secondprefixes3.includes(pay.bundle)||userData1.secondprefixes4.includes(pay.bundle)||userData1.secondprefixes5.includes(pay.bundle);
+             if (isFSecondInRed) {
+              doc.setTextColor(0, 0, 255); // Blue text
+             } else {
+                 doc.setTextColor(0, 0, 0); // Black text
+             }
           doc.rect(startX + 2 * blockWidth, startY, blockWidth, blockHeight, 'FD');
           doc.text(pay.s.toString(), startX + 2 * blockWidth + blockWidth / 2, startY + blockHeight / 2, { align: 'center' });
 
@@ -752,7 +801,7 @@ const AddProductForm = ({userdata,draws, setProducts,products}) => {
     doc.save('admin_total_sale_report.pdf');
   };
   
-  const downloadinvoice1 = (arr,values,limits,useritself) => {
+  const downloadinvoice1 = (arr,values,limits,useritself,userData1) => {
     let filteredPayments = arr;
     
     for (let i=0;i<filteredPayments.length;i++){
@@ -901,11 +950,23 @@ const AddProductForm = ({userdata,draws, setProducts,products}) => {
             doc.setFillColor(255, 255, 255); // White background
             doc.setDrawColor(75, 0, 130); // Dark blue/purplish border
             doc.rect(startX + blockWidth, startY, blockWidth, blockHeight, 'FD');
+            const isFirstInRed = userData1.firstprefixes.includes(pay.bundle);
+             if (isFirstInRed) {
+                 doc.setTextColor(255, 0, 0); // Red text
+             } else {
+                 doc.setTextColor(0, 0, 0); // Black text
+             }
             doc.text(pay.f.toString(), startX + blockWidth + blockWidth / 2, startY + blockHeight / 2, { align: 'center' });
   
             // Draw second value block with white background and dark blue/purplish border
             doc.setFillColor(255, 255, 255); // White background
             doc.setDrawColor(75, 0, 130); // Dark blue/purplish border
+            let isFSecondInRed = userData1.secondprefixes1.includes(pay.bundle) || userData1.secondprefixes2.includes(pay.bundle)||userData1.secondprefixes3.includes(pay.bundle)||userData1.secondprefixes4.includes(pay.bundle)||userData1.secondprefixes5.includes(pay.bundle);
+            if (isFSecondInRed) {
+             doc.setTextColor(0, 0, 255); // Blue text
+            } else {
+                doc.setTextColor(0, 0, 0); // Black text
+            }
             doc.rect(startX + 2 * blockWidth, startY, blockWidth, blockHeight, 'FD');
             doc.text(pay.s.toString(), startX + 2 * blockWidth + blockWidth / 2, startY + blockHeight / 2, { align: 'center' });
   
@@ -979,9 +1040,37 @@ const AddProductForm = ({userdata,draws, setProducts,products}) => {
         const userData = await response.json();
         let tempobj=userData.drawarrtosend;
         if(values.limittype==="uplimit"){
-          downloadinvoice(tempobj,values,userData.limits,userData)
+          const response1 = await fetch(`${linkurl}/report/getPrefixes/${values.date}`, {
+            method: 'GET',
+            headers: {
+              'Content-Type': 'application/json',
+              token: token,
+            }
+          });
+          if (response1.ok) {
+            const userData1 = await response1.json();
+            downloadinvoice(tempobj,values,userData.limits,userData1)
+          // setSoldValues(userData)
+          } else {
+            const userData = await response.json();
+            alert(userData.Message)
+          }
         }else{
-          downloadinvoice1(tempobj,values,userData.limits,userData)
+          const response1 = await fetch(`${linkurl}/report/getPrefixes/${values.date}`, {
+            method: 'GET',
+            headers: {
+              'Content-Type': 'application/json',
+              token: token,
+            }
+          });
+          if (response1.ok) {
+            const userData1 = await response1.json();
+            downloadinvoice1(tempobj,values,userData.limits,userData1)
+          // setSoldValues(userData)
+          } else {
+            const userData = await response.json();
+            alert(userData.Message)
+          }
         }
        
         // form.resetFields();
@@ -1004,9 +1093,35 @@ const AddProductForm = ({userdata,draws, setProducts,products}) => {
     const userData = await response.json();
     // let tempobj=userData.drawarrtosend;
     if(values.limittype==="uplimit"){
-      downloadinvoice2(userData,values)
+      const response1 = await fetch(`${linkurl}/report/getPrefixes/${values.date}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          token: token,
+        }
+      });
+      if (response1.ok) {
+        const userData1 = await response1.json();
+        downloadinvoice2(userData,values,userData1)
+      } else {
+        const userData = await response.json();
+        alert(userData.Message)
+      }
     }else{
-      downloadinvoice3(userData,values)
+      const response1 = await fetch(`${linkurl}/report/getPrefixes/${values.date}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          token: token,
+        }
+      });
+      if (response1.ok) {
+        const userData1 = await response1.json();
+        downloadinvoice3(userData,values,userData1)
+      } else {
+        const userData = await response.json();
+        alert(userData.Message)
+      }
     }
     // form.resetFields();
   } else {
@@ -1120,7 +1235,20 @@ else if (values.dealer==="allcombined"){
           
          
           let drawarrtosend=convertObjectToArray(drawtosend);
-          downloadinvoice4(drawarrtosend,values)
+          const response1 = await fetch(`${linkurl}/report/getPrefixes/${values.date}`, {
+            method: 'GET',
+            headers: {
+              'Content-Type': 'application/json',
+              token: token,
+            }
+          });
+          if (response1.ok) {
+            const userData1 = await response1.json();
+            downloadinvoice4(drawarrtosend,values,userData1)
+          } else {
+            const userData = await response.json();
+            alert(userData.Message)
+          }
       }else{
         
     userData.forEach((Payments) => {
@@ -1205,7 +1333,21 @@ else if (values.dealer==="allcombined"){
       
      
       let drawarrtosend=convertObjectToArray(drawtosend);
-      downloadinvoice4(drawarrtosend,values)
+      const response1 = await fetch(`${linkurl}/report/getPrefixes/${values.date}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          token: token,
+        }
+      });
+      if (response1.ok) {
+        const userData1 = await response1.json();
+        downloadinvoice4(drawarrtosend,values,userData1)
+      } else {
+        const userData = await response.json();
+        alert(userData.Message)
+      }
+      // downloadinvoice4(drawarrtosend,values)
       }
     // form.resetFields();
   } else {

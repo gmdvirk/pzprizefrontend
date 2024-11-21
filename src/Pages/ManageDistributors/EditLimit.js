@@ -21,13 +21,13 @@ const EditProductForm = (props) => {
   const [product, setProduct] = useState(props.initialValues);
   const [limitsetting, setLimitsetting] = useState({
     hindsaa:0,
-                            hindsab:0,
-                            akraa:0,
-                            akrab:0,
-                            tendolaa:0,
-                            tendolab:0,
-                            panogadaa:0,
-                            panogadab:0
+    hindsab:0,
+    akraa:0,
+    akrab:0,
+    tendolaa:0,
+    tendolab:0,
+    panogadaa:0,
+    panogadab:0
   });
   
   const [drawdate, setDrawdate] = useState(null);
@@ -76,7 +76,17 @@ const EditProductForm = (props) => {
         // const index=temp.findIndex((obj)=>obj._id===props.initialValues._id);
         // temp[index]={...tempobj}
         // props.setProducts(temp)
-        // form.resetFields();
+        setLimitsetting({
+          hindsaa:0,
+    hindsab:0,
+    akraa:0,
+    akrab:0,
+    tendolaa:0,
+    tendolab:0,
+    panogadaa:0,
+    panogadab:0
+        })
+        form.resetFields();
         setMessage("Successfully Updated")
         setSuccessModalVisible(true)
       } else {
