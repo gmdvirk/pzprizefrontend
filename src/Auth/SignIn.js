@@ -5,6 +5,7 @@ import ReCAPTCHA from "react-google-recaptcha";
 import COLORS from '../colors';
 import { linkurl } from '../link';
 import { useNavigate } from 'react-router-dom';
+import Logo from "./logo192.png"
 
 const { Option } = Select;
 
@@ -64,6 +65,9 @@ const SignInPage = () => {
   return (
     <div className="signin-container">
       <Card title="Sign In" className="signin-card">
+      <div style={{ textAlign: 'center', marginBottom: 20 }}>
+          <img src={Logo} alt="Logo" style={{ maxWidth: '80px',borderRadius:10 }} />  {/* Adjust the size as needed */}
+        </div>
         <Form
           name="signin-form"
           initialValues={{ remember: true }}
