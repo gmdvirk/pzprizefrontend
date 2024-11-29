@@ -495,7 +495,6 @@ const handleLoginasanother =(record)=>{
     // Save the PDF
     doc.save('payment_report.pdf');
   };
-  {console.log(payment)}
   const today = new Date().toISOString().split('T')[0];
 
   return (

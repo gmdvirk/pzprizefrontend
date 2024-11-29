@@ -132,7 +132,6 @@ const navigate=useNavigate();
         const userData1 = await response2.json();
         setDraws(userData1)
       }
-      console.log(userData)
       const response3 = await fetch(`${linkurl}/user/getLimitByUserId/${userData.data._id}`, {
         method: 'GET',
         headers: {

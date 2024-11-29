@@ -13,6 +13,7 @@ const AddProductForm = ({ userdata,draws,setProducts,products,limits}) => {
   const [form] = Form.useForm();
   const [successModalVisible, setSuccessModalVisible] = useState(false);
   const [errorModalVisible, setErrorModalVisible] = useState(false);
+  const [id, setId] = useState("");
   const [option, setOption] = useState("All");
   const [tempvalues,setTempvalues]=useState({
     onedigita:0,
@@ -35,7 +36,7 @@ const AddProductForm = ({ userdata,draws,setProducts,products,limits}) => {
     panogadab:0
   });
   const [drawdate,setDrawdate]=useState(null)
-  const [type,setType]=useState(null)
+  const [type,setType]=useState("uplimit")
   const [loading, setLoading] = useState(false);
   const generateProductCode = () => {
     return `COLLECTION-${uuidv4()}`;
@@ -118,6 +119,7 @@ const AddProductForm = ({ userdata,draws,setProducts,products,limits}) => {
       doc.text(`Draw: ${drawdate.date}`, 150, 30);
       doc.text(`Draw Title: ${drawdate.title}`, 14, 35);
     }
+    filteredPayments=filteredPayments.filter((obj)=>obj.f>0 || obj.s >0)
     let arr1=filteredPayments.filter((obj)=>obj.bundle.length===1)
     let arr2=filteredPayments.filter((obj)=>obj.bundle.length===2)
     let arr3=filteredPayments.filter((obj)=>obj.bundle.length===3)
@@ -188,30 +190,28 @@ const AddProductForm = ({ userdata,draws,setProducts,products,limits}) => {
         doc.setDrawColor(75, 0, 130); // Dark blue/purplish border
         doc.setTextColor(0, 0, 0); // Black text
         doc.rect(startX, startY, blockWidth, blockHeight, 'FD');
+        const isFirstInRed = userData1.firstprefixes.includes(pay.bundle);
+            if (isFirstInRed) {
+                doc.setTextColor(255, 0, 0); // Red text
+            } else {
+                doc.setTextColor(0, 0, 0); // Black text
+            }
+            let isFSecondInRed = userData1.secondprefixes1.includes(pay.bundle) || userData1.secondprefixes2.includes(pay.bundle)||userData1.secondprefixes3.includes(pay.bundle)||userData1.secondprefixes4.includes(pay.bundle)||userData1.secondprefixes5.includes(pay.bundle);
+            if (!(isFirstInRed) && isFSecondInRed) {
+             doc.setTextColor(0, 0, 255); // Blue text
+            } 
         doc.text(pay.bundle.toString(), startX + blockWidth / 2, startY + blockHeight / 2, { align: 'center' });
 
         // Draw first value block with white background and dark blue/purplish border
         doc.setFillColor(255, 255, 255); // White background
         doc.setDrawColor(75, 0, 130); // Dark blue/purplish border
         doc.rect(startX + blockWidth, startY, blockWidth, blockHeight, 'FD');
-        const isFirstInRed = userData1.firstprefixes.includes(pay.bundle);
-             if (isFirstInRed) {
-                 doc.setTextColor(255, 0, 0); // Red text
-             } else {
-                 doc.setTextColor(0, 0, 0); // Black text
-             }
         doc.text(pay.f.toString(), startX + blockWidth + blockWidth / 2, startY + blockHeight / 2, { align: 'center' });
 
         // Draw second value block with white background and dark blue/purplish border
         doc.setFillColor(255, 255, 255); // White background
         doc.setDrawColor(75, 0, 130); // Dark blue/purplish border
         doc.rect(startX + 2 * blockWidth, startY, blockWidth, blockHeight, 'FD');
-        let isFSecondInRed = userData1.secondprefixes1.includes(pay.bundle) || userData1.secondprefixes2.includes(pay.bundle)||userData1.secondprefixes3.includes(pay.bundle)||userData1.secondprefixes4.includes(pay.bundle)||userData1.secondprefixes5.includes(pay.bundle);
-             if (isFSecondInRed) {
-              doc.setTextColor(0, 0, 255); // Blue text
-             } else {
-                 doc.setTextColor(0, 0, 0); // Black text
-             }
         doc.text(pay.s.toString(), startX + 2 * blockWidth + blockWidth / 2, startY + blockHeight / 2, { align: 'center' });
 
         // Move to the next block position
@@ -305,6 +305,7 @@ const AddProductForm = ({ userdata,draws,setProducts,products,limits}) => {
             filteredPayments[i].s=Number(values.onedigitb)
            }
           }
+          
          
       }
       }
@@ -410,6 +411,7 @@ const AddProductForm = ({ userdata,draws,setProducts,products,limits}) => {
       doc.text(`Draw: ${drawdate.date}`, 150, 30);
       doc.text(`Draw Title: ${drawdate.title}`, 14, 35);
     }
+    filteredPayments=filteredPayments.filter((obj)=>obj.f>0 || obj.s >0)
     let arr1=filteredPayments.filter((obj)=>obj.bundle.length===1)
       let arr2=filteredPayments.filter((obj)=>obj.bundle.length===2)
       let arr3=filteredPayments.filter((obj)=>obj.bundle.length===3)
@@ -480,30 +482,28 @@ const AddProductForm = ({ userdata,draws,setProducts,products,limits}) => {
           doc.setDrawColor(75, 0, 130); // Dark blue/purplish border
           doc.setTextColor(0, 0, 0); // Black text
           doc.rect(startX, startY, blockWidth, blockHeight, 'FD');
+          const isFirstInRed = userData1.firstprefixes.includes(pay.bundle);
+            if (isFirstInRed) {
+                doc.setTextColor(255, 0, 0); // Red text
+            } else {
+                doc.setTextColor(0, 0, 0); // Black text
+            }
+            let isFSecondInRed = userData1.secondprefixes1.includes(pay.bundle) || userData1.secondprefixes2.includes(pay.bundle)||userData1.secondprefixes3.includes(pay.bundle)||userData1.secondprefixes4.includes(pay.bundle)||userData1.secondprefixes5.includes(pay.bundle);
+            if (!(isFirstInRed) && isFSecondInRed) {
+             doc.setTextColor(0, 0, 255); // Blue text
+            } 
           doc.text(pay.bundle.toString(), startX + blockWidth / 2, startY + blockHeight / 2, { align: 'center' });
 
           // Draw first value block with white background and dark blue/purplish border
           doc.setFillColor(255, 255, 255); // White background
           doc.setDrawColor(75, 0, 130); // Dark blue/purplish border
           doc.rect(startX + blockWidth, startY, blockWidth, blockHeight, 'FD');
-          const isFirstInRed = userData1.firstprefixes.includes(pay.bundle);
-             if (isFirstInRed) {
-                 doc.setTextColor(255, 0, 0); // Red text
-             } else {
-                 doc.setTextColor(0, 0, 0); // Black text
-             }
           doc.text(pay.f.toString(), startX + blockWidth + blockWidth / 2, startY + blockHeight / 2, { align: 'center' });
 
           // Draw second value block with white background and dark blue/purplish border
           doc.setFillColor(255, 255, 255); // White background
           doc.setDrawColor(75, 0, 130); // Dark blue/purplish border
           doc.rect(startX + 2 * blockWidth, startY, blockWidth, blockHeight, 'FD');
-          let isFSecondInRed = userData1.secondprefixes1.includes(pay.bundle) || userData1.secondprefixes2.includes(pay.bundle)||userData1.secondprefixes3.includes(pay.bundle)||userData1.secondprefixes4.includes(pay.bundle)||userData1.secondprefixes5.includes(pay.bundle);
-             if (isFSecondInRed) {
-              doc.setTextColor(0, 0, 255); // Blue text
-             } else {
-                 doc.setTextColor(0, 0, 0); // Black text
-             }
           doc.text(pay.s.toString(), startX + 2 * blockWidth + blockWidth / 2, startY + blockHeight / 2, { align: 'center' });
 
           // Move to the next block position
@@ -562,6 +562,36 @@ const AddProductForm = ({ userdata,draws,setProducts,products,limits}) => {
         
         return;
       }
+                              let tempobj={
+                                hindsaa :values.onedigita,
+                                hindsab:values.onedigitb,
+                                akraa :values.twodigita,
+                                akrab :values.twodigitb,
+                                tendolaa:values.threedigita,
+                                tendolab:values. threedigitb,
+                                panogadaa:values. fourdigita,
+                                panogadab:values. fourdigitb
+                              }
+      const response3 = await fetch(`${linkurl}/user/editLimit`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          token: token,
+        },
+        body: JSON.stringify({
+          _id:id,
+          userid:userdata._id,
+          drawid:drawdate._id,
+          limit:{...tempobj}
+        }),
+      });
+      if (response3.ok) {
+        const userData3 = await response3.json();
+
+      }else{
+        alert("Facing error")
+        return;
+      }
       const response = await fetch(`${linkurl}/report/getHaddLimitReportforalldistributor`, {
         method: 'POST',
         headers: {
@@ -578,7 +608,6 @@ const AddProductForm = ({ userdata,draws,setProducts,products,limits}) => {
         let alldraws=[]
           let drawtosend={}
           if(values.limittype==="uplimit"){
-    
             userData.forEach((Payments) => {
               let filteredPayments=Payments.drawarrtosend
               for (let i = 0; i < filteredPayments.length; i++) {
@@ -591,7 +620,6 @@ const AddProductForm = ({ userdata,draws,setProducts,products,limits}) => {
                   if(filteredPayments[i].s<0){
                     filteredPayments[i].s=0
                   }
-
                   if(alldraws.includes(filteredPayments[i].bundle)){
                     drawtosend[filteredPayments[i].bundle] ={bundle:filteredPayments[i].bundle,f:Number( drawtosend[filteredPayments[i].bundle].f )+filteredPayments[i].f,s:Number( drawtosend[filteredPayments[i].bundle].s )+filteredPayments[i].s}
                 }else{
@@ -668,23 +696,19 @@ const AddProductForm = ({ userdata,draws,setProducts,products,limits}) => {
               // downloadinvoice4(drawarrtosend,values)
 
           }else{
-            
         userData.forEach((Payments) => {
           let filteredPayments=Payments.drawarrtosend
       
           for (let i = 0; i < filteredPayments.length; i++) {
             if (filteredPayments[i].bundle.length === 1) {
-              if(Number(Payments.limits.hindsaa)>filteredPayments[i].f){
-                filteredPayments[i].f=filteredPayments[i].f
-              }else{
-                filteredPayments[i].f=Number(Payments.limits.hindsaa)
-              }
-             if(filteredPayments[i].s<Number(Payments.limits.hindsab)){
-              filteredPayments[i].s=filteredPayments[i].s
-             }
-             else{
-              filteredPayments[i].s=Number(Payments.limits.hindsab)
-             }
+              filteredPayments[i].f = filteredPayments[i].f - Number(Payments.limits.hindsaa);
+                  filteredPayments[i].s = filteredPayments[i].s - Number(Payments.limits.hindsab);
+                  if(filteredPayments[i].f<0){
+                    filteredPayments[i].f=0
+                  }
+                  if(filteredPayments[i].s<0){
+                    filteredPayments[i].s=0
+                  }
               if(alldraws.includes(filteredPayments[i].bundle)){
                 drawtosend[filteredPayments[i].bundle] ={bundle:filteredPayments[i].bundle,f:Number( drawtosend[filteredPayments[i].bundle].f )+filteredPayments[i].f,s:Number( drawtosend[filteredPayments[i].bundle].s )+filteredPayments[i].s}
             }else{
@@ -693,16 +717,14 @@ const AddProductForm = ({ userdata,draws,setProducts,products,limits}) => {
             }
             }
             if (filteredPayments[i].bundle.length === 2) {
-              if(filteredPayments[i].f<Number(Payments.limits.akraa)){
-                filteredPayments[i].f=filteredPayments[i].f
-              }else{
-                filteredPayments[i].f=Number(Payments.limits.akraa)
-              }
-              if(filteredPayments[i].s<Number(Payments.limits.akrab)){
-                filteredPayments[i].s=filteredPayments[i].s
-              }else{
-                filteredPayments[i].s=Number(Payments.limits.akrab)
-              }
+              filteredPayments[i].f = filteredPayments[i].f - Number(Payments.limits.akraa);
+                  filteredPayments[i].s = filteredPayments[i].s - Number(Payments.limits.akrab);
+                  if(filteredPayments[i].f<0){
+                    filteredPayments[i].f=0
+                  }
+                  if(filteredPayments[i].s<0){
+                    filteredPayments[i].s=0
+                  }
               if(alldraws.includes(filteredPayments[i].bundle)){
                 drawtosend[filteredPayments[i].bundle] ={bundle:filteredPayments[i].bundle,f:Number( drawtosend[filteredPayments[i].bundle].f )+filteredPayments[i].f,s:Number( drawtosend[filteredPayments[i].bundle].s )+filteredPayments[i].s}
             }else{
@@ -711,17 +733,14 @@ const AddProductForm = ({ userdata,draws,setProducts,products,limits}) => {
             }
             }
             if (filteredPayments[i].bundle.length === 3) {
-              if(filteredPayments[i].f<Number(Payments.limits.tendolaa)){
-                filteredPayments[i].f=filteredPayments[i].f
-              }else{
-                filteredPayments[i].f=Number(Payments.limits.tendolaa)
-              }
-              if(filteredPayments[i].s<Number(Payments.limits.tendolab)){
-                filteredPayments[i].s=filteredPayments[i].s
-              }
-              else{
-                filteredPayments[i].s=Number(Payments.limits.tendolab)
-              }
+              filteredPayments[i].f = filteredPayments[i].f - Number(Payments.limits.tendolaa);
+                  filteredPayments[i].s = filteredPayments[i].s - Number(Payments.limits.tendolab);
+                  if(filteredPayments[i].f<0){
+                    filteredPayments[i].f=0
+                  }
+                  if(filteredPayments[i].s<0){
+                    filteredPayments[i].s=0
+                  }
               if(alldraws.includes(filteredPayments[i].bundle)){
                 drawtosend[filteredPayments[i].bundle] ={bundle:filteredPayments[i].bundle,f:Number( drawtosend[filteredPayments[i].bundle].f )+filteredPayments[i].f,s:Number( drawtosend[filteredPayments[i].bundle].s )+filteredPayments[i].s}
             }else{
@@ -730,17 +749,14 @@ const AddProductForm = ({ userdata,draws,setProducts,products,limits}) => {
             }
             }
             if (filteredPayments[i].bundle.length === 4) {
-              if(filteredPayments[i].f<Number(Payments.limits.panogadaa)){
-                filteredPayments[i].f=filteredPayments[i].f
-              }else{
-                filteredPayments[i].f=Number(Payments.limits.panogadaa)
-              }
-              
-              if(filteredPayments[i].s<Number(Payments.limits.panogadab)){
-                filteredPayments[i].s=filteredPayments[i].s
-              }else{
-                filteredPayments[i].s=Number(Payments.limits.panogadab)
-              }
+              filteredPayments[i].f = filteredPayments[i].f - Number(Payments.limits.panogadaa);
+                  filteredPayments[i].s = filteredPayments[i].s - Number(Payments.limits.panogadab);
+                  if(filteredPayments[i].f<0){
+                    filteredPayments[i].f=0
+                  }
+                  if(filteredPayments[i].s<0){
+                    filteredPayments[i].s=0
+                  }
               if(alldraws.includes(filteredPayments[i].bundle)){
                 drawtosend[filteredPayments[i].bundle] ={bundle:filteredPayments[i].bundle,f:Number( drawtosend[filteredPayments[i].bundle].f )+filteredPayments[i].f,s:Number( drawtosend[filteredPayments[i].bundle].s )+filteredPayments[i].s}
             }else{
@@ -1022,6 +1038,7 @@ const AddProductForm = ({ userdata,draws,setProducts,products,limits}) => {
   useEffect(() => {
     form.setFieldsValue(tempvalues);
   }, [tempvalues, form]);
+
   useEffect(() => {
     setTempvalues({...limitsettings})
   }, [limitsettings, form]);
@@ -1080,7 +1097,7 @@ const AddProductForm = ({ userdata,draws,setProducts,products,limits}) => {
                                 fourdigita:limits.data[index].panogadaa,
                                 fourdigitb:limits.data[index].panogadab
                               }
-                              // setId(props.limits.data[index]._id)
+                              setId(limits.data[index]._id)
                               form.setFieldsValue(tempobj);
                             }
                             
@@ -1109,6 +1126,7 @@ const AddProductForm = ({ userdata,draws,setProducts,products,limits}) => {
                       rules={[{ required: true, message: 'Please select' }]}
                       className="flex-item"
                       fieldKey={ 'bundle'}
+                      initialValue={"All"}
                     >
                       <Select placeholder="Select bundle type" onChange={(e)=>{setOption(e)}}>
                         <Option value={"All"}>All Bundles</Option>
@@ -1116,6 +1134,22 @@ const AddProductForm = ({ userdata,draws,setProducts,products,limits}) => {
                         <Option value={"B"}>B</Option>
                         <Option value={"C"}>C</Option>
                         <Option value={"D"}>D</Option>
+                      </Select>
+                    </Form.Item>
+                    </Col>
+                        
+      <Col xs={12} sm={8}>
+      <Form.Item
+      label={"Limit Type"}
+                    name={ 'limittype'}
+                      rules={[{ required: true, message: 'Please select' }]}
+                      className="flex-item"
+                      fieldKey={ 'limittype'}
+                      initialValue={"uplimit"}
+                    >
+                      <Select placeholder="Select limit type" onChange={(e)=>setType(e)} >
+                        <Option value={"uplimit"}>Up Limit</Option>
+                        <Option value={"downlimit"}>Down Limit</Option>
                       </Select>
                     </Form.Item>
                     </Col>
@@ -1207,21 +1241,7 @@ const AddProductForm = ({ userdata,draws,setProducts,products,limits}) => {
       </Form.Item>
       </Col>}
    
-     
-      <Col xs={12} sm={8}>
-      <Form.Item
-      label={"Limit Type"}
-                    name={ 'limittype'}
-                      rules={[{ required: true, message: 'Please select' }]}
-                      className="flex-item"
-                      fieldKey={ 'limittype'}
-                    >
-                      <Select placeholder="Select limit type" onChange={(e)=>setType(e)} >
-                        <Option value={"uplimit"}>Up Limit</Option>
-                        <Option value={"downlimit"}>Down Limit</Option>
-                      </Select>
-                    </Form.Item>
-                    </Col>
+ 
      </Row>
     <Form.Item>
     <Button   style={{

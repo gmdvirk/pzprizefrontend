@@ -146,7 +146,7 @@ const EditProductForm = (props) => {
                        </Select>
                      </Form.Item>
                      </Col>
-                     <Col xs={24} sm={8}>
+                     {/* <Col xs={24} sm={8}>
       <Form.Item
       label={"Hadd limit allowed"}
                     name={ 'haddaloud'}
@@ -159,7 +159,7 @@ const EditProductForm = (props) => {
                         <Option value={false}>Not Alowed</Option>
                       </Select>
                     </Form.Item>
-                    </Col>
+                    </Col> */}
              
       </Row>
       

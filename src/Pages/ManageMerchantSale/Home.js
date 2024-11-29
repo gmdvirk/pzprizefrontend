@@ -2142,7 +2142,12 @@ const InputSection = () => {
     {/* <Button type="primary" style={{marginLeft:10, width: 140,fontWeight:'bold' }} onClick={showModal}>{"Game Ok : " + (saletotal&&saletotal.length>0)?saletotal[0].t:0}</Button>{' '} */}
     <Button 
   type="primary" 
-  style={{marginLeft:0, width: 120}} 
+  style={{
+    marginLeft: 0, 
+    width: 120,
+    textAlign: 'left',
+    paddingLeft: 10 // Add some padding to prevent text from sticking to the edge
+  }} 
   onClick={showModal}
 >
   {"G:" + (saletotal && saletotal.length > 0 ? saletotal[0].t : 0)}
@@ -2151,7 +2156,7 @@ const InputSection = () => {
       <Button style={{width:50,paddingLeft:-10,fontSize:10 }} danger onClick={() => setDeleteConfirmationVisible(true)} disabled={!(selectedRowKeys && selectedRowKeys.length > 0)} type="primary">Delete</Button>
     {/* )} */}
     {' '}
-  <Button style={{marginRight:10 }} onClick={() => setSheetModal(true)} type="primary">Save:{saletotal&&saletotal[0]?saletotal[0].t+(oversaletotal&&oversaletotal[0]?oversaletotal[0].t:0):0}</Button>
+  <Button style={{marginRight:10 }} onClick={() => setSheetModal(true)} type="primary">Save</Button>
     <Button style={{right:0,position:'absolute' }} type="primary" danger onClick={showModal1}> {"No Ok:" + (oversaletotal && oversaletotal.length > 0 ? oversaletotal[0].t : 0)}</Button>{' '}
 
 </div>

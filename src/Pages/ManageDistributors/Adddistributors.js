@@ -107,7 +107,7 @@ const AddProductForm = ({ setProducts,products}) => {
        </Form.Item>
        </Col>
       <Col xs={24} sm={8}>
-      <Form.Item name="address" label="Customer Address" rules={[{ required: true, message: 'Please enter customer address' }]}>
+      <Form.Item initialValue={"0"} name="address" label="Customer Address" rules={[{ required: true, message: 'Please enter customer address' }]}>
         <Input placeholder="Enter Customer Address" />
       </Form.Item>
       </Col>
@@ -115,7 +115,7 @@ const AddProductForm = ({ setProducts,products}) => {
       <Row gutter={16}>
   
       <Col xs={24} sm={8}>
-      <Form.Item name="contact" label="Contact" rules={[{ required: true, message: 'Please enter contact' }]}>
+      <Form.Item initialValue={"0"} name="contact" label="Contact" rules={[{ required: true, message: 'Please enter contact' }]}>
         <Input placeholder="Enter contact" />
       </Form.Item>
       </Col>

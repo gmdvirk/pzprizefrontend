@@ -121,30 +121,28 @@ const AddProductForm = ({userdata,draws, setProducts,products}) => {
           doc.setDrawColor(75, 0, 130); // Dark blue/purplish border
           doc.setTextColor(0, 0, 0); // Black text
           doc.rect(startX, startY, blockWidth, blockHeight, 'FD');
-          doc.text(pay.bundle.toString(), startX + blockWidth / 2, startY + blockHeight / 2, { align: 'center' });
-
-          // Draw first value block with white background and dark blue/purplish border
-          doc.setFillColor(255, 255, 255); // White background
-          doc.setDrawColor(75, 0, 130); // Dark blue/purplish border
-          doc.rect(startX + blockWidth, startY, blockWidth, blockHeight, 'FD');
           const isFirstInRed = userData1.firstprefixes.includes(pay.bundle);
             if (isFirstInRed) {
                 doc.setTextColor(255, 0, 0); // Red text
             } else {
                 doc.setTextColor(0, 0, 0); // Black text
             }
+            let isFSecondInRed = userData1.secondprefixes1.includes(pay.bundle) || userData1.secondprefixes2.includes(pay.bundle)||userData1.secondprefixes3.includes(pay.bundle)||userData1.secondprefixes4.includes(pay.bundle)||userData1.secondprefixes5.includes(pay.bundle);
+            if (!(isFirstInRed) && isFSecondInRed) {
+             doc.setTextColor(0, 0, 255); // Blue text
+            }
+          doc.text(pay.bundle.toString(), startX + blockWidth / 2, startY + blockHeight / 2, { align: 'center' });
+
+          // Draw first value block with white background and dark blue/purplish border
+          doc.setFillColor(255, 255, 255); // White background
+          doc.setDrawColor(75, 0, 130); // Dark blue/purplish border
+          doc.rect(startX + blockWidth, startY, blockWidth, blockHeight, 'FD');
           doc.text(pay.f.toString(), startX + blockWidth + blockWidth / 2, startY + blockHeight / 2, { align: 'center' });
 
           // Draw second value block with white background and dark blue/purplish border
           doc.setFillColor(255, 255, 255); // White background
           doc.setDrawColor(75, 0, 130); // Dark blue/purplish border
           doc.rect(startX + 2 * blockWidth, startY, blockWidth, blockHeight, 'FD');
-          let isFSecondInRed = userData1.secondprefixes1.includes(pay.bundle) || userData1.secondprefixes2.includes(pay.bundle)||userData1.secondprefixes3.includes(pay.bundle)||userData1.secondprefixes4.includes(pay.bundle)||userData1.secondprefixes5.includes(pay.bundle);
-             if (isFSecondInRed) {
-              doc.setTextColor(0, 0, 255); // Blue text
-             } else {
-                 doc.setTextColor(0, 0, 0); // Black text
-             }
           doc.text(pay.s.toString(), startX + 2 * blockWidth + blockWidth / 2, startY + blockHeight / 2, { align: 'center' });
 
           // Move to the next block position

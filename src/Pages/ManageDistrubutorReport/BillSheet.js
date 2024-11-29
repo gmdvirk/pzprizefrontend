@@ -28,6 +28,7 @@ const AddProductForm = ({draws,userdata, setProducts,products}) => {
   const generateSummarisedreportpdf = async (arr) => {
     let dataarr = [];
     const doc = new jsPDF();
+    let partbill=0
 
     // Define header and footer
     const header = () => {
@@ -123,7 +124,9 @@ const AddProductForm = ({draws,userdata, setProducts,products}) => {
     // Add the total net total to the PDF
     doc.setFontSize(12);
     doc.setTextColor(0);
-    doc.text(`Total Net Total: ${totalNetTotal.toFixed(2)}`, 14, doc.lastAutoTable.finalY + 10);
+    doc.text(`Party Bill: ${dataarr[0].nettotal }`, 14, doc.lastAutoTable.finalY + 10);
+    doc.text(`All Dealers Bill: ${totalNetTotal.toFixed(2)}`, 14, doc.lastAutoTable.finalY + 15);
+    doc.text(`Profit/Loss: ${totalNetTotal.toFixed(2) - dataarr[0].nettotal}`, 14, doc.lastAutoTable.finalY + 20);
 
     // Save the PDF
     doc.save('Bill_Sheet_Report.pdf');
@@ -197,6 +200,16 @@ setLoading(false)
   
       doc.setFontSize(14);
       doc.setTextColor(40, 40, 40);
+      if(report.id===userdata._id){
+        doc.setTextColor(0, 0, 255); // Blue text
+      }
+      else if(report.role==="merchant"){
+        doc.setTextColor(0, 0, 0); // Blue text
+      }
+      else if(report.role==="distributor" ||report.role==="subdistributor" ){
+        doc.setTextColor(255, 0, 0); // Blue text
+      }
+
       doc.text(`Report ${index + 1}`, 14, 40);
   
       // Second Prizes table
@@ -261,9 +274,9 @@ setLoading(false)
       const pcPercentageValue = report.comission.pcpercentage;
   
       doc.setFontSize(12);
-      doc.setTextColor(60, 60, 60);
+      // doc.setTextColor(60, 60, 60);
       // doc.text(`Totals:`, 14, doc.autoTable.previous.finalY + 10);
-      doc.setTextColor(80, 80, 80);
+      // doc.setTextColor(80, 80, 80);
       // doc.text(`Total F: ${totalF}`, 14, doc.autoTable.previous.finalY + 15);
       // doc.text(`Total S: ${totalS}`, 14, doc.autoTable.previous.finalY + 20);
       // doc.text(`Total Sale: ${totalF + totalS+totalFfour+totalSfour}`, 14, doc.autoTable.previous.finalY + 25);
@@ -275,6 +288,8 @@ setLoading(false)
       // doc.text(`PC Percentage: ${pcPercentageValue}%`, 14, doc.autoTable.previous.finalY + 40);
       // doc.text(`Commission Amount: ${commissionAmount }%`, 14, doc.autoTable.previous.finalY + 45);
       // doc.text(`PC Percentage Amount: ${pcPercentageAmount}`, 14, doc.autoTable.previous.finalY + 50);
+      doc.text(`Safa+Akra+tndola Sale: ${totalF + totalS}`, 14, doc.autoTable.previous.finalY + 15);
+      doc.text(`Pc Sale: ${totalFfour+totalSfour}`, 14, doc.autoTable.previous.finalY + 20);
       doc.text(`Total Sale: ${totalF + totalS+totalFfour+totalSfour}`, 14, doc.autoTable.previous.finalY + 25);
       doc.text(`Total Comsission: ${pcPercentageAmount+commissionAmount}`, 14, doc.autoTable.previous.finalY + 30);
       doc.text(`Safi Sale: ${(totalF + totalS+totalFfour+totalSfour)-pcPercentageAmount-commissionAmount}`, 14, doc.autoTable.previous.finalY + 35);
