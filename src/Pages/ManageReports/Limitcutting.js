@@ -190,13 +190,18 @@ const AddProductForm = ({ userdata,draws,setProducts,products,limits}) => {
         doc.setDrawColor(75, 0, 130); // Dark blue/purplish border
         doc.setTextColor(0, 0, 0); // Black text
         doc.rect(startX, startY, blockWidth, blockHeight, 'FD');
-        const isFirstInRed = userData1.firstprefixes.includes(pay.bundle);
+        let  isFirstInRed=false;
+            let isFSecondInRed=false
+            if(userData1){
+              isFirstInRed = userData1.firstprefixes.includes(pay.bundle);
+              isFSecondInRed =userData1.secondprefixes1.includes(pay.bundle) || userData1.secondprefixes2.includes(pay.bundle)||userData1.secondprefixes3.includes(pay.bundle)||userData1.secondprefixes4.includes(pay.bundle)||userData1.secondprefixes5.includes(pay.bundle);
+              
+            }
             if (isFirstInRed) {
                 doc.setTextColor(255, 0, 0); // Red text
             } else {
                 doc.setTextColor(0, 0, 0); // Black text
             }
-            let isFSecondInRed = userData1.secondprefixes1.includes(pay.bundle) || userData1.secondprefixes2.includes(pay.bundle)||userData1.secondprefixes3.includes(pay.bundle)||userData1.secondprefixes4.includes(pay.bundle)||userData1.secondprefixes5.includes(pay.bundle);
             if (!(isFirstInRed) && isFSecondInRed) {
              doc.setTextColor(0, 0, 255); // Blue text
             } 
@@ -276,6 +281,7 @@ const AddProductForm = ({ userdata,draws,setProducts,products,limits}) => {
     return "deactive"
  }
   const downloadinvoice5 = (arr,values,userData1) => {
+    console.log(values)
     let filteredPayments = arr;
     for (let i=0;i<filteredPayments.length;i++){
       if(filteredPayments[i].bundle.length===1){
@@ -305,8 +311,6 @@ const AddProductForm = ({ userdata,draws,setProducts,products,limits}) => {
             filteredPayments[i].s=Number(values.onedigitb)
            }
           }
-          
-         
       }
       }
       if(filteredPayments[i].bundle.length===2){
@@ -318,7 +322,6 @@ const AddProductForm = ({ userdata,draws,setProducts,products,limits}) => {
         if(filteredPayments[i].s<Number(values.twodigitb)){
           filteredPayments[i].s=Number(filteredPayments[i].s)-Number(values.twodigitb)
         }
-      }
       }
       else if(values.limittype==="downlimit"){
         if(filteredPayments[i].f<Number(values.twodigita)){
@@ -334,6 +337,8 @@ const AddProductForm = ({ userdata,draws,setProducts,products,limits}) => {
       }
         
       }
+     
+      }
       if(filteredPayments[i].bundle.length===3){
         if(option==="All"||option==="C"){
           if(values.limittype==="uplimit"){
@@ -342,7 +347,6 @@ const AddProductForm = ({ userdata,draws,setProducts,products,limits}) => {
         }
         if(filteredPayments[i].s<Number(values.threedigitb)){
           filteredPayments[i].s=Number(filteredPayments[i].s)-Number(values.threedigitb)
-        }
         }
       }else if(values.limittype==="downlimit"){
         if(filteredPayments[i].f<Number(values.threedigita)){
@@ -357,6 +361,8 @@ const AddProductForm = ({ userdata,draws,setProducts,products,limits}) => {
           filteredPayments[i].s=Number(values.threedigitb)
         }
       }
+        }
+     
       }
       if(filteredPayments[i].bundle.length===4){
         if(option==="All"||option==="D"){
@@ -368,7 +374,6 @@ const AddProductForm = ({ userdata,draws,setProducts,products,limits}) => {
         if(filteredPayments[i].s<Number(values.fourdigitb)){
           filteredPayments[i].s=Number(filteredPayments[i].s)-Number(values.fourdigitb)
         }
-      }
       }else if(values.limittype==="downlimit"){
         if(filteredPayments[i].f<Number(values.fourdigita)){
           filteredPayments[i].f=filteredPayments[i].f
@@ -382,6 +387,8 @@ const AddProductForm = ({ userdata,draws,setProducts,products,limits}) => {
           filteredPayments[i].s=Number(values.fourdigitb)
         }
       }
+      }
+     
       }
     }
     // let arr1=filteredPayments.filter((obj)=>obj.bundle.length===1)
@@ -482,13 +489,18 @@ const AddProductForm = ({ userdata,draws,setProducts,products,limits}) => {
           doc.setDrawColor(75, 0, 130); // Dark blue/purplish border
           doc.setTextColor(0, 0, 0); // Black text
           doc.rect(startX, startY, blockWidth, blockHeight, 'FD');
-          const isFirstInRed = userData1.firstprefixes.includes(pay.bundle);
+          let  isFirstInRed=false;
+            let isFSecondInRed=false
+            if(userData1){
+              isFirstInRed = userData1.firstprefixes.includes(pay.bundle);
+              isFSecondInRed =userData1.secondprefixes1.includes(pay.bundle) || userData1.secondprefixes2.includes(pay.bundle)||userData1.secondprefixes3.includes(pay.bundle)||userData1.secondprefixes4.includes(pay.bundle)||userData1.secondprefixes5.includes(pay.bundle);
+              
+            }
             if (isFirstInRed) {
                 doc.setTextColor(255, 0, 0); // Red text
             } else {
                 doc.setTextColor(0, 0, 0); // Black text
             }
-            let isFSecondInRed = userData1.secondprefixes1.includes(pay.bundle) || userData1.secondprefixes2.includes(pay.bundle)||userData1.secondprefixes3.includes(pay.bundle)||userData1.secondprefixes4.includes(pay.bundle)||userData1.secondprefixes5.includes(pay.bundle);
             if (!(isFirstInRed) && isFSecondInRed) {
              doc.setTextColor(0, 0, 255); // Blue text
             } 

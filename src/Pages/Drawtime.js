@@ -72,7 +72,7 @@ const navigate=useNavigate();
         return;
       }
       setUserdata(userData.data)
-      const response1 = await fetch(`${linkurl}/draw/`, {
+      const response1 = await fetch(`${linkurl}/draw/getdrawinfo`, {
         method: 'GET',
         headers: {
           token: `${token}`,
