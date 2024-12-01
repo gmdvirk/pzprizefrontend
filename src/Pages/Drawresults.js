@@ -63,7 +63,7 @@ const navigate=useNavigate();
         return;
       }
       setUserdata(userData.data)
-      const response1 = await fetch(`${linkurl}/draw/getalldeactivedraws`, {
+      const response1 = await fetch(`${linkurl}/draw/getalldeactivedrawsinfo`, {
         method: 'GET',
         headers: {
           token: `${token}`,
