@@ -186,8 +186,10 @@ const AddProductForm = ({ userdata,setProducts,draws,products}) => {
   
       const totalPrizes = Number(totalFp )+ Number(totalSs) 
       const commissionValue = report.comission.comission;
-      const commissionAmount = commissionValue === 0 ? 0 : ((totalF + totalS) * commissionValue) / 100;
-      const pcPercentageAmount = report.comission.pcpercentage === 0 ? 0 : ((totalF + totalS) * report.comission.pcpercentage) / 100;
+      const commissionAmount = report.comission.comission===0?report.comission.comission:(((totalF + totalS)*Number(report.comission.comission))/100);
+      const pcPercentageAmount = report.comission.pcpercentage===0?report.comission.pcpercentage:(((totalFfour + totalSfour)*Number(report.comission.pcpercentage))/100);
+      // const commissionAmount = commissionValue === 0 ? 0 : ((totalF + totalS) * commissionValue) / 100;
+      // const pcPercentageAmount = report.comission.pcpercentage === 0 ? 0 : ((totalF + totalS) * report.comission.pcpercentage) / 100;
       const pcPercentageValue = report.comission.pcpercentage;
       const grandTotal = totalF + totalS + totalFfour +totalSfour;
       const safitotal = grandTotal - pcPercentageAmount - commissionAmount;
