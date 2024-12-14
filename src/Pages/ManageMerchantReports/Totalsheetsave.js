@@ -17,7 +17,7 @@ const AddProductForm = ({draws,sheets,userdata, setProducts,products}) => {
   const [selectedsheet,setSelectedsheet]=useState(null)
   const [tempsheets,setTempSheets]=useState([])
   const [loading, setLoading] = useState(false);
-  const downloadinvoice = (arr, values) => {
+  const downloadinvoice = (arr, values,userData1) => {
     let filteredPayments = [
       ...arr
     ];
@@ -125,6 +125,21 @@ const AddProductForm = ({draws,sheets,userdata, setProducts,products}) => {
         doc.setDrawColor(75, 0, 130); // Dark blue/purplish border
         doc.setTextColor(0, 0, 0); // White text
         doc.rect(startX, startY, blockWidth, blockHeight, 'FD');
+        let  isFirstInRed=false;
+        let isFSecondInRed=false
+        if(userData1){
+          isFirstInRed = userData1.firstprefixes.includes(pay.bundle);
+          isFSecondInRed =userData1.secondprefixes1.includes(pay.bundle) || userData1.secondprefixes2.includes(pay.bundle)||userData1.secondprefixes3.includes(pay.bundle)||userData1.secondprefixes4.includes(pay.bundle)||userData1.secondprefixes5.includes(pay.bundle);
+          
+        }
+            if (isFirstInRed) {
+                doc.setTextColor(255, 0, 0); // Red text
+            } else {
+                doc.setTextColor(0, 0, 0); // Black text
+            }
+            if (!(isFirstInRed) && isFSecondInRed) {
+             doc.setTextColor(0, 0, 255); // Blue text
+            } 
         doc.text(pay.bundle.toString(), startX + blockWidth / 2, startY + blockHeight / 2, { align: 'center' });
   
         // Draw f block with dark blue/purplish border
@@ -182,7 +197,7 @@ const AddProductForm = ({draws,sheets,userdata, setProducts,products}) => {
 
     }
   };
-  const downloadinvoice1 = (arr, values) => {
+  const downloadinvoice1 = (arr, userData1) => {
     
     const doc = new jsPDF();
     let filteredPayments = [
@@ -230,7 +245,7 @@ const AddProductForm = ({draws,sheets,userdata, setProducts,products}) => {
       doc.text(`Username: ${userdata.username}`, 80, 30);
       doc.text(`Draw: ${drawdate.date}`, 150, 30);
       doc.text(`Draw Title: ${drawdate.title}`, 14, 35);
-      doc.text(`Sheet: ${selectedsheet.sheetname}`, 80, 35);
+        doc.text(`Sheet: ${selectedsheet.sheetname}`, 80, 35);
     }
   
     let startY = 35; // Initial Y position for the first section
@@ -309,6 +324,21 @@ const AddProductForm = ({draws,sheets,userdata, setProducts,products}) => {
         doc.setDrawColor(75, 0, 130); // Dark blue/purplish border
         doc.setTextColor(0, 0, 0); // White text
         doc.rect(startX, startY, blockWidth, blockHeight, 'FD');
+        let  isFirstInRed=false;
+        let isFSecondInRed=false
+        if(userData1){
+          isFirstInRed = userData1.firstprefixes.includes(pay.bundle);
+          isFSecondInRed =userData1.secondprefixes1.includes(pay.bundle) || userData1.secondprefixes2.includes(pay.bundle)||userData1.secondprefixes3.includes(pay.bundle)||userData1.secondprefixes4.includes(pay.bundle)||userData1.secondprefixes5.includes(pay.bundle);
+          
+        }
+            if (isFirstInRed) {
+                doc.setTextColor(255, 0, 0); // Red text
+            } else {
+                doc.setTextColor(0, 0, 0); // Black text
+            }
+            if (!(isFirstInRed) && isFSecondInRed) {
+             doc.setTextColor(0, 0, 255); // Blue text
+            } 
         doc.text(pay.bundle.toString(), startX + blockWidth / 2, startY + blockHeight / 2, { align: 'center' });
   
         // Draw f block with dark blue/purplish border
@@ -385,10 +415,6 @@ const AddProductForm = ({draws,sheets,userdata, setProducts,products}) => {
   };
   
   const onFinish = async (values) => {
-    console.log({
-      ...values,
-      sheetId:drawdate._id
-    })
     setLoading(true)
     try {
       const token = localStorage.getItem('token');
@@ -398,6 +424,7 @@ const AddProductForm = ({draws,sheets,userdata, setProducts,products}) => {
         
         return;
       }
+
         const response = await fetch(`${linkurl}/report/getSalesBySheet`, {
           method: 'POST',
           headers: {
@@ -412,9 +439,36 @@ const AddProductForm = ({draws,sheets,userdata, setProducts,products}) => {
         if (response.ok) {
           const userData = await response.json();
           if(values.report==="combined"){
-            downloadinvoice1(userData)
+                      const response1 = await fetch(`${linkurl}/report/getPrefixes/${values.date}`, {
+                        method: 'GET',
+                        headers: {
+                          'Content-Type': 'application/json',
+                          token: token,
+                        }
+                      });
+                      if (response1.ok) {
+                        const userData1 = await response1.json();
+                        downloadinvoice1(userData,userData1)
+                      } else {
+                        const userData = await response.json();
+                        alert(userData.Message)
+                      }
+           
           }else{
-            downloadinvoice(userData,values)
+            const response1 = await fetch(`${linkurl}/report/getPrefixes/${values.date}`, {
+              method: 'GET',
+              headers: {
+                'Content-Type': 'application/json',
+                token: token,
+              }
+            });
+            if (response1.ok) {
+              const userData1 = await response1.json();
+            downloadinvoice(userData,values,userData1)
+          } else {
+            const userData = await response.json();
+            alert(userData.Message)
+          }
           }
          
         } else {
@@ -512,14 +566,20 @@ const getExpiredOrNot=(users)=>{
                         onChange={(e)=>{
                           if(e==="sjkngkfjgnfkj"){
                             setSelectedsheet({_id:"sjkngkfjgnfkj",sheetname:"no save",drawid:drawdate._id})
-                          }else{
+                          }
+                          else if(e==="combinedsjkngkfjgnfkj"){
+                            setSelectedsheet({_id:"sjkngkfjgnfkj",sheetname:"combined",drawid:drawdate._id})
+                          }
+                          else{
                             const temp=sheets.find((obj)=>obj._id===e)
                             setSelectedsheet(temp)
                           }
                           
                           }}
                        >
+                         {drawdate && <Option value={"combinedsjkngkfjgnfkj"}>{"combined"}</Option>}
                          {drawdate && <Option value={"sjkngkfjgnfkj"}>{(0)+"---"+" no save"}</Option>}
+                         
                         {
                           
                           tempsheets.map((obj,index)=>{

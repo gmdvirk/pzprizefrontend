@@ -202,17 +202,17 @@ const EditProductForm = ({selectedProduct,setSelectedProduct,payment,setPayment,
       }}>
      <Form form={form} onFinish={onFinish} layout="vertical">
     <Row gutter={16}>
-    
+    <Col xs={24} sm={12}>
+       <Form.Item name="amount" label="Amount" rules={[{ required: true, message: 'Please enter amount' }]}>
+         <Input placeholder="Enter amount" />
+       </Form.Item>
+       </Col>
        <Col xs={24} sm={12}>
        <Form.Item name="description" label="Description" rules={[{ required: true, message: 'Please enter a description' }]}>
          <Input placeholder="Enter description" />
        </Form.Item>
        </Col>
-       <Col xs={24} sm={12}>
-       <Form.Item name="amount" label="Amount" rules={[{ required: true, message: 'Please enter amount' }]}>
-         <Input placeholder="Enter amount" />
-       </Form.Item>
-       </Col>
+    
        
        </Row>
      

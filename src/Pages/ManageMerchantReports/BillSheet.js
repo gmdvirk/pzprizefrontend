@@ -17,7 +17,6 @@ const AddProductForm = ({draws,userdata, setProducts,products}) => {
   const [errorModalVisible, setErrorModalVisible] = useState(false);
   const [loading, setLoading] = useState(false);
  const getAllbill=async()=>{
-console.log(drawdate)
 setLoading(true)
 try {
   const token = localStorage.getItem('token');
@@ -90,9 +89,9 @@ setLoading(false)
 
   // Prepare table data with cell styles
   const tableData = data.map(sheet => [
-    { content: sheet.sheetname || 'N/A', styles: { fontStyle: 'normal' } },
-    { content: sheet.total, styles: { fontStyle: 'normal' } },
-    { content: sheet.prize, styles: { fontStyle: 'normal' } }
+    { content: sheet.sheetname || 'N/A', styles: { fontStyle: 'bold' } },
+    { content: sheet.total.toFixed(2), styles: { fontStyle: 'bold' } },
+    { content: sheet.prize.toFixed(2), styles: { fontStyle: 'bold' } }
   ]);
 
   // Calculate totals
@@ -102,8 +101,8 @@ setLoading(false)
   // Add totals row with bold style
   tableData.push([
     { content: 'Total', styles: { fontStyle: 'bold' } },
-    { content: totalSale, styles: { fontStyle: 'bold' } },
-    { content: totalPrize, styles: { fontStyle: 'bold' } }
+    { content: totalSale.toFixed(2), styles: { fontStyle: 'bold' } },
+    { content: totalPrize.toFixed(2), styles: { fontStyle: 'bold' } }
   ]);
 
   // Configure and draw the table
@@ -115,7 +114,7 @@ setLoading(false)
     styles: {
       fontSize: 10,
       textColor: 80,
-      cellPadding: 5
+      cellPadding: 2
     },
     headStyles: {
       fillColor: [240, 240, 240],
@@ -157,18 +156,18 @@ setLoading(false)
 
   doc.save('AllSellBill.pdf');
 };
-  const generatePDFReport = (data) => {
-    const doc = new jsPDF();
-  
-    // Define header and footer
-    const header = () => {
-      doc.setFontSize(18);
-      doc.setTextColor(40, 40, 40);
-      doc.text('Bill Sheet Report', 14, 22);
-      doc.setFontSize(10);
-      doc.setTextColor(100);
-      doc.text(`Generated on: ${new Date().toLocaleDateString()}`, 84, 22);
-    };
+const generatePDFReport = (data) => {
+  const doc = new jsPDF();
+
+  // Define header and footer
+  const header = () => {
+    doc.setFontSize(18);
+    doc.setTextColor(40, 40, 40);
+    doc.text('Bill Sheet Report', 14, 22);
+    doc.setFontSize(10);
+    doc.setTextColor(100);
+    doc.text(`Generated on: ${new Date().toLocaleDateString()}`, 84, 22);
+
     if (userdata && userdata.username) {
       doc.setFontSize(10);
       doc.text(`User: ${userdata.name}`, 14, 30);
@@ -176,125 +175,169 @@ setLoading(false)
       doc.text(`Draw: ${drawdate.date}`, 150, 30);
       doc.text(`Draw Title: ${drawdate.title}`, 14, 35);
     }
-  
-    const footer = (pageNumber) => {
-      doc.setFontSize(10);
-      doc.setTextColor(150);
-      doc.text(`Page ${pageNumber}`, doc.internal.pageSize.width - 20, doc.internal.pageSize.height - 10);
-    };
-  
-    data.majorsalesreport.forEach((report, index) => {
-      if (index !== 0) {
-        doc.addPage();
-      }
-  
-      header();
-  
-      doc.setFontSize(14);
-      doc.setTextColor(40, 40, 40);
-      if(report.id===userdata._id){
-        doc.setTextColor(0, 0, 255); // Blue text
-      }
-      else if(report.role==="merchant"){
-        doc.setTextColor(0, 0, 0); // Blue text
-      }
-      else if(report.role==="distributor" ||report.role==="subdistributor" ){
-        doc.setTextColor(255, 0, 0); // Blue text
-      }
-
-      doc.text(`Report ${index + 1}`, 14, 40);
-  
-      // Second Prizes table
-      doc.autoTable({
-        startY: 50,
-        head: [['firstprize','secondprize1', 'secondprize2', 'secondprize3', 'secondprize4', 'secondprize5']],
-        body: [
-          [
-            data.firstprize || 'N/A',
-            data.secondprize1,
-            data.secondprize2,
-            data.secondprize3,
-            data.secondprize4,
-            data.secondprize5
-          ]
-        ],
-        theme: 'grid',
-        styles: {
-          fontSize: 10,
-          textColor: 80,
-        },
-        headStyles: {
-          fillColor: [240, 240, 240],
-          textColor: 40,
-          fontSize: 11,
-        }
-      });
-      doc.autoTable({
-        startY: 80,
-        head: [['Name','Username', 'Comission', 'Pc percentage']],
-        body: [
-          [
-            report.name,
-            report.username,
-            report.comission.comission,
-            report.comission.pcpercentage
-          ]
-        ],
-        theme: 'grid',
-        styles: {
-          fontSize: 10,
-          textColor: 80,
-        },
-        headStyles: {
-          fillColor: [240, 240, 240],
-          textColor: 40,
-          fontSize: 11,
-        }
-      });
-      let totalFp = report.prize.tempobj.f;
-      let totalSs = report.prize.tempobj.s;
-      let totalF = report.prize.tempsale.f;
-      let totalS = report.prize.tempsale.s;
-      let totalFfour = report.prize.tempsalefour.f;
-      let totalSfour = report.prize.tempsalefour.s;
-  
-  
-      const totalPrizes = Number(totalFp )+ Number(totalSs) 
-      const commissionValue = report.comission.comission;
-      const commissionAmount = report.comission.comission===0?report.comission.comission:(((totalF + totalS)*Number(report.comission.comission))/100);
-      const pcPercentageAmount = report.comission.pcpercentage===0?report.comission.pcpercentage:(((totalFfour + totalSfour)*Number(report.comission.pcpercentage))/100);
-      const pcPercentageValue = report.comission.pcpercentage;
-  
-      doc.setFontSize(12);
-      // doc.setTextColor(60, 60, 60);
-      // doc.text(`Totals:`, 14, doc.autoTable.previous.finalY + 10);
-      // doc.setTextColor(80, 80, 80);
-      // doc.text(`Total F: ${totalF}`, 14, doc.autoTable.previous.finalY + 15);
-      // doc.text(`Total S: ${totalS}`, 14, doc.autoTable.previous.finalY + 20);
-      // doc.text(`Grand Total: ${totalF + totalS}`, 14, doc.autoTable.previous.finalY + 20);
-      // doc.text(`Total Prizes: ${totalPrizes}`, 14, doc.autoTable.previous.finalY + 25);
-      // // doc.text(`Commission: ${commissionValue}`, 14, doc.autoTable.previous.finalY + 35);
-      // // doc.text(`PC Percentage: ${pcPercentageValue}%`, 14, doc.autoTable.previous.finalY + 40);
-      // // doc.text(`Commission Amount: ${commissionAmount }%`, 14, doc.autoTable.previous.finalY + 45);
-      // // doc.text(`PC Percentage Amount: ${pcPercentageAmount}`, 14, doc.autoTable.previous.finalY + 50);
-      // doc.text(`Total Comsission: ${pcPercentageAmount+commissionAmount}`, 14, doc.autoTable.previous.finalY + 30);
-      // doc.text(`Safi Sale: ${(totalF + totalS)-pcPercentageAmount-commissionAmount}`, 14, doc.autoTable.previous.finalY + 35);
-      // doc.text(`Net Total: ${(totalF + totalS)- Number(totalPrizes)-pcPercentageAmount-commissionAmount}`, 14, doc.autoTable.previous.finalY + 40);
-     
-      doc.text(`Safa+Akra+tndola Sale: ${totalF + totalS}`, 14, doc.autoTable.previous.finalY + 15);
-      doc.text(`Pc Sale: ${totalFfour+totalSfour}`, 14, doc.autoTable.previous.finalY + 20);
-      doc.text(`Total Sale: ${totalF + totalS+totalFfour+totalSfour}`, 14, doc.autoTable.previous.finalY + 25);
-      doc.text(`Total Comsission: ${pcPercentageAmount+commissionAmount}`, 14, doc.autoTable.previous.finalY + 30);
-      doc.text(`Safi Sale: ${(totalF + totalS+totalFfour+totalSfour)-pcPercentageAmount-commissionAmount}`, 14, doc.autoTable.previous.finalY + 35);
-      doc.text(`Total Prizes: ${totalPrizes}`, 14, doc.autoTable.previous.finalY + 40);
-      doc.text(`Bill: ${((totalF + totalS+totalFfour+totalSfour)- Number(totalPrizes)-pcPercentageAmount-commissionAmount).toFixed(2)}`, 14, doc.autoTable.previous.finalY + 45);
-      // doc.text(`Net Total: ${(totalF + totalS)-pcPercentageAmount-commissionAmount}`, 14, doc.autoTable.previous.finalY + 60);
-
-      footer(doc.internal.getNumberOfPages());
-    });
-  
-    doc.save('MajorsalesReport.pdf');
   };
+
+  const footer = (pageNumber) => {
+    doc.setFontSize(10);
+    doc.setTextColor(150);
+    doc.text(`Page ${pageNumber}`, doc.internal.pageSize.width - 20, doc.internal.pageSize.height - 10);
+  };
+
+  data.majorsalesreport.forEach((report, index) => {
+    if (index !== 0) {
+      doc.addPage();
+    }
+
+    // Header
+    header();
+
+    // Report Title with Conditional Coloring
+    doc.setFontSize(14);
+    if (report.id === userdata._id) {
+      doc.setTextColor(0, 0, 255); // Blue text
+    } else if (report.role === "merchant") {
+      doc.setTextColor(0, 0, 0); // Black text
+    } else if (report.role === "distributor" || report.role === "subdistributor") {
+      doc.setTextColor(255, 0, 0); // Red text
+    } else {
+      doc.setTextColor(40, 40, 40); // Default color
+    }
+    doc.text(`Report ${index + 1}`, 14, 40);
+    doc.setTextColor(40, 40, 40); // Reset to default color
+
+    // Second Prizes Table
+    doc.autoTable({
+      startY: 50,
+      head: [['First Prize', 'Second Prize 1', 'Second Prize 2', 'Second Prize 3', 'Second Prize 4', 'Second Prize 5']],
+      body: [
+        [
+          data.firstprize || 'N/A',
+          data.secondprize1 || 'N/A',
+          data.secondprize2 || 'N/A',
+          data.secondprize3 || 'N/A',
+          data.secondprize4 || 'N/A',
+          data.secondprize5 || 'N/A'
+        ]
+      ],
+      theme: 'grid',
+      styles: {
+        fontSize: 10,
+        textColor: 80,
+      },
+      headStyles: {
+        fillColor: [240, 240, 240],
+        textColor: 40,
+        fontSize: 11,
+      }
+    });
+
+    // User Information Table
+    doc.autoTable({
+      startY: 80,
+      head: [['Name', 'Username', 'Commission', 'PC Percentage']],
+      body: [
+        [
+          report.name || 'N/A',
+          report.username || 'N/A',
+          report.comission.comission !== undefined ? report.comission.comission : 'N/A',
+          report.comission.pcpercentage !== undefined ? report.comission.pcpercentage : 'N/A'
+        ]
+      ],
+      theme: 'grid',
+      styles: {
+        fontSize: 10,
+        textColor: 80,
+      },
+      headStyles: {
+        fillColor: [240, 240, 240],
+        textColor: 40,
+        fontSize: 11,
+      }
+    });
+
+    // Calculations
+    const { prize, comission } = report;
+    const totalFp = Number(prize.tempobj.f) || 0;
+    const totalSs = Number(prize.tempobj.s) || 0;
+    const totalF = Number(prize.tempsale.f) || 0;
+    const totalS = Number(prize.tempsale.s) || 0;
+    const totalFfour = Number(prize.tempsalefour.f) || 0;
+    const totalSfour = Number(prize.tempsalefour.s) || 0;
+
+    const totalPrizes = totalFp + totalSs;
+    const commissionAmount = comission.comission === 0 ? 0 : ((totalF + totalS) * Number(comission.comission)) / 100;
+    const pcPercentageAmount = comission.pcpercentage === 0 ? 0 : ((totalFfour + totalSfour) * Number(comission.pcpercentage)) / 100;
+    const totalSales = totalF + totalS + totalFfour + totalSfour;
+    const totalCommission = commissionAmount + pcPercentageAmount;
+    const safiSale = totalSales - totalCommission;
+    const billAmount = safiSale - totalPrizes;
+
+    // Summary Table with Conditional Coloring for 'Bill'
+    doc.autoTable({
+      startY: doc.autoTable.previous.finalY + 10,
+      head: [['Description', 'Amount']],
+      body: [
+        ['Safa+Akra+tndola Sale', totalF + totalS],
+        ['Pc Sale', totalFfour + totalSfour],
+        ['Total Sale', totalSales],
+        ['Total Commission', totalCommission.toFixed(2)],
+        ['Safi Sale', safiSale.toFixed(2)],
+        ['Total Prizes', totalPrizes.toFixed(2)],
+        ['Bill', billAmount.toFixed(2)]
+      ],
+      theme: 'striped',
+      styles: {
+        fontSize: 10,
+        textColor: 80,
+      },
+      headStyles: {
+        fillColor: [200, 200, 200],
+        textColor: 40,
+        fontSize: 11,
+        halign: 'left',
+      },
+      columnStyles: {
+        0: { halign: 'left', fontStyle: 'bold',cellWidth: 50  },
+        1: { halign: 'left',cellWidth: 50  }
+      },
+      tableWidth: 'auto',
+      didParseCell: function (data) {
+        // Identify the 'Bill' row by the Description column
+        if (data.section === 'body') {
+          const description = data.row.raw[0];
+          if (description === 'Bill') {
+            const amount = parseFloat(data.cell.text);
+            if (amount < 0) {
+              data.cell.styles.textColor = [255, 0, 0]; // Red
+            } else {
+              data.cell.styles.textColor = [0, 128, 0]; // Green
+            }
+          }else{
+            if(report.id===userdata._id){
+              // doc.setTextColor(0, 0, 255); // Blue text
+              data.cell.styles.textColor=[0,0,255]
+            }
+            else if(report.role==="merchant"){
+              // doc.setTextColor(0, 0, 0); // Blue text
+              data.cell.styles.textColor=[0,0,0]
+            }
+            else if(report.role==="distributor" ||report.role==="subdistributor" ){
+              // doc.setTextColor(255, 0, 0); // Blue text
+              data.cell.styles.textColor=[255,0,0]
+            }
+      
+          }
+        }
+      }
+    });
+
+    // Add Footer
+    footer(doc.internal.getNumberOfPages());
+  });
+
+  // Save the PDF
+  doc.save('MajorsalesReport.pdf');
+};
 
   const onFinish = async (values) => {
     setLoading(true)

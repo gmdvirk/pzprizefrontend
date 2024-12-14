@@ -35,6 +35,8 @@ const App = ({isOnline, userdata, setProducts,credit,upline, products,balance,se
   const [drawdate,setDrawdate]=useState(null)
   const [lastkeypressed,setLastKeyPressed]=useState("")
   const [sheetmodal, setSheetModal] = useState(false);
+  const [sheetsaveloader, setSheetsaveloader] = useState(false);
+  
   const [isGModalVisible, setIsGModalVisible] = useState(false);
   const errorAudioRef = useRef(null);
   const oversaleAudioRef = useRef(null);
@@ -1042,6 +1044,7 @@ const App = ({isOnline, userdata, setProducts,credit,upline, products,balance,se
     setSmsModalVisible(true); // Open SMS modal
   };
   const downloadinvoice = (arr,type) => {
+   
     const filteredPayments = [...arr]
     let totalFirst1 = 0;
     let totalSecond1 = 0;
@@ -1052,12 +1055,7 @@ const App = ({isOnline, userdata, setProducts,credit,upline, products,balance,se
         total1 += (parseFloat(pay.f) || 0) + (parseFloat(pay.s) || 0);
       })
     const doc = new jsPDF();
-    let arr1 = filteredPayments.filter((obj) => obj.bundle.length === 1);
-    let arr2 = filteredPayments.filter((obj) => obj.bundle.length === 2);
-    let arr3 = filteredPayments.filter((obj) => obj.bundle.length === 3);
-    let arr4 = filteredPayments.filter((obj) => obj.bundle.length === 4);
-    let temparr = [arr1, arr2, arr3, arr4];
-  
+    let temparr =[filteredPayments]
     doc.setFontSize(16);
     doc.setTextColor(40);
     if(type==="sale"){
@@ -1067,8 +1065,6 @@ const App = ({isOnline, userdata, setProducts,credit,upline, products,balance,se
 
     }
     
-    // doc.text(`Total of First: ${totalFirst1.toFixed(2)}`, 14, 42);
-    // doc.text(`Total of Second: ${totalSecond1.toFixed(2)}`, 84, 42);
     doc.text(`Total: ${total1.toFixed(2)}`, 14, 42);
     doc.setFontSize(10);
     if (userdata && userdata.username) {
@@ -1083,7 +1079,6 @@ const App = ({isOnline, userdata, setProducts,credit,upline, products,balance,se
     const blockWidth = 15; // Smaller width for each block
     const blockHeight = 8; // Smaller height for each block
     temparr.forEach((filteredPayments, arrIndex) => {
-      
       if(filteredPayments.length>0){
       filteredPayments.forEach((pay) => {
         totalFirst1 += parseFloat(pay.f) || 0;
@@ -1094,9 +1089,7 @@ const App = ({isOnline, userdata, setProducts,credit,upline, products,balance,se
     })
     
     doc.setFontSize(12);
-    // doc.text(`Total of First: ${totalFirst1.toFixed(2)}`, 14, startY);
-    // doc.text(`Total of Second: ${totalSecond1.toFixed(2)}`, 84, startY);
-    // doc.text(`Total: ${total1.toFixed(2)}`, 154, startY);
+    
     startY += 10; // Add some spacing before the totals
     temparr.forEach((filteredPayments, arrIndex) => {
       
@@ -1154,12 +1147,19 @@ const App = ({isOnline, userdata, setProducts,credit,upline, products,balance,se
         doc.setDrawColor(75, 0, 130); // Dark blue/purplish border
         doc.setTextColor(0, 0, 0); // White text
         doc.rect(startX, startY, blockWidth, blockHeight, 'FD');
+        doc.setFont(undefined, 'bold')
         doc.text(pay.bundle.toString(), startX + blockWidth / 2, startY + blockHeight / 2, { align: 'center' });
-  
+        doc.setFont(undefined, 'normal');
         // Draw f block with dark blue/purplish border
         doc.setFillColor(255, 255, 255); // White background
         doc.setDrawColor(75, 0, 130); // Dark blue/purplish border
         doc.rect(startX + blockWidth, startY, blockWidth, blockHeight, 'FD');
+        if(type==="oversale"){
+          doc.setTextColor(255, 0, 0); // Red text
+        }
+       
+       
+             
         doc.text(pay.f.toString(), startX + blockWidth + blockWidth / 2, startY + blockHeight / 2, { align: 'center' });
   
         // Draw s block with dark blue/purplish border
@@ -1167,7 +1167,7 @@ const App = ({isOnline, userdata, setProducts,credit,upline, products,balance,se
         doc.setDrawColor(75, 0, 130); // Dark blue/purplish border
         doc.rect(startX + 2 * blockWidth, startY, blockWidth, blockHeight, 'FD');
         doc.text(pay.s.toString(), startX + 2 * blockWidth + blockWidth / 2, startY + blockHeight / 2, { align: 'center' });
-  
+        doc.setTextColor(0, 0, 0); // Black text
         // Move to the next block position
         startX += 3 * blockWidth;
   
@@ -1391,6 +1391,7 @@ const App = ({isOnline, userdata, setProducts,credit,upline, products,balance,se
     doc.save(`${sheetname}.pdf`);
   };
   const handleDownlaodSheet=async()=>{
+    setSheetsaveloader(true)
     setLoading(true)
     let sheetcreated=null
     try {
@@ -1423,7 +1424,6 @@ const App = ({isOnline, userdata, setProducts,credit,upline, products,balance,se
         setOverSaledetail([])
         setSheetname("")
         setSheetModal(false)
-        console.log(completedraw)
         const response1 = await fetch(`${linkurl}/report/getSalesBySheet`, {
           method: 'POST',
           headers: {
@@ -1454,10 +1454,11 @@ const App = ({isOnline, userdata, setProducts,credit,upline, products,balance,se
     }catch(error){
       alert(error.message)
     }
-
+    setSheetsaveloader(false)
     setLoading(false)
   }
 const handleSheetSave=async()=>{
+  setSheetsaveloader(true)
   const token = localStorage.getItem('token');
 
   if (!token) {
@@ -1486,6 +1487,7 @@ const handleSheetSave=async()=>{
     setOverSaledetail([])
     setSheetname("")
     setSheetModal(false)
+    setSheetsaveloader(false)
   }else{
 
   }
@@ -2125,7 +2127,7 @@ const InputSection = () => {
   <p style={{
     zIndex: 9999,
     color: "green",
-    marginTop: -30,
+    marginTop: -10,
     marginLeft: 50
   }}>
     {"Draw : "+completedraw.title+" "+completedraw.date+" "+completedraw.time}
@@ -2243,7 +2245,7 @@ const InputSection = () => {
   </Col>
   <Col xs={4} sm={4}>
   <div style={{display:'flex',flexDirection:'column'}}>
-  <p style={{marginLeft:50,marginTop:20,marginBottom:10,color:'green',zIndex:99}}>{value.a}</p>
+  <p style={{marginLeft:30,marginTop:20,marginBottom:10,color:'green',zIndex:99}}>{value.a}</p>
   <Form.Item style={{ marginLeft: 10 }} >
     <Input id='2' value={inputValue1} placeholder='F'
       readOnly={isReadOnly} // Dynamically set readOnly based on screen width
@@ -2271,7 +2273,7 @@ const InputSection = () => {
   </Col>
   <Col xs={4} sm={4}>
   <div style={{display:'flex',flexDirection:'column'}}>
-  <p style={{marginLeft:60,marginTop:20,marginBottom:10,color:'green',zIndex:99}}>{value.b}</p>
+  <p style={{marginLeft:40,marginTop:20,marginBottom:10,color:'green',zIndex:99}}>{value.b}</p>
   <Form.Item style={{ marginLeft: 15,zIndex:99 }}>
       <Input
       id="3"
@@ -2564,6 +2566,7 @@ const InputSection = () => {
           <Button
             key="dedlete"
             type="danger"
+            disabled={sheetsaveloader}
             onClick={handleDownlaodSheet}
             icon={<CloudDownloadOutlined />}
             style={{
@@ -2577,6 +2580,7 @@ const InputSection = () => {
           <Button
             key="delete"
             type="danger"
+            disabled={sheetsaveloader}
             onClick={handleSheetSave}
             icon={<SaveFilled />}
             style={{
@@ -2692,7 +2696,7 @@ const InputSection = () => {
               >
                 Download
               </Button>
-              {selectedRowKeys1 && selectedRowKeys1.length > 0 && <Button onClick={() => setDeleteConfirmationVisible1(true)} type="primary">Delete</Button>}{' '}
+              {selectedRowKeys1 && selectedRowKeys1.length > 0 && <Button onClick={() => setDeleteConfirmationVisible1(true)} type="primary" danger>Delete</Button>}{' '}
               <Table
             columns={columns}
             dataSource={oversaletotal}
