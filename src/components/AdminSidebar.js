@@ -60,7 +60,7 @@ const SidebarDrawer = (props) => {
             <div style={{ padding: '16px', background: 'white' }}>
               <Avatar size={64} src={imageUrl} icon={<UserOutlined />} />
               <Title level={4}>{Info.name}</Title>
-              {props.userdata  && (<Title level={4}>User : {props.userdata.username}</Title>)}
+              {props.userdata  && (<Title level={4}>User : {props.userdata.name}</Title>)}
             </div>
             <Menu
               theme="dark"
