@@ -572,7 +572,7 @@ const getExpiredOrNot=(users)=>{
         Balance Updated
       </Button>
       {" "}
-      <Button  
+   {/*   <Button  
       onClick={updateBalanceReverse}
       style={{
             borderRadius:10,
@@ -581,7 +581,7 @@ const getExpiredOrNot=(users)=>{
                       }}
                       icon={<SaveFilled/>}>
         Reverse Balance
-      </Button>
+      </Button> */}
     </Form.Item>
 
       {/* Success Modal */}

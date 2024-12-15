@@ -1240,7 +1240,15 @@ const App = ({isOnline, userdata, setProducts,credit,upline, products,balance,se
   
     doc.setFontSize(16);
     doc.setTextColor(40);
-    doc.text('Save Sheet', 14, 22);
+    if(i===0){
+      doc.text('Save Sheet', 14, 22);
+    }else{
+      
+      doc.setTextColor(255, 0, 0); // Red text
+      doc.text('Over Sale Save Sheet', 14, 22);
+      doc.setTextColor(40);
+    }
+    
   
     doc.setFontSize(10);
     if (userdata && userdata.username) {
@@ -1374,6 +1382,8 @@ const App = ({isOnline, userdata, setProducts,credit,upline, products,balance,se
       doc.text(`Total of Second: ${totalSecond1.toFixed(2)}`, 84, startY);
       doc.text(`Total: ${total1.toFixed(2)}`, 154, startY);
     }else{
+      
+      doc.setTextColor(255, 0, 0); // Red text
       doc.text(`Total of First: ${totalFirst2.toFixed(2)}`, 14, startY);
     doc.text(`Total of Second: ${totalSecond2.toFixed(2)}`, 84, startY);
     doc.text(`Total: ${total2.toFixed(2)}`, 154, startY);

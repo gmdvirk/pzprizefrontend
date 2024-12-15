@@ -299,9 +299,8 @@ const AddProductForm = ({userdata,draws, setProducts,products}) => {
                         
                       {draws.map((obj)=>{
                         return(
-                          <>
-                        {(getExpiredOrNot(obj)!=="active")&&  <Option style={{color:getExpiredOrNot(obj)==="active"?"green":'red'}} value={obj.date}>{obj.title+"---"+obj.date+"--"+getExpiredOrNot(obj)}</Option>}
-                       </>
+                          <Option style={{color:getExpiredOrNot(obj)==="active"?"green":'red'}} value={obj.date}>{obj.title+"---"+obj.date+"--"+getExpiredOrNot(obj)}</Option>
+                
                         )
                       })  }
                        </Select>

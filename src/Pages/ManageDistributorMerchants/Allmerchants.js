@@ -522,7 +522,7 @@ const handleLoginasanother =(record)=>{
                 <p>Credit:{completeuserdata.payment.credit}</p>
               </Col>
               <Col xs={12} sm={12} md={6}>
-                <p style={{color:completeuserdata.payment.balanceupline>0?"green":'red'}}>Balance Upline: {completeuserdata.payment.balanceupline}</p>
+                <p style={{color:completeuserdata.payment.balanceupline>0?"green":'red'}}>Balance Upline: {completeuserdata.payment.balanceupline.toFixed(2)}</p>
               </Col>
               <Col xs={12} sm={12} md={6}>
                 <p>Available Balance:{completeuserdata.payment.availablebalance}</p>

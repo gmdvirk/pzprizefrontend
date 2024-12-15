@@ -21,14 +21,14 @@ const AddProductForm = ({draws,sheets,userdata, setProducts,products}) => {
     let filteredPayments = [
       ...arr
     ];
-    let arr1 = filteredPayments.filter((obj) => obj.bundle.length === 1);
-    let arr2 = filteredPayments.filter((obj) => obj.bundle.length === 2);
-    let arr3 = filteredPayments.filter((obj) => obj.bundle.length === 3);
-    let arr4 = filteredPayments.filter((obj) => obj.bundle.length === 4);
+    // let arr1 = filteredPayments.filter((obj) => obj.bundle.length === 1);
+    // let arr2 = filteredPayments.filter((obj) => obj.bundle.length === 2);
+    // let arr3 = filteredPayments.filter((obj) => obj.bundle.length === 3);
+    // let arr4 = filteredPayments.filter((obj) => obj.bundle.length === 4);
     let totalFirst1 = 0;
     let totalSecond1 = 0;
     let total1 = 0;
-    let temparr = [arr1, arr2, arr3, arr4];
+    let temparr = [filteredPayments];
     const doc = new jsPDF();
   
     doc.setFontSize(16);
@@ -229,15 +229,23 @@ const AddProductForm = ({draws,sheets,userdata, setProducts,products}) => {
     // doc.text(`Total of Second: ${totalSecondf.toFixed(2)}`, 84, 42);
     doc.text(`Total: ${totalf.toFixed(2)}`, 14, 42);
     for (let i=0;i<2;i++){
-    let arr1 = filteredPayments.filter((obj) => obj.bundle.length === 1);
-    let arr2 = filteredPayments.filter((obj) => obj.bundle.length === 2);
-    let arr3 = filteredPayments.filter((obj) => obj.bundle.length === 3);
-    let arr4 = filteredPayments.filter((obj) => obj.bundle.length === 4);
-    let temparr = [arr1, arr2, arr3, arr4];
+    // let arr1 = filteredPayments.filter((obj) => obj.bundle.length === 1);
+    // let arr2 = filteredPayments.filter((obj) => obj.bundle.length === 2);
+    // let arr3 = filteredPayments.filter((obj) => obj.bundle.length === 3);
+    // let arr4 = filteredPayments.filter((obj) => obj.bundle.length === 4);
+    let temparr = [filteredPayments];
   
     doc.setFontSize(16);
+
     doc.setTextColor(40);
-    doc.text('Save Sheet Report', 14, 22);
+    if(i===0){
+      doc.text('Save Sheet Report ', 14, 22);
+    }else{
+      
+      doc.setTextColor(255, 0, 0); // Red text
+      doc.text('Over Sale Save Sheet', 14, 22);
+      doc.setTextColor(40);
+    }
   
     doc.setFontSize(10);
     if (userdata && userdata.username) {
@@ -388,6 +396,7 @@ const AddProductForm = ({draws,sheets,userdata, setProducts,products}) => {
      if(i===0){
        doc.text(`Total : ${total1}`, 134, startY);
      }else{
+      doc.setTextColor(255, 0, 0); // Red text
        
        doc.text(`Total : ${total2}`, 134, startY);
      }
