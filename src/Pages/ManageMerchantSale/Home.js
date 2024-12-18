@@ -2274,10 +2274,10 @@ const InputSection = () => {
   id="1"
   inputMode="numeric" 
   pattern="[0-9]*" 
-  readOnly={isReadOnly}
+  // readOnly={isReadOnly}
   value={inputValue}
   placeholder="No"
-  onKeyDown={(e) => handleKeyDown(e, '1')}
+  onKeyDown={(e) => handleKeyDown1(e, '1')}
   onFocus={(e) => {
     e.target.select();
     setActiveInput('1');
@@ -2312,9 +2312,9 @@ const InputSection = () => {
     <Input id='2'
     inputMode="numeric" 
     pattern="[0-9]*" 
-    onKeyDown={(e) => handleKeyDown(e, '2')}
+    onKeyDown={(e) => handleKeyDown1(e, '2')}
     value={inputValue1} placeholder='F'
-      readOnly={isReadOnly} // Dynamically set readOnly based on screen width
+      // readOnly={isReadOnly} // Dynamically set readOnly based on screen width
      onFocus={(e) => {
       e.target.select(); 
       setActiveInput('2')}}
@@ -2343,8 +2343,8 @@ const InputSection = () => {
   <Form.Item style={{ marginLeft: 15,zIndex:99 }}>
       <Input
       id="3"
-      onKeyDown={(e) => handleKeyDown(e, '3')}
-      readOnly={isReadOnly} // Dynamically set readOnly based on screen width
+      onKeyDown={(e) => handleKeyDown1(e, '3')}
+      // readOnly={isReadOnly} // Dynamically set readOnly based on screen width
       value={inputValue2}
       inputMode="numeric" 
   pattern="[0-9]*" 
