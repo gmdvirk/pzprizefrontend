@@ -2052,6 +2052,55 @@ const FastInput = memo(({
     </div>
   );
 });
+const handleKeyDown = (e, currentId) => {
+  // Trigger when user presses Enter or tries to move to next field
+  if (e.key === 'Enter' || e.key === 'Tab') {
+    e.preventDefault(); // Prevent normal tabbing if desired
+    switch (currentId) {
+      case '4':
+        // Move focus to input '5'
+        document.getElementById('5').focus();
+        break;
+      case '5':
+        // Move focus to input '6'
+        document.getElementById('6').focus();
+        break;
+      case '6':
+        // If on last input ('6'), cycle back to first ('4')
+        document.getElementById('4').focus();
+        break;
+      default:
+        break;
+    }
+  }
+};
+const handleKeyDown1 = (e, currentId) => {
+  // Trigger when user presses Enter or tries to move to next field
+  if (e.key === 'Enter' || e.key === 'Tab') {
+    e.preventDefault(); // Prevent normal tabbing if desired
+    switch (currentId) {
+      case '1':
+        // Move focus to input '5'
+        document.getElementById('2').focus();
+        setActiveInput('2')
+
+        break;
+      case '2':
+        // Move focus to input '6'
+        document.getElementById('3').focus();
+        setActiveInput('3')
+        break;
+      case '3':
+        // If on last input ('6'), cycle back to first ('4')
+        document.getElementById('1').focus();
+        setActiveInput('1')
+        onFinish();
+        break;
+      default:
+        break;
+    }
+  }
+};
 
 // Use the optimized components in your layout
 const InputSection = () => {
@@ -2223,9 +2272,12 @@ const InputSection = () => {
   <Form.Item style={{ marginTop: 10, marginLeft: 5 }}>
   <Input
   id="1"
+  inputMode="numeric" 
+  pattern="[0-9]*" 
   readOnly={isReadOnly}
   value={inputValue}
   placeholder="No"
+  onKeyDown={(e) => handleKeyDown(e, '1')}
   onFocus={(e) => {
     e.target.select();
     setActiveInput('1');
@@ -2257,7 +2309,11 @@ const InputSection = () => {
   <div style={{display:'flex',flexDirection:'column'}}>
   <p style={{marginLeft:30,marginTop:20,marginBottom:10,color:'green',zIndex:99}}>{value.a}</p>
   <Form.Item style={{ marginLeft: 10 }} >
-    <Input id='2' value={inputValue1} placeholder='F'
+    <Input id='2'
+    inputMode="numeric" 
+    pattern="[0-9]*" 
+    onKeyDown={(e) => handleKeyDown(e, '2')}
+    value={inputValue1} placeholder='F'
       readOnly={isReadOnly} // Dynamically set readOnly based on screen width
      onFocus={(e) => {
       e.target.select(); 
@@ -2287,8 +2343,11 @@ const InputSection = () => {
   <Form.Item style={{ marginLeft: 15,zIndex:99 }}>
       <Input
       id="3"
+      onKeyDown={(e) => handleKeyDown(e, '3')}
       readOnly={isReadOnly} // Dynamically set readOnly based on screen width
       value={inputValue2}
+      inputMode="numeric" 
+  pattern="[0-9]*" 
       placeholder="S"
       onFocus={(e) => {
         e.target.select();
@@ -2459,7 +2518,7 @@ const InputSection = () => {
     </div>
 </div> */}
 
-<Keyboard/>
+{/* <Keyboard/> */}
       <Modal
           title="Confirm Deletion"
           visible={deleteConfirmationVisible}
@@ -2728,7 +2787,7 @@ const InputSection = () => {
           />
           <Form style={{zIndex:99999}}>
           <Row gutter={6}>
-               <Col xs={4} sm={4}>
+               {/* <Col xs={4} sm={4}>
   <Form.Item >
     <Input id='4' inputMode="numeric" 
   pattern="[0-9]*" 
@@ -2766,7 +2825,66 @@ const InputSection = () => {
         marginLeft:40
       }} />
   </Form.Item>
-  </Col>
+  </Col> */}
+   <Col xs={4} sm={4}>
+        <Form.Item>
+          <Input
+            id='4'
+            inputMode="numeric"
+            pattern="[0-9]*"
+            value={inputValue4}
+            placeholder='No'
+            onFocus={(e) => {
+              e.target.select();
+              setActiveInput('4');
+            }}
+            onKeyDown={(e) => handleKeyDown(e, '4')}
+            onChange={handleInputChange4 }
+            className="custom-input"
+          />
+        </Form.Item>
+      </Col>
+      <Col xs={4} sm={4}>
+        <Form.Item>
+          <Input
+            id='5'
+            inputMode="numeric"
+            pattern="[0-9]*"
+            value={ inputValue5 }
+            placeholder='f'
+            onFocus={(e) => {
+              e.target.select();
+              setActiveInput('5');
+            }}
+            onKeyDown={(e) => handleKeyDown(e, '5')}
+            onChange={handleInputChange5}
+            className="custom-input"
+            style={{ marginLeft: 20 }}
+          />
+        </Form.Item>
+      </Col>
+      <Col xs={4} sm={4}>
+        <Form.Item>
+          <Input
+            id='6'
+            inputMode="numeric"
+            pattern="[0-9]*"
+            value={inputValue6 }
+            placeholder='s'
+            onFocus={(e) => {
+              e.target.select();
+              setActiveInput('6');
+            }}
+            onKeyDown={(e) => handleKeyDown(e, '6')}
+            onChange={ handleInputChange6 }
+            className="custom-input"
+            style={{
+              zIndex: 9999,
+              marginLeft: 40
+            }}
+          />
+        </Form.Item>
+      </Col>
   <Col xs={4} sm={4}>
   <Form.Item>
     <Button style={{height:30,marginTop:0,marginLeft:70,zIndex:999}} onClick={onFinish1} type="primary">
