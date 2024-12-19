@@ -11,7 +11,7 @@ const Statisticscard = ({data}) => {
     for(let i=0;i<data.length;i++){
         temp=temp+Number(data[i].payment.balanceupline )
     }
-    return temp
+    return temp.toFixed(2)
   }
   return (
     <div style={{ padding: '24px' }}>

@@ -96,32 +96,81 @@ const AddProductForm = ({draws,userdata, setProducts,products}) => {
 
     doc.setFontSize(14);
 
-    const columns = [
-        { header: 'Username', dataKey: 'username' },
-        { header: 'Grand Total', dataKey: 'grandTotal' },
-        { header: 'Commission', dataKey: 'commissionAmountTotal' },
-        { header: 'Safi Total', dataKey: 'safitotal' },
-        { header: 'Prize', dataKey: 'totalPrizes' },
-        { header: 'Net Total', dataKey: 'nettotal' }
-    ];
+    // const columns = [
+    //     { header: 'Username', dataKey: 'username' },
+    //     { header: 'Grand Total', dataKey: 'grandTotal' },
+    //     { header: 'Commission', dataKey: 'commissionAmountTotal' },
+    //     { header: 'Safi Total', dataKey: 'safitotal' },
+    //     { header: 'Prize', dataKey: 'totalPrizes' },
+    //     { header: 'Net Total', dataKey: 'nettotal' }
+    // ];
 
-    const rows = dataarr;
+    // const rows = dataarr;
 
-    // Generate the table
-    doc.autoTable({
-        columns: columns,
-        body: rows,
-        startY: 45,
-        didParseCell: (data) => {
-            // Make the first row bold
-            if (data.row.index === 0 && data.section === 'body') {
-                data.cell.styles.fontStyle = 'bold';
-            }
-        },
-        didDrawPage: (data) => {
-            footer(doc.internal.getNumberOfPages());
-        }
-    });
+    // // Generate the table
+    // doc.autoTable({
+    //     columns: columns,
+    //     body: rows,
+    //     startY: 45,
+    //     didParseCell: (data) => {
+    //         // Make the first row bold
+    //         if (data.row.index === 0 && data.section === 'body') {
+    //             data.cell.styles.fontStyle = 'bold';
+    //         }
+    //     },
+    //     didDrawPage: (data) => {
+    //         footer(doc.internal.getNumberOfPages());
+    //     }
+    // });
+    // Define the table columns and rows
+const columns = [
+  { header: 'Username', dataKey: 'username' },
+  { header: 'Grand Total', dataKey: 'grandTotal' },
+  { header: 'Commission', dataKey: 'commissionAmountTotal' },
+  { header: 'Safi Total', dataKey: 'safitotal' },
+  { header: 'Prize', dataKey: 'totalPrizes' },
+  { header: 'Net Total', dataKey: 'nettotal' },
+];
+
+const rows = dataarr;
+
+// Generate the table
+doc.autoTable({
+  columns: columns,
+  body: rows,
+  startY: 50,
+  showHead: 'firstPage',
+  didDrawPage: (data) => {
+    // Footer
+    footer(doc.internal.getNumberOfPages());
+  },
+  styles: {
+    lineColor: [0, 0, 0], // Black color for borders
+    lineWidth: 0.1, // Thin border
+    fontStyle: 'bold', // Make all text bold
+  },
+  bodyStyles: {
+    lineColor: [0, 0, 0], // Black color for row borders
+    lineWidth: 0.1, // Thin border for rows
+  },
+  headStyles: {
+    fillColor: [240, 240, 240], // Light gray background for header
+    textColor: [0, 0, 0], // Black text for header
+    lineColor: [0, 0, 0], // Black border for header
+    lineWidth: 0.1, // Thin border for header
+    fontStyle: 'bold', // Make header text bold (in case it's not inherited from styles)
+  },
+  didParseCell: function(data) {
+    if (data.section === 'body' && data.column.dataKey === 'nettotal') {
+      const value = parseFloat(data.cell.raw);
+      if (value >= 0) {
+        data.cell.styles.textColor = [0, 128, 0]; // Green for positive values
+      } else {
+        data.cell.styles.textColor = [255, 0, 0]; // Red for negative values
+      }
+    }
+  }
+});
 
     // Add the total net total to the PDF
     doc.setFontSize(12);

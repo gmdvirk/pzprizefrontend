@@ -237,12 +237,12 @@ const AddProductForm = ({ userdata,setProducts,draws,products}) => {
       const nettotal = grandTotal - pcPercentageAmount - commissionAmount- Number(totalPrizes);
       const name = report.name
       const username=report.username
-  
+      const commissionAmountTotal=Number(commissionAmount.toFixed(2))+Number(pcPercentageAmount.toFixed(2))
       dataarr.push({
         commissionValue,
         commissionAmount: commissionAmount.toFixed(2),
         pcPercentageAmount: pcPercentageAmount.toFixed(2),
-        commissionAmountTotal:Number(commissionAmount.toFixed(2))+Number(pcPercentageAmount.toFixed(2)),
+        commissionAmountTotal:commissionAmountTotal.toFixed(2),
         pcPercentageValue,
         grandTotal: grandTotal.toFixed(2),
         safitotal: safitotal.toFixed(2),
@@ -252,9 +252,14 @@ const AddProductForm = ({ userdata,setProducts,draws,products}) => {
         username
       });
     });
+      // Calculate total net total excluding the first row
+      let totalNetTotal = 0;
+      for (let i = 1; i < dataarr.length; i++) {
+          totalNetTotal += parseFloat(dataarr[i].nettotal);
+      }
   
     // Add header to PDF
-    // Add header to PDF
+ 
     doc.setFontSize(10);
     doc.text(`Draw: ${drawdate.date}`, 150, 30);
     doc.text(`Draw Title: ${drawdate.title}`, 14, 35);
@@ -264,32 +269,86 @@ const AddProductForm = ({ userdata,setProducts,draws,products}) => {
     doc.setFontSize(14);
   
     // Define the table columns and rows
-    const columns = [
-      // { header: 'Name', dataKey: 'name' },
-      { header: 'Username', dataKey: 'username' },
-      { header: 'Grand Total', dataKey: 'grandTotal' },
-      // { header: 'Commission Value', dataKey: 'commissionValue' },
-      { header: 'Commission', dataKey: 'commissionAmountTotal' },
-      { header: 'Safi Total', dataKey: 'safitotal' },
-      // { header: 'PC Percentage', dataKey: 'pcPercentageAmount' },
-      { header: 'Prize', dataKey: 'totalPrizes' },
-      { header: 'Net Total', dataKey: 'nettotal' },
-    ];
+    // const columns = [
+    //   // { header: 'Name', dataKey: 'name' },
+    //   { header: 'Username', dataKey: 'username' },
+    //   { header: 'Grand Total', dataKey: 'grandTotal' },
+    //   // { header: 'Commission Value', dataKey: 'commissionValue' },
+    //   { header: 'Commission', dataKey: 'commissionAmountTotal' },
+    //   { header: 'Safi Total', dataKey: 'safitotal' },
+    //   // { header: 'PC Percentage', dataKey: 'pcPercentageAmount' },
+    //   { header: 'Prize', dataKey: 'totalPrizes' },
+    //   { header: 'Net Total', dataKey: 'nettotal' },
+    // ];
   
-    const rows = dataarr;
+    // const rows = dataarr;
   
-    // Generate the table
-    doc.autoTable({
-      columns: columns,
-      body: rows,
-      startY: 50,
-      showHead: 'firstPage',
-      didDrawPage: (data) => {
-        // Footer
-        footer(doc.internal.getNumberOfPages());
-      },
-    });
-  
+    // // Generate the table
+    // doc.autoTable({
+    //   columns: columns,
+    //   body: rows,
+    //   startY: 50,
+    //   showHead: 'firstPage',
+    //   didDrawPage: (data) => {
+    //     // Footer
+    //     footer(doc.internal.getNumberOfPages());
+    //   },
+    // });
+  // Define the table columns and rows
+// Define the table columns and rows
+const columns = [
+  { header: 'Username', dataKey: 'username' },
+  { header: 'Grand Total', dataKey: 'grandTotal' },
+  { header: 'Commission', dataKey: 'commissionAmountTotal' },
+  { header: 'Safi Total', dataKey: 'safitotal' },
+  { header: 'Prize', dataKey: 'totalPrizes' },
+  { header: 'Net Total', dataKey: 'nettotal' },
+];
+
+const rows = dataarr;
+
+// Generate the table
+doc.autoTable({
+  columns: columns,
+  body: rows,
+  startY: 50,
+  showHead: 'firstPage',
+  didDrawPage: (data) => {
+    // Footer
+    footer(doc.internal.getNumberOfPages());
+  },
+  styles: {
+    lineColor: [0, 0, 0], // Black color for borders
+    lineWidth: 0.1, // Thin border
+    fontStyle: 'bold', // Make all text bold
+  },
+  bodyStyles: {
+    lineColor: [0, 0, 0], // Black color for row borders
+    lineWidth: 0.1, // Thin border for rows
+  },
+  headStyles: {
+    fillColor: [240, 240, 240], // Light gray background for header
+    textColor: [0, 0, 0], // Black text for header
+    lineColor: [0, 0, 0], // Black border for header
+    lineWidth: 0.1, // Thin border for header
+    fontStyle: 'bold', // Make header text bold (in case it's not inherited from styles)
+  },
+  didParseCell: function(data) {
+    if (data.section === 'body' && data.column.dataKey === 'nettotal') {
+      const value = parseFloat(data.cell.raw);
+      if (value >= 0) {
+        data.cell.styles.textColor = [0, 128, 0]; // Green for positive values
+      } else {
+        data.cell.styles.textColor = [255, 0, 0]; // Red for negative values
+      }
+    }
+  }
+});
+   // Add header to PDF
+   doc.text(`Party Bill: ${dataarr[0].nettotal }`, 14, doc.lastAutoTable.finalY + 10);
+   doc.text(`All Dealers Bill: ${totalNetTotal.toFixed(2)}`, 14, doc.lastAutoTable.finalY + 15);
+   doc.text(`Profit/Loss: ${totalNetTotal.toFixed(2) - dataarr[0].nettotal}`, 14, doc.lastAutoTable.finalY + 20);
+
     // Save the PDF
     doc.save('bill_sheet_report.pdf');
   };

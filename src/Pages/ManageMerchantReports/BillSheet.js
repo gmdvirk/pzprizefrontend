@@ -271,66 +271,60 @@ const generatePDFReport = (data) => {
     const totalCommission = commissionAmount + pcPercentageAmount;
     const safiSale = totalSales - totalCommission;
     const billAmount = safiSale - totalPrizes;
-
-    // Summary Table with Conditional Coloring for 'Bill'
-    doc.autoTable({
-      startY: doc.autoTable.previous.finalY + 10,
-      head: [['Description', 'Amount']],
-      body: [
-        ['Safa+Akra+tndola Sale', totalF + totalS],
-        ['Pc Sale', totalFfour + totalSfour],
-        ['Total Sale', totalSales],
-        ['Total Commission', totalCommission.toFixed(2)],
-        ['Safi Sale', safiSale.toFixed(2)],
-        ['Total Prizes', totalPrizes.toFixed(2)],
-        ['Bill', billAmount.toFixed(2)]
-      ],
-      theme: 'striped',
-      styles: {
-        fontSize: 10,
-        textColor: 80,
-      },
-      headStyles: {
-        fillColor: [200, 200, 200],
-        textColor: 40,
-        fontSize: 11,
-        halign: 'left',
-      },
-      columnStyles: {
-        0: { halign: 'left', fontStyle: 'bold',cellWidth: 50  },
-        1: { halign: 'left',cellWidth: 50  }
-      },
-      tableWidth: 'auto',
-      didParseCell: function (data) {
-        // Identify the 'Bill' row by the Description column
-        if (data.section === 'body') {
-          const description = data.row.raw[0];
-          if (description === 'Bill') {
-            const amount = parseFloat(data.cell.text);
-            if (amount < 0) {
-              data.cell.styles.textColor = [255, 0, 0]; // Red
-            } else {
-              data.cell.styles.textColor = [0, 128, 0]; // Green
-            }
-          }else{
-            if(report.id===userdata._id){
-              // doc.setTextColor(0, 0, 255); // Blue text
-              data.cell.styles.textColor=[0,0,255]
-            }
-            else if(report.role==="merchant"){
-              // doc.setTextColor(0, 0, 0); // Blue text
-              data.cell.styles.textColor=[0,0,0]
-            }
-            else if(report.role==="distributor" ||report.role==="subdistributor" ){
-              // doc.setTextColor(255, 0, 0); // Blue text
-              data.cell.styles.textColor=[255,0,0]
-            }
-      
-          }
+// Summary Table with Conditional Coloring for 'Bill'
+doc.autoTable({
+  startY: doc.autoTable.previous.finalY + 10,
+  head: [['Description', 'Amount']],
+  body: [
+    ['Safa+Akra+tndola Sale', totalF + totalS],
+    ['Pc Sale', totalFfour + totalSfour],
+    ['Total Sale', totalSales],
+    ['Total Commission', totalCommission.toFixed(2)],
+    ['Safi Sale', safiSale.toFixed(2)],
+    ['Total Prizes', totalPrizes.toFixed(2)],
+    ['Bill', billAmount.toFixed(2)]
+  ],
+  theme: 'striped',
+  styles: {
+    fontSize: 12, // Increased from 10 to 12
+    textColor: 80,
+  },
+  headStyles: {
+    fillColor: [200, 200, 200],
+    textColor: 40,
+    fontSize: 14, // Increased from 11 to 14
+    halign: 'left',
+  },
+  columnStyles: {
+    0: { halign: 'left', fontStyle: 'bold' },
+    1: { halign: 'left' }
+  },
+  tableWidth: 'auto',
+  didParseCell: function (data) {
+    // Identify the 'Bill' row by the Description column
+    if (data.section === 'body') {
+      const description = data.row.raw[0];
+      if (description === 'Bill') {
+        const amount = parseFloat(data.cell.text);
+        if (amount < 0) {
+          data.cell.styles.textColor = [255, 0, 0]; // Red
+        } else {
+          data.cell.styles.textColor = [0, 128, 0]; // Green
+        }
+      } else {
+        if(report.id === userdata._id){
+          data.cell.styles.textColor = [0, 0, 255]; // Blue text
+        }
+        else if(report.role === "merchant"){
+          data.cell.styles.textColor = [0, 0, 0]; // Black text
+        }
+        else if(report.role === "distributor" || report.role === "subdistributor"){
+          data.cell.styles.textColor = [255, 0, 0]; // Red text
         }
       }
-    });
-
+    }
+  }
+});
     // Add Footer
     footer(doc.internal.getNumberOfPages());
   });

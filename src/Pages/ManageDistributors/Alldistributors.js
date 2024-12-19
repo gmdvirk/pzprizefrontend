@@ -265,7 +265,7 @@ const ProductTable = ({ products, setProducts,userdata }) => {
       key: 'role',
       render: (_, record) => (
         <span style={{color:record.payment.balanceupline>0?"green":'red'}}>
-          {record.payment.balanceupline}
+          {record.payment.balanceupline.toFixed(2)}
         </span>
      
       ),

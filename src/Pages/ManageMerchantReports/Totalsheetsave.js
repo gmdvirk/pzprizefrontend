@@ -140,8 +140,9 @@ const AddProductForm = ({draws,sheets,userdata, setProducts,products}) => {
             if (!(isFirstInRed) && isFSecondInRed) {
              doc.setTextColor(0, 0, 255); // Blue text
             } 
+            doc.setFont(undefined, 'bold');
         doc.text(pay.bundle.toString(), startX + blockWidth / 2, startY + blockHeight / 2, { align: 'center' });
-  
+        doc.setFont(undefined, 'normal');
         // Draw f block with dark blue/purplish border
         doc.setFillColor(255, 255, 255); // White background
         doc.setDrawColor(75, 0, 130); // Dark blue/purplish border
@@ -347,18 +348,25 @@ const AddProductForm = ({draws,sheets,userdata, setProducts,products}) => {
             if (!(isFirstInRed) && isFSecondInRed) {
              doc.setTextColor(0, 0, 255); // Blue text
             } 
+            doc.setFont(undefined, 'bold');
         doc.text(pay.bundle.toString(), startX + blockWidth / 2, startY + blockHeight / 2, { align: 'center' });
-  
+        doc.setFont(undefined, 'normal');
         // Draw f block with dark blue/purplish border
         doc.setFillColor(255, 255, 255); // White background
         doc.setDrawColor(75, 0, 130); // Dark blue/purplish border
         doc.rect(startX + blockWidth, startY, blockWidth, blockHeight, 'FD');
+        if(i===1){
+          doc.setTextColor(255, 0, 0); // Red text
+        }
         doc.text(pay.f.toString(), startX + blockWidth + blockWidth / 2, startY + blockHeight / 2, { align: 'center' });
   
         // Draw s block with dark blue/purplish border
         doc.setFillColor(255, 255, 255); // White background
         doc.setDrawColor(75, 0, 130); // Dark blue/purplish border
         doc.rect(startX + 2 * blockWidth, startY, blockWidth, blockHeight, 'FD');
+        if(i===1){
+          doc.setTextColor(255, 0, 0); // Red text
+        }
         doc.text(pay.s.toString(), startX + 2 * blockWidth + blockWidth / 2, startY + blockHeight / 2, { align: 'center' });
   
         // Move to the next block position

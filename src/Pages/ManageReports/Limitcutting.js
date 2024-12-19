@@ -902,35 +902,18 @@ const AddProductForm = ({ userdata,draws,setProducts,products,limits}) => {
       const commissionAmount = report.comission.comission===0?report.comission.comission:(((totalF + totalS)*Number(report.comission.comission))/100);
       const pcPercentageAmount = report.comission.pcpercentage===0?report.comission.pcpercentage:(((totalFfour + totalSfour)*Number(report.comission.pcpercentage))/100);
       const pcPercentageValue = report.comission.pcpercentage;
-  
+      
       doc.setFontSize(12);
       doc.setTextColor(60, 60, 60);
-      // doc.text(`Totals:`, 14, doc.autoTable.previous.finalY + 10);
       doc.setTextColor(80, 80, 80);
-      // doc.text(`Total F: ${totalF}`, 14, doc.autoTable.previous.finalY + 15);
-      // doc.text(`Total S: ${totalS}`, 14, doc.autoTable.previous.finalY + 20);
-      // doc.text(`Grand Total: ${totalF + totalS}`, 14, doc.autoTable.previous.finalY + 20);
-      // doc.text(`Total Prizes: ${totalPrizes}`, 14, doc.autoTable.previous.finalY + 25);
-      // // doc.text(`Commission: ${commissionValue}`, 14, doc.autoTable.previous.finalY + 35);
-      // // doc.text(`PC Percentage: ${pcPercentageValue}%`, 14, doc.autoTable.previous.finalY + 40);
-      // // doc.text(`Commission Amount: ${commissionAmount }%`, 14, doc.autoTable.previous.finalY + 45);
-      // // doc.text(`PC Percentage Amount: ${pcPercentageAmount}`, 14, doc.autoTable.previous.finalY + 50);
-      // doc.text(`Total Comsission: ${pcPercentageAmount+commissionAmount}`, 14, doc.autoTable.previous.finalY + 30);
-      // doc.text(`Safi Sale: ${(totalF + totalS)-pcPercentageAmount-commissionAmount}`, 14, doc.autoTable.previous.finalY + 35);
-      // doc.text(`Net Total: ${(totalF + totalS)- Number(totalPrizes)-pcPercentageAmount-commissionAmount}`, 14, doc.autoTable.previous.finalY + 40);
       doc.text(`Total Sale: ${totalF + totalS+totalFfour+totalSfour}`, 14, doc.autoTable.previous.finalY + 25);
       doc.text(`Total Comsission: ${pcPercentageAmount+commissionAmount}`, 14, doc.autoTable.previous.finalY + 30);
-      doc.text(`Safi Sale: ${(totalF + totalS+totalFfour+totalSfour)-pcPercentageAmount-commissionAmount}`, 14, doc.autoTable.previous.finalY + 35);
+      const safeSale=(totalF + totalS+totalFfour+totalSfour)-pcPercentageAmount-commissionAmount
+      doc.text(`Safi Sale: ${safeSale.toFixed(2)}`, 14, doc.autoTable.previous.finalY + 35);
       doc.text(`Total Prizes: ${totalPrizes}`, 14, doc.autoTable.previous.finalY + 40);
       doc.text(`Bill: ${((totalF + totalS+totalFfour+totalSfour)- Number(totalPrizes)-pcPercentageAmount-commissionAmount).toFixed(2)}`, 14, doc.autoTable.previous.finalY + 45);
     
-      // doc.text(`Total Sale: ${totalF + totalS}`, 14, doc.autoTable.previous.finalY + 25);
-      // doc.text(`Total Comsission: ${pcPercentageAmount+commissionAmount}`, 14, doc.autoTable.previous.finalY + 30);
-      // doc.text(`Safi Sale: ${(totalF + totalS)-pcPercentageAmount-commissionAmount}`, 14, doc.autoTable.previous.finalY + 35);
-      // doc.text(`Total Prizes: ${totalPrizes}`, 14, doc.autoTable.previous.finalY + 40);
-      // doc.text(`Bill: ${((totalF + totalS)- Number(totalPrizes)-pcPercentageAmount-commissionAmount).toFixed(2)}`, 14, doc.autoTable.previous.finalY + 45);
-      // // doc.text(`Net Total: ${(totalF + totalS)-pcPercentageAmount-commissionAmount}`, 14, doc.autoTable.previous.finalY + 60);
-
+    
       footer(doc.internal.getNumberOfPages());
     });
   

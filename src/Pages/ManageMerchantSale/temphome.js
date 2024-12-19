@@ -824,11 +824,6 @@ const App = ({isOnline, userdata, setProducts,credit,upline, products,balance,se
     return isMultipleOfFive(value1) && isMultipleOfFive(value2);
   }
   const onFinish = async () => {
-    if(inputValue1==="0" && inputValue2==="0"){
-      setErrormessage("Both values can not be zero.")
-          showErormessage();
-          return;
-    }
     if (inputValue !== '' && inputValue1 !== '' && inputValue2 !== '' &&areMultiplesOfFive(inputValue1,inputValue2)) {
       let values = { f: Number(inputValue1), s: Number(inputValue2), salenumber:inputValue };
       const salecode = generateProductCode();
@@ -1203,7 +1198,7 @@ const App = ({isOnline, userdata, setProducts,credit,upline, products,balance,se
     doc.setFontSize(12);
   
 
-    doc.save('Oversale Report.pdf');
+    doc.save('payment_report.pdf');
   };
   const downloadinvoice1 = (arr, values) => {
     
@@ -1328,7 +1323,6 @@ const App = ({isOnline, userdata, setProducts,credit,upline, products,balance,se
           }
         }
       }
-      
   
       filteredPayments.forEach((pay) => {
         totalFirst += parseFloat(pay.f) || 0;
@@ -1340,29 +1334,18 @@ const App = ({isOnline, userdata, setProducts,credit,upline, products,balance,se
         doc.setDrawColor(75, 0, 130); // Dark blue/purplish border
         doc.setTextColor(0, 0, 0); // White text
         doc.rect(startX, startY, blockWidth, blockHeight, 'FD');
-        if(i===1){
-          doc.setTextColor(255, 0, 0); // Red text
-        }
-      
         doc.text(pay.bundle.toString(), startX + blockWidth / 2, startY + blockHeight / 2, { align: 'center' });
-       
+  
         // Draw f block with dark blue/purplish border
         doc.setFillColor(255, 255, 255); // White background
         doc.setDrawColor(75, 0, 130); // Dark blue/purplish border
         doc.rect(startX + blockWidth, startY, blockWidth, blockHeight, 'FD');
-        if(i===1){
-          doc.setTextColor(255, 0, 0); // Red text
-        }
         doc.text(pay.f.toString(), startX + blockWidth + blockWidth / 2, startY + blockHeight / 2, { align: 'center' });
   
         // Draw s block with dark blue/purplish border
         doc.setFillColor(255, 255, 255); // White background
         doc.setDrawColor(75, 0, 130); // Dark blue/purplish border
         doc.rect(startX + 2 * blockWidth, startY, blockWidth, blockHeight, 'FD');
-        if(i===1){
-          doc.setTextColor(255, 0, 0); // Red text
-        }
-
         doc.text(pay.s.toString(), startX + 2 * blockWidth + blockWidth / 2, startY + blockHeight / 2, { align: 'center' });
   
         // Move to the next block position
@@ -1861,7 +1844,7 @@ setActiveInput('1')
   return () => clearTimeout(timer); // Cleanup the timer if the component unmounts
 }, [selecteddraw]);
 const getTableHeight = () => {
-  return !isMobile ? '350px' : '460px'; // Adjust these values as needed
+  return !isMobile ? '350px' : '160px'; // Adjust these values as needed
 };
 const Keyboard = () => {
   // Memoize the number buttons layout
@@ -2069,55 +2052,6 @@ const FastInput = memo(({
     </div>
   );
 });
-const handleKeyDown = (e, currentId) => {
-  // Trigger when user presses Enter or tries to move to next field
-  if (e.key === 'Enter' || e.key === 'Tab') {
-    e.preventDefault(); // Prevent normal tabbing if desired
-    switch (currentId) {
-      case '4':
-        // Move focus to input '5'
-        document.getElementById('5').focus();
-        break;
-      case '5':
-        // Move focus to input '6'
-        document.getElementById('6').focus();
-        break;
-      case '6':
-        // If on last input ('6'), cycle back to first ('4')
-        document.getElementById('4').focus();
-        break;
-      default:
-        break;
-    }
-  }
-};
-const handleKeyDown1 = (e, currentId) => {
-  // Trigger when user presses Enter or tries to move to next field
-  if (e.key === 'Enter' || e.key === 'Tab') {
-    e.preventDefault(); // Prevent normal tabbing if desired
-    switch (currentId) {
-      case '1':
-        // Move focus to input '5'
-        document.getElementById('2').focus();
-        setActiveInput('2')
-
-        break;
-      case '2':
-        // Move focus to input '6'
-        document.getElementById('3').focus();
-        setActiveInput('3')
-        break;
-      case '3':
-        // If on last input ('6'), cycle back to first ('4')
-        document.getElementById('1').focus();
-        setActiveInput('1')
-        onFinish();
-        break;
-      default:
-        break;
-    }
-  }
-};
 
 // Use the optimized components in your layout
 const InputSection = () => {
@@ -2289,12 +2223,9 @@ const InputSection = () => {
   <Form.Item style={{ marginTop: 10, marginLeft: 5 }}>
   <Input
   id="1"
-  inputMode="numeric" 
-  pattern="[0-9]*" 
-  // readOnly={isReadOnly}
+  readOnly={isReadOnly}
   value={inputValue}
   placeholder="No"
-  onKeyDown={(e) => handleKeyDown1(e, '1')}
   onFocus={(e) => {
     e.target.select();
     setActiveInput('1');
@@ -2310,7 +2241,7 @@ const InputSection = () => {
       handleNext1()
     }
   }}
-  className="custom-input no-select no-context-menu black-border-focus no-caret"
+  className="custom-input no-select no-context-menu black-border-focus"
   style={{ 
     marginTop: 30,
     fontWeight: 'bold',
@@ -2326,38 +2257,27 @@ const InputSection = () => {
   <div style={{display:'flex',flexDirection:'column'}}>
   <p style={{marginLeft:30,marginTop:20,marginBottom:10,color:'green',zIndex:99}}>{value.a}</p>
   <Form.Item style={{ marginLeft: 10 }} >
-  <Input
-  id='2'
-  inputMode="numeric"
-  pattern="[0-9]*"
-  onKeyDown={(e) => handleKeyDown1(e, '2')}
-  value={inputValue1}
-  placeholder='F'
-  onFocus={(e) => {
-    e.target.select();
-    setActiveInput('2');
-  }}
-  onClick={(e) => {
-    e.target.select();
-    setActiveInput('2');
-  }}
-  onChange={handleInputChange1}
-  className="custom-input no-select no-context-menu black-border-focus no-caret"
-  onKeyPress={(e) => {
-    if (e.key === 'Enter') {
-      e.preventDefault();
-      handleNext1();
-    }
-  }}
-  style={{
-    marginLeft: 10,
-    height: 40,
-    marginTop: -100,
-    fontWeight: 'bold',
-    fontSize: 18,
-    caretColor: 'transparent', // This will hide the cursor
-  }}
-/>
+    <Input id='2' value={inputValue1} placeholder='F'
+      readOnly={isReadOnly} // Dynamically set readOnly based on screen width
+     onFocus={(e) => {
+      e.target.select(); 
+      setActiveInput('2')}}
+      onClick={
+        (e)=>{e.target.select(); 
+        setActiveInput('2')}}
+      onChange={handleInputChange1} className="custom-input no-select no-context-menu black-border-focus"
+      onKeyPress={(e) => {
+        if (e.key === 'Enter') {
+          e.preventDefault(); // Prevent default form submission
+          handleNext1()
+        }
+      }}
+      style={{
+        marginLeft:10,
+        height:40,
+        marginTop:-100,fontWeight:'bold' ,fontSize:18
+      }} 
+      />
   </Form.Item>
   </div>
   </Col>
@@ -2367,11 +2287,8 @@ const InputSection = () => {
   <Form.Item style={{ marginLeft: 15,zIndex:99 }}>
       <Input
       id="3"
-      onKeyDown={(e) => handleKeyDown1(e, '3')}
-      // readOnly={isReadOnly} // Dynamically set readOnly based on screen width
+      readOnly={isReadOnly} // Dynamically set readOnly based on screen width
       value={inputValue2}
-      inputMode="numeric" 
-  pattern="[0-9]*" 
       placeholder="S"
       onFocus={(e) => {
         e.target.select();
@@ -2388,7 +2305,7 @@ const InputSection = () => {
           handleNext1()
         }
       }}
-      className="custom-input no-select no-context-menu black-border-focus no-caret"
+      className="custom-input no-select no-context-menu black-border-focus"
       style={{
         marginLeft: 20,
         height:40,
@@ -2404,7 +2321,7 @@ const InputSection = () => {
   <Col xs={4} sm={4}>
   <Form.Item>
     
-    <Button style={{height:50,marginTop:40,marginLeft:50,zIndex:999,fontWeight:'bold' }} onClick={onFinish} type="primary">
+    <Button style={{height:50,marginTop:20,marginLeft:50,zIndex:999,fontWeight:'bold' }} onClick={onFinish} type="primary">
       Add
     </Button>
   </Form.Item>
@@ -2542,7 +2459,7 @@ const InputSection = () => {
     </div>
 </div> */}
 
-{/* <Keyboard/> */}
+<Keyboard/>
       <Modal
           title="Confirm Deletion"
           visible={deleteConfirmationVisible}
@@ -2811,7 +2728,7 @@ const InputSection = () => {
           />
           <Form style={{zIndex:99999}}>
           <Row gutter={6}>
-               {/* <Col xs={4} sm={4}>
+               <Col xs={4} sm={4}>
   <Form.Item >
     <Input id='4' inputMode="numeric" 
   pattern="[0-9]*" 
@@ -2849,66 +2766,7 @@ const InputSection = () => {
         marginLeft:40
       }} />
   </Form.Item>
-  </Col> */}
-   <Col xs={4} sm={4}>
-        <Form.Item>
-          <Input
-            id='4'
-            inputMode="numeric"
-            pattern="[0-9]*"
-            value={inputValue4}
-            placeholder='No'
-            onFocus={(e) => {
-              e.target.select();
-              setActiveInput('4');
-            }}
-            onKeyDown={(e) => handleKeyDown(e, '4')}
-            onChange={handleInputChange4 }
-            className="custom-input"
-          />
-        </Form.Item>
-      </Col>
-      <Col xs={4} sm={4}>
-        <Form.Item>
-          <Input
-            id='5'
-            inputMode="numeric"
-            pattern="[0-9]*"
-            value={ inputValue5 }
-            placeholder='f'
-            onFocus={(e) => {
-              e.target.select();
-              setActiveInput('5');
-            }}
-            onKeyDown={(e) => handleKeyDown(e, '5')}
-            onChange={handleInputChange5}
-            className="custom-input"
-            style={{ marginLeft: 20 }}
-          />
-        </Form.Item>
-      </Col>
-      <Col xs={4} sm={4}>
-        <Form.Item>
-          <Input
-            id='6'
-            inputMode="numeric"
-            pattern="[0-9]*"
-            value={inputValue6 }
-            placeholder='s'
-            onFocus={(e) => {
-              e.target.select();
-              setActiveInput('6');
-            }}
-            onKeyDown={(e) => handleKeyDown(e, '6')}
-            onChange={ handleInputChange6 }
-            className="custom-input"
-            style={{
-              zIndex: 9999,
-              marginLeft: 40
-            }}
-          />
-        </Form.Item>
-      </Col>
+  </Col>
   <Col xs={4} sm={4}>
   <Form.Item>
     <Button style={{height:30,marginTop:0,marginLeft:70,zIndex:999}} onClick={onFinish1} type="primary">
