@@ -101,7 +101,9 @@ const AdminHomePage = () => {
   const sidebarStyle = {
     color: 'white',
     width: '260px',
-    margin: '10px',
+    marginLeft: '10px',
+    marginRight: '10px',
+    marginTop:-10,
     borderRadius: 20,
     boxShadow: '0 4px 8px rgba(0, 0, 0, 0.3)',
     zIndex: 1,

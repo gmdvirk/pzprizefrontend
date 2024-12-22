@@ -14,6 +14,7 @@ import { Table, Button, Input, Col,Tabs,Row, Form,message, Select, Modal,Space,S
 import { BackwardFilled, CheckCircleFilled, CloseCircleFilled,CloudDownloadOutlined,SaveFilled,SearchOutlined} from '@ant-design/icons';
 import jsPDF from 'jspdf';
 import 'jspdf-autotable';
+import ScrollLock from './ScrollLock';
 import { green } from '@mui/material/colors';
 const { Option } = Select;
 const { TabPane } = Tabs;
@@ -97,8 +98,8 @@ const App = ({isOnline, userdata, setProducts,credit,upline, products,balance,se
   const [oversaledetailtotal, setOverSaledetailtotal] = useState([]);
   const [loading, setLoading] = useState(false);
   const [inputValue, setInputValue] = useState("");
-  const [inputValue1, setInputValue1] = useState('0');
-  const [inputValue2, setInputValue2] = useState('0');
+  const [inputValue1, setInputValue1] = useState('');
+  const [inputValue2, setInputValue2] = useState('');
   const [inputValue4, setInputValue4] = useState("");
   const [inputValue5, setInputValue5] = useState('0');
   const [inputValue6, setInputValue6] = useState('0');
@@ -439,15 +440,14 @@ const App = ({isOnline, userdata, setProducts,credit,upline, products,balance,se
   }
   
   const handleInputChange = (e) => {
-    if(e.target.value===''|| isNumericOnly(e.target.value)){
-      setInputValue(e.target.value);
-      if(e.target.value!=''){
-        getvalue(e.target.value)
+    const newValue = e.target.value;
+    if (newValue === '' || (isNumericOnly(newValue) && newValue.length <= 4)) {
+      setInputValue(newValue);
+      if (newValue !== '') {
+        getvalue(newValue);
       }
-      
     }
   };
-  
   // const handleInputChange3 = (e) => {
   //   setInputValue3(e.target.value);
   //   // setModalTableData(convertStringToArrayOfObjects(e.target.value))
@@ -1861,7 +1861,7 @@ setActiveInput('1')
   return () => clearTimeout(timer); // Cleanup the timer if the component unmounts
 }, [selecteddraw]);
 const getTableHeight = () => {
-  return !isMobile ? '350px' : '460px'; // Adjust these values as needed
+  return !isMobile ? '350px' : '160px'; // Adjust these values as needed
 };
 const Keyboard = () => {
   // Memoize the number buttons layout
@@ -2097,21 +2097,36 @@ const handleKeyDown1 = (e, currentId) => {
     e.preventDefault(); // Prevent normal tabbing if desired
     switch (currentId) {
       case '1':
-        // Move focus to input '5'
-        document.getElementById('2').focus();
-        setActiveInput('2')
+        if(inputValue===''){
+
+        }else{
+          // Move focus to input '5'
+          document.getElementById('2').focus();
+          setActiveInput('2')
+        }
+        
 
         break;
       case '2':
         // Move focus to input '6'
-        document.getElementById('3').focus();
+        if(inputValue1===''){
+
+        }else{
+          document.getElementById('3').focus();
         setActiveInput('3')
+        }
+        
         break;
       case '3':
-        // If on last input ('6'), cycle back to first ('4')
-        document.getElementById('1').focus();
-        setActiveInput('1')
-        onFinish();
+        if(inputValue2===''){
+
+        }else{
+// If on last input ('6'), cycle back to first ('4')
+document.getElementById('1').focus();
+setActiveInput('1')
+onFinish();
+        }
+        
         break;
       default:
         break;
@@ -2162,8 +2177,66 @@ const InputSection = () => {
     </>
   );
 };
+const isMobileKey = () => {
+  return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+};
+
+// const [isMobileDevice, setIsMobileDevice] = useState(false);
+// useEffect(() => {
+//   setIsMobileDevice(isMobileKey());
+//     // Add necessary meta tags for mobile
+//     const viewportMeta = document.createElement('meta');
+//     viewportMeta.name = 'viewport';
+//     viewportMeta.content = 'width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui';
+//     document.head.appendChild(viewportMeta);
+    
+//     // Add additional meta tag to prevent keyboard issues on iOS
+//     const mobileWebAppMeta = document.createElement('meta');
+//     mobileWebAppMeta.name = 'mobile-web-app-capable';
+//     mobileWebAppMeta.content = 'yes';
+//     document.head.appendChild(mobileWebAppMeta);
+
+//     // Add meta tag to disable autocomplete suggestions
+//     const autocompleteMetaTag = document.createElement('meta');
+//     autocompleteMetaTag.name = 'apple-mobile-web-app-capable';
+//     autocompleteMetaTag.content = 'yes';
+//     document.head.appendChild(autocompleteMetaTag);
+//     // Add meta tag to disable automatic phone number detection
+//     const formatDetectionMeta = document.createElement('meta');
+//     formatDetectionMeta.name = 'format-detection';
+//     formatDetectionMeta.content = 'telephone=no';
+//     document.head.appendChild(formatDetectionMeta);
+
+//     const preventScroll = (e) => {
+//       if (isMobileDevice()) {
+//         window.scrollTo(0, 0);
+//       }
+//     };
+
+//     window.addEventListener('scroll', preventScroll);
+//     return () => {
+//       window.removeEventListener('scroll', preventScroll);
+//       document.head.removeChild(viewportMeta);
+//     };
+//   }, []);
+   // Additional meta tag for Safari keyboard
+  //  useEffect(() => {
+  //   const keyboardAssistTag = document.createElement('meta');
+  //   keyboardAssistTag.setAttribute('name', 'disabled-adaptations');
+  //   keyboardAssistTag.setAttribute('content', 'none');
+  //   document.head.appendChild(keyboardAssistTag);
+    
+  //   return () => {
+  //     document.head.removeChild(keyboardAssistTag);
+  //   };
+  // }, []);
+
   return (
-    <div className="App">
+    <>
+    {/* <ScrollLock /> */}
+    
+    <div className="App prevent-bounce">
+      
       {loading ? (
         <div style={{ textAlign: 'center', marginTop: '50px' }}>
           <Spin size="large" />
@@ -2193,7 +2266,7 @@ const InputSection = () => {
   setCompletedraw={setCompletedraw}
   setSelectedDraw={setSelectedDraw}
 />
-     <div style={{display:'flex',flexDirection:'row',marginTop:15, borderBottom: '2px solid black'}}>
+     <div style={{display:'flex',flexDirection:'row',marginTop:15, borderBottom: '2px solid black',paddingBottom:-5}}>
       {<p style={{fontSize:14,marginLeft:10,marginRight:10}}>{userdata.username}</p>}
       {/* {<p style={{fontSize:14,marginRight:10}}>Credit : {credit}</p>} */}
       {<p style={{fontSize:14}}>Balanace : {balance}</p>}
@@ -2239,6 +2312,7 @@ const InputSection = () => {
 
 </div>
      </div>
+   
      
       <div className="table-container">
         <div className="scrollable-table-container"
@@ -2283,14 +2357,21 @@ const InputSection = () => {
       
       </div>
       <Form >
-      <Row style={{marginTop:-20}} gutter={6}>
+      <Row style={{marginTop:-25}} gutter={6}>
       <Col xs={4} sm={4}>
       <div style={{display:'flex',flexDirection:'column'}}>
-  <Form.Item style={{ marginTop: 10, marginLeft: 5 }}>
+  <Form.Item style={{ marginTop: 45, marginLeft: 5 }}>
   <Input
   id="1"
   inputMode="numeric" 
   pattern="[0-9]*" 
+          autoCapitalize="off"
+          autoCorrect="off"
+          spellCheck="false"
+          data-lpignore="true"
+          enterKeyHint="next"
+          autoComplete="off"
+          role="presentation"
   // readOnly={isReadOnly}
   value={inputValue}
   placeholder="No"
@@ -2312,10 +2393,10 @@ const InputSection = () => {
   }}
   className="custom-input no-select no-context-menu black-border-focus no-caret"
   style={{ 
-    marginTop: 30,
+    marginTop: 0,
     fontWeight: 'bold',
     fontSize: 18,
-    height: 40,
+    height: 30,
   }}
 />
 </Form.Item>
@@ -2324,12 +2405,19 @@ const InputSection = () => {
   </Col>
   <Col xs={4} sm={4}>
   <div style={{display:'flex',flexDirection:'column'}}>
-  <p style={{marginLeft:30,marginTop:20,marginBottom:10,color:'green',zIndex:99}}>{value.a}</p>
+  <p style={{marginLeft:30,marginTop:25,marginBottom:5,color:'green',zIndex:99}}>{value.a}</p>
   <Form.Item style={{ marginLeft: 10 }} >
   <Input
   id='2'
   inputMode="numeric"
   pattern="[0-9]*"
+  autoCapitalize="off"
+  autoCorrect="off"
+  spellCheck="false"
+  data-lpignore="true"
+  enterKeyHint="next"
+  autoComplete="off"
+  role="presentation"
   onKeyDown={(e) => handleKeyDown1(e, '2')}
   value={inputValue1}
   placeholder='F'
@@ -2351,7 +2439,7 @@ const InputSection = () => {
   }}
   style={{
     marginLeft: 10,
-    height: 40,
+    height: 30,
     marginTop: -100,
     fontWeight: 'bold',
     fontSize: 18,
@@ -2363,7 +2451,7 @@ const InputSection = () => {
   </Col>
   <Col xs={4} sm={4}>
   <div style={{display:'flex',flexDirection:'column'}}>
-  <p style={{marginLeft:40,marginTop:20,marginBottom:10,color:'green',zIndex:99}}>{value.b}</p>
+  <p style={{marginLeft:40,marginTop:25,marginBottom:5,color:'green',zIndex:99}}>{value.b}</p>
   <Form.Item style={{ marginLeft: 15,zIndex:99 }}>
       <Input
       id="3"
@@ -2372,6 +2460,13 @@ const InputSection = () => {
       value={inputValue2}
       inputMode="numeric" 
   pattern="[0-9]*" 
+  autoCapitalize="off"
+  autoCorrect="off"
+  spellCheck="false"
+  data-lpignore="true"
+  enterKeyHint="next"
+  autoComplete="off"
+  role="presentation"
       placeholder="S"
       onFocus={(e) => {
         e.target.select();
@@ -2391,12 +2486,13 @@ const InputSection = () => {
       className="custom-input no-select no-context-menu black-border-focus no-caret"
       style={{
         marginLeft: 20,
-        height:40,
+        height:30,
         marginTop: -100,
         fontWeight: 'bold',fontSize:18
       }}
     />
   </Form.Item>
+  
   </div>
  
   </Col>
@@ -2404,21 +2500,20 @@ const InputSection = () => {
   <Col xs={4} sm={4}>
   <Form.Item>
     
-    <Button style={{height:50,marginTop:40,marginLeft:50,zIndex:999,fontWeight:'bold' }} onClick={onFinish} type="primary">
+    <Button style={{height:45,marginTop:32,marginLeft:50,zIndex:999,fontWeight:'bold' }} onClick={onFinish} type="primary">
       Add
     </Button>
   </Form.Item>
   </Col>
   <Col xs={4} sm={4}>
   <Form.Item>
-    <Button style={{marginTop:30,marginLeft:55,fontWeight:'bold' }}onClick={handleSmsButtonClick}type="primary">
+    <Button style={{marginTop:35,marginLeft:55,fontWeight:'bold' }}onClick={handleSmsButtonClick}type="primary">
     SMS
     </Button>
   </Form.Item>
   </Col>
   </Row>
 </Form>
-     
 {/* <div className="keyboard">
    {[1, 2, 3].map((item, index) => (
   <div
@@ -2946,6 +3041,7 @@ const InputSection = () => {
       </Modal>
       </>}</>}
     </div>
+    </>
   );
 };
 
