@@ -339,18 +339,18 @@ const SidebarDrawer = (props) => {
           <Card
             style={{
               boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)',
-              marginTop: 10,
+              marginTop:  props.userdata.role === 'merchant' ?0:10,
               marginLeft: 10,
               marginRigth: 10,
               marginBottom:0,
-              height: 70,
+              height:props.userdata.role === 'merchant' ?60: 70,
             }}
           >
             <Button
               style={{
                 background: COLORS.primarygradient,
                 borderRadius: 10,
-                marginTop:-15
+                marginTop:props.userdata.role === 'merchant' ?-25:-15
               }}
               type="primary"
               icon={<MenuOutlined />}
