@@ -14,7 +14,6 @@ import { Table, Button, Input, Col,Tabs,Row, Form,message, Select, Modal,Space,S
 import { BackwardFilled, CheckCircleFilled, CloseCircleFilled,CloudDownloadOutlined,SaveFilled,SearchOutlined} from '@ant-design/icons';
 import jsPDF from 'jspdf';
 import 'jspdf-autotable';
-import ScrollLock from './ScrollLock';
 import { green } from '@mui/material/colors';
 const { Option } = Select;
 const { TabPane } = Tabs;
@@ -2013,62 +2012,8 @@ const [tableHeight, setTableHeight] = useState(getTableHeight());
 //   }
 // }, []);
 // Memoize the input components to prevent unnecessary re-renders
-const FastInput = memo(({ 
-  id, 
-  value, 
-  placeholder, 
-  isReadOnly, 
-  setActiveInput, 
-  handleChange, 
-  handleNext,
-  valueAbove 
-}) => {
-  const handleFocus = useCallback((e) => {
-    e.target.select();
-    setActiveInput(id);
-  }, [id, setActiveInput]);
 
-  const handleKeyPress = useCallback((e) => {
-    if (e.key === 'Enter') {
-      e.preventDefault();
-      handleNext();
-    }
-  }, [handleNext]);
-
-  return (
-    <div style={{display: 'flex', flexDirection: 'column'}}>
-      <p style={{
-        marginLeft: id === '2' ? 50 : 60,
-        marginTop: 20,
-        marginBottom: 10,
-        color: 'green',
-        zIndex: 99
-      }}>
-        {valueAbove}
-      </p>
-      <Form.Item style={{ marginLeft: id === '2' ? 10 : 15, zIndex: 99 }}>
-        <Input
-          id={id}
-          value={value}
-          placeholder={placeholder}
-          readOnly={isReadOnly}
-          onFocus={handleFocus}
-          onClick={handleFocus}
-          onChange={handleChange}
-          onKeyPress={handleKeyPress}
-          className="custom-input no-select no-context-menu black-border-focus"
-          style={{
-            marginLeft: id === '2' ? 10 : 20,
-            height: 40,
-            marginTop: -100,
-            fontWeight: 'bold',
-            fontSize: 18
-          }}
-        />
-      </Form.Item>
-    </div>
-  );
-});
+ 
 const handleKeyDown = (e, currentId) => {
   // Trigger when user presses Enter or tries to move to next field
   if (e.key === 'Enter' || e.key === 'Tab') {
@@ -2134,106 +2079,8 @@ onFinish();
   }
 };
 
-// Use the optimized components in your layout
-const InputSection = () => {
-  const handleInputChange1 = useCallback((e) => {
-    if(e.target.value === '' || isNumericOnly(e.target.value)) {
-      setInputValue1(e.target.value);
-    }
-  }, []);
-
-  const handleInputChange2 = useCallback((e) => {
-    if(e.target.value === '' || isNumericOnly(e.target.value)) {
-      setInputValue2(e.target.value);
-    }
-  }, []);
-
   return (
     <>
-      <Col xs={4} sm={4}>
-        <FastInput
-          id="2"
-          value={inputValue1}
-          placeholder="F"
-          isReadOnly={isReadOnly}
-          setActiveInput={setActiveInput}
-          handleChange={handleInputChange1}
-          handleNext={handleNext1}
-          valueAbove={value.a}
-        />
-      </Col>
-      <Col xs={4} sm={4}>
-        <FastInput
-          id="3"
-          value={inputValue2}
-          placeholder="S"
-          isReadOnly={isReadOnly}
-          setActiveInput={setActiveInput}
-          handleChange={handleInputChange2}
-          handleNext={handleNext1}
-          valueAbove={value.b}
-        />
-      </Col>
-    </>
-  );
-};
-const isMobileKey = () => {
-  return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-};
-
-// const [isMobileDevice, setIsMobileDevice] = useState(false);
-// useEffect(() => {
-//   setIsMobileDevice(isMobileKey());
-//     // Add necessary meta tags for mobile
-//     const viewportMeta = document.createElement('meta');
-//     viewportMeta.name = 'viewport';
-//     viewportMeta.content = 'width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui';
-//     document.head.appendChild(viewportMeta);
-    
-//     // Add additional meta tag to prevent keyboard issues on iOS
-//     const mobileWebAppMeta = document.createElement('meta');
-//     mobileWebAppMeta.name = 'mobile-web-app-capable';
-//     mobileWebAppMeta.content = 'yes';
-//     document.head.appendChild(mobileWebAppMeta);
-
-//     // Add meta tag to disable autocomplete suggestions
-//     const autocompleteMetaTag = document.createElement('meta');
-//     autocompleteMetaTag.name = 'apple-mobile-web-app-capable';
-//     autocompleteMetaTag.content = 'yes';
-//     document.head.appendChild(autocompleteMetaTag);
-//     // Add meta tag to disable automatic phone number detection
-//     const formatDetectionMeta = document.createElement('meta');
-//     formatDetectionMeta.name = 'format-detection';
-//     formatDetectionMeta.content = 'telephone=no';
-//     document.head.appendChild(formatDetectionMeta);
-
-//     const preventScroll = (e) => {
-//       if (isMobileDevice()) {
-//         window.scrollTo(0, 0);
-//       }
-//     };
-
-//     window.addEventListener('scroll', preventScroll);
-//     return () => {
-//       window.removeEventListener('scroll', preventScroll);
-//       document.head.removeChild(viewportMeta);
-//     };
-//   }, []);
-   // Additional meta tag for Safari keyboard
-  //  useEffect(() => {
-  //   const keyboardAssistTag = document.createElement('meta');
-  //   keyboardAssistTag.setAttribute('name', 'disabled-adaptations');
-  //   keyboardAssistTag.setAttribute('content', 'none');
-  //   document.head.appendChild(keyboardAssistTag);
-    
-  //   return () => {
-  //     document.head.removeChild(keyboardAssistTag);
-  //   };
-  // }, []);
-
-  return (
-    <>
-    {/* <ScrollLock /> */}
     
     <div className="App prevent-bounce">
       
@@ -2242,7 +2089,6 @@ const isMobileKey = () => {
           <Spin size="large" />
           <p>Please Wait...</p>
         </div>):<>
-      {/* {contextHolder} */}
       {isVisible && (
         <div className="custom-success-message show">
           Entry is saved successfully!
@@ -2496,7 +2342,6 @@ const isMobileKey = () => {
   </div>
  
   </Col>
-  {/* <FastInput/> */}
   <Col xs={4} sm={4}>
   <Form.Item>
     
@@ -2514,130 +2359,7 @@ const isMobileKey = () => {
   </Col>
   </Row>
 </Form>
-{/* <div className="keyboard">
-   {[1, 2, 3].map((item, index) => (
-  <div
-  style={{
-    backgroundColor:lastkeypressed === item.toString() ? '#0000FF':'white',
-      color:lastkeypressed === item.toString() ? 'white':'black',
-  }}
-    key={index}
-    onClick={() => {
-      handleKeyPress(item.toString())
-      setTimeout(() => {
-        setLastKeyPressed("")
-      }, 500);
-    }}
-  >
-    {item}
-  </div>
-))}
 
-    <div key={999} style={{backgroundColor:lastkeypressed === 'back'?'red': '#d3a6ed'}} onClick={handleBackspace}  >
-  <BackspaceIcon/>
-    </div>
-  {[4, 5, 6].map((item, index) => (
-    <div style={{
-      backgroundColor:lastkeypressed === item.toString() ? '#0000FF':'white',
-      color:lastkeypressed === item.toString() ? 'white':'black',
-    }} key={index + 4} onClick={ () => {
-      handleKeyPress(item.toString())
-      setTimeout(() => {
-        setLastKeyPressed("")
-      }, 500);
-      }}>
-      {item}
-    </div>
-  ))}
- 
- <div key={9999} style={{backgroundColor:lastkeypressed === 'next'?'green': '#52cca7'}} onClick={handleNext}  >
-  <ArrowForwardIcon/>
-    </div>
-  {[7, 8, 9].map((item, index) => (
-    <div
-    style={{
-      backgroundColor:lastkeypressed === item.toString() ? '#0000FF':'white',
-      color:lastkeypressed === item.toString() ? 'white':'black',
-    }}
-      key={index + 8}
-      onClick={ () => {
-        handleKeyPress(item.toString())
-        setTimeout(() => {
-          setLastKeyPressed("")
-        }, 500);
-      }}
-    >
-      {item}
-    </div>
-  ))}
-<div 
-  key={99} 
-  style={{
-    backgroundColor:lastkeypressed === "_" ? '#0000FF':'white',
-    color:lastkeypressed === "_" ? 'white':'black',
-  }}  
-  onClick={() => {
-    setLastKeyPressed('_')
-    setTimeout(() => {
-      setLastKeyPressed("")
-    }, 500);
-    }}
->
-  {'_'}
-</div>
-    <div style={{
-       backgroundColor:lastkeypressed === "," ? '#0000FF':'white',
-       color:lastkeypressed === "," ? 'white':'black',
-    }} onClick={()=>{
-      setLastKeyPressed(',')
-      setTimeout(() => {
-        setLastKeyPressed("")
-      }, 500);
-      }}  key={69} >
-      {','}
-    </div>
-  {[ 0, ].map((item, index) => (
-    <div
-    style={{
-      backgroundColor:lastkeypressed === item.toString() ? '#0000FF':'white',
-      color:lastkeypressed === item.toString() ? 'white':'black',
-    }}
-      key={index + 12}
-      onClick={() => {
-        handleKeyPress(item.toString())
-        setTimeout(() => {
-          setLastKeyPressed("")
-        }, 500);
-      }}
-    >
-      {item}
-    </div>
-  ))}
-   <div style={{
-     backgroundColor:lastkeypressed === "." ? '#0000FF':'white',
-     color:lastkeypressed === "." ? 'white':'black',
-   }}  key={79} onClick={()=>{
-    setLastKeyPressed('.')
-    setTimeout(() => {
-      setLastKeyPressed("")
-    }, 500);
-    }}    >
-      {'.'}
-    </div>
- <div style={{
- backgroundColor:lastkeypressed === "-" ? '#0000FF':'white',
-      color:lastkeypressed === "-" ? 'white':'black',
- }}  onClick={()=>{
-  setLastKeyPressed('-')
-  setTimeout(() => {
-    setLastKeyPressed("")
-  }, 500);
-  }} key={4}   >
-      {'-'}
-    </div>
-</div> */}
-
-{/* <Keyboard/> */}
       <Modal
           title="Confirm Deletion"
           visible={deleteConfirmationVisible}
@@ -2906,45 +2628,7 @@ const isMobileKey = () => {
           />
           <Form style={{zIndex:99999}}>
           <Row gutter={6}>
-               {/* <Col xs={4} sm={4}>
-  <Form.Item >
-    <Input id='4' inputMode="numeric" 
-  pattern="[0-9]*" 
- value={inputValue4} placeholder='No' 
-      onFocus={(e) => {
-      e.target.select(); 
-        setActiveInput('4')}
-        } onChange={handleInputChange4} className="custom-input"/>
-  </Form.Item>
-  </Col>
-  <Col xs={4} sm={4}>
-  <Form.Item  >
-    <Input id='5' inputMode="numeric" 
-  pattern="[0-9]*" 
- value={inputValue5} placeholder='f'
-     onFocus={(e) => {
-      e.target.select(); 
-      setActiveInput('5')}} onChange={handleInputChange5} className="custom-input"
-      style={{
-        marginLeft:20
-      }} 
-      />
-  </Form.Item>
-  </Col>
-  <Col xs={4} sm={4}>
-  <Form.Item   >
-    <Input id='6' inputMode="numeric" 
-  pattern="[0-9]*" 
- value={inputValue6} placeholder='s' 
-    onFocus={(e) => {
-      e.target.select(); 
-      setActiveInput('6');
-      }} onChange={handleInputChange6} className="custom-input" style={{
-        zIndex:9999,
-        marginLeft:40
-      }} />
-  </Form.Item>
-  </Col> */}
+           
    <Col xs={4} sm={4}>
         <Form.Item>
           <Input
