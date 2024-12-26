@@ -2242,6 +2242,7 @@ onFinish();
     marginTop: 0,
     fontWeight: 'bold',
     fontSize: 18,
+    zIndex: 999,
     height: 30,
   }}
 />
@@ -2261,6 +2262,7 @@ onFinish();
   autoCorrect="off"
   spellCheck="false"
   data-lpignore="true"
+  
   enterKeyHint="next"
   autoComplete="off"
   role="presentation"
@@ -2289,6 +2291,7 @@ onFinish();
     marginTop: -100,
     fontWeight: 'bold',
     fontSize: 18,
+    zIndex: 999,
     caretColor: 'transparent', // This will hide the cursor
   }}
 />
@@ -2334,6 +2337,7 @@ onFinish();
         marginLeft: 20,
         height:30,
         marginTop: -100,
+        zIndex: 999,
         fontWeight: 'bold',fontSize:18
       }}
     />
