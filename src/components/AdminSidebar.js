@@ -335,8 +335,23 @@ const SidebarDrawer = (props) => {
               Logout
             </Button>
           </Drawer>
-
-          <Card
+{selectedMenuKey==="merchant"?
+       <div style={{
+        margin:10
+       }}>
+       <Button
+         style={{
+           background: COLORS.primarygradient,
+           borderRadius: 10,
+           marginTop:props.userdata.role === 'merchant' ?-25:-15
+         }}
+         type="primary"
+         icon={<MenuOutlined />}
+         onClick={() => setDrawerVisible(true)}
+       ></Button>
+       {selectedMenuKey==="merchant"&&props.draw&&<p style={{zIndex:9999,color:"green",marginTop:-30,marginLeft:50}}>{props.draw.title+" "+props.draw.date}</p>}
+     </div>:
+            <Card
             style={{
               boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)',
               marginTop:  props.userdata.role === 'merchant' ?0:10,
@@ -358,6 +373,8 @@ const SidebarDrawer = (props) => {
             ></Button>
             {selectedMenuKey==="merchant"&&props.draw&&<p style={{zIndex:9999,color:"green",marginTop:-30,marginLeft:50}}>{props.draw.title+" "+props.draw.date}</p>}
           </Card>
+}
+   
         </>
       ) : (
         <Card
