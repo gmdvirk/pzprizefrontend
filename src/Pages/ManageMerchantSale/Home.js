@@ -2115,9 +2115,9 @@ onFinish();
      <div style={{display:'flex',flexDirection:'row',marginTop:15, borderBottom: '2px solid black',paddingBottom:-5}}>
       {<p style={{fontSize:14,marginLeft:10,marginRight:10}}>{userdata.username}</p>}
       {/* {<p style={{fontSize:14,marginRight:10}}>Credit : {credit}</p>} */}
-      {<p style={{fontSize:14}}>Balanace : {balance}</p>}
-     { upline<0&&<p style={{fontSize:14,marginLeft:10,color:'red'}}>Upline : {upline}</p>}
-      {upline>0&&<p style={{fontSize:14,marginLeft:10,color:'green'}}>Upline : {upline}</p>}
+      {<p style={{fontSize:14}}>Balanace : {balance.toFixed(2)}</p>}
+     { upline<0&&<p style={{fontSize:14,marginLeft:10,color:'red'}}>Upline : {upline.toFixed(2)}</p>}
+      {upline>0&&<p style={{fontSize:14,marginLeft:10,color:'green'}}>Upline : {upline.toFixed(2)}</p>}
       {completedraw && !isMobile && 
   <p style={{
     zIndex: 9999,

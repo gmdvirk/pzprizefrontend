@@ -293,7 +293,7 @@ const handleLoginasanother =(record)=>{
       render: (balanceupline) => (
         <span style={{ color: balanceupline < 0? 'red' : 'green' }}>
           
-          {balanceupline}
+          {balanceupline.toFixed(2)}
         </span>
       ),
     },
@@ -304,7 +304,7 @@ const handleLoginasanother =(record)=>{
       ...getColumnSearchProps('availablebalance'),
       render: (availablebalance) => (
         <span style={{ color: availablebalance < 0? 'red' : 'green' }}>
-          {availablebalance}
+          {availablebalance.toFixed(2)}
         </span>
       ),
     },
@@ -525,7 +525,7 @@ const handleLoginasanother =(record)=>{
                 <p style={{color:completeuserdata.payment.balanceupline>0?"green":'red'}}>Balance Upline: {completeuserdata.payment.balanceupline.toFixed(2)}</p>
               </Col>
               <Col xs={12} sm={12} md={6}>
-                <p>Available Balance:{completeuserdata.payment.availablebalance}</p>
+                <p>Available Balance:{completeuserdata.payment.availablebalance.toFixed(2)}</p>
               </Col>
             </Row>
             <h1>Users : {products.length}</h1>

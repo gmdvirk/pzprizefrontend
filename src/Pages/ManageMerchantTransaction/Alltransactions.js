@@ -212,7 +212,7 @@ const ProductTable = ({ payment, setPayment,userdata }) => {
       render: (balanceupline) => (
         <span style={{ color: balanceupline < 0? 'red' : 'green' }}>
           
-          {balanceupline}
+          {balanceupline.toFixed(2)}
         </span>
       ),
     },
@@ -224,7 +224,7 @@ const ProductTable = ({ payment, setPayment,userdata }) => {
       render: (availablebalance) => (
         <span style={{ color: availablebalance < 0? 'red' : 'green' }}>
           
-          {availablebalance}
+          {availablebalance.toFixed(2)}
         </span>
       ),
     },
@@ -300,7 +300,7 @@ const ProductTable = ({ payment, setPayment,userdata }) => {
       type: pay.type,
       cash: pay.cash,
       credit: pay.credit,
-      balanceupline: pay.balanceupline,
+      balanceupline: pay.balanceupline.toFixed(2),
       date: `${pay.date} ${pay.time}`,
       description: pay.description,
     }));

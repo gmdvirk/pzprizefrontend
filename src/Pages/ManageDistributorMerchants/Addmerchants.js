@@ -46,7 +46,7 @@ const AddProductForm = ({ setProducts,products}) => {
         const userData = await response.json();
         let tempobj={...userData.data};
         let temp=[...products];
-        temp.push(tempobj)
+        temp.unshift(tempobj)
         setProducts(temp)
         form.resetFields();
       } else {
@@ -80,18 +80,18 @@ const AddProductForm = ({ setProducts,products}) => {
         </div>):
     <Form form={form} onFinish={onFinish} layout="vertical">
        <Row gutter={16}>
-       
-      <Col xs={24} sm={8}>
-      <Form.Item name="username" label="Username" rules={[{ required: true, message: 'Please enter a username' }]}>
-        <Input placeholder="Enter Username" />
-      </Form.Item>
-      </Col>
-      <Col xs={24} sm={8}>
+       <Col xs={24} sm={8}>
       <Form.Item name="name" label="Name" rules={[{ required: true, message: 'Please enter a name' }]}>
         <Input placeholder="Enter name" />
       </Form.Item>
       </Col>
            
+      <Col xs={24} sm={8}>
+      <Form.Item name="username" label="Username" rules={[{ required: true, message: 'Please enter a username' }]}>
+        <Input placeholder="Enter Username" />
+      </Form.Item>
+      </Col>
+     
       <Col xs={24} sm={8}>
       <Form.Item name="password" label="Password" rules={[{ required: true, message: 'Please enter password' }]}>
         <Input placeholder="Enter password" />

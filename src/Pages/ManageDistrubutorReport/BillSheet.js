@@ -125,6 +125,7 @@ const AddProductForm = ({draws,userdata, setProducts,products}) => {
     // Define the table columns and rows
 const columns = [
   { header: 'Username', dataKey: 'username' },
+  { header: 'Name', dataKey: 'name' },
   { header: 'Grand Total', dataKey: 'grandTotal' },
   { header: 'Commission', dataKey: 'commissionAmountTotal' },
   { header: 'Safi Total', dataKey: 'safitotal' },
@@ -177,7 +178,7 @@ doc.autoTable({
     doc.setTextColor(0);
     doc.text(`Party Bill: ${dataarr[0].nettotal }`, 14, doc.lastAutoTable.finalY + 10);
     doc.text(`All Dealers Bill: ${totalNetTotal.toFixed(2)}`, 14, doc.lastAutoTable.finalY + 15);
-    doc.text(`Profit/Loss: ${totalNetTotal.toFixed(2) - dataarr[0].nettotal}`, 14, doc.lastAutoTable.finalY + 20);
+    doc.text(`Profit/Loss: ${totalNetTotal.toFixed(2) - Number(dataarr[0].nettotal).toFixed(2)}`, 14, doc.lastAutoTable.finalY + 20);
 
     // Save the PDF
     doc.save('Bill_Sheet_Report.pdf');

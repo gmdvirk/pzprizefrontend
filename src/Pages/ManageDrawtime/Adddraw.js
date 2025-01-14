@@ -41,7 +41,7 @@ const AddProductForm = ({ setProducts,products}) => {
         const userData = await response.json();
         let tempobj={...userData.data};
         let temp=[...products];
-        temp.push(tempobj)
+        temp.unshift(tempobj)
         setProducts(temp)
         form.resetFields();
         setMessage("Successfully Updated")
