@@ -86,14 +86,12 @@ const SignInPage = () => {
           >
             <Input.Password prefix={<LockOutlined />} placeholder="Password" />
           </Form.Item>
-
           <Form.Item >
             <ReCAPTCHA
               sitekey="6Ldv-lMqAAAAAFwTlBYzcqzaG1S2ZMdtOO8tAe5L"
               onChange={handleCaptchaChange}
             />
           </Form.Item>
-
           <Form.Item>
             <Button 
               icon={<LockFilled/>}
