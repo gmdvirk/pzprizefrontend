@@ -1536,7 +1536,15 @@ const handleSmsModalOk = async () => {
     }
 
     const token = localStorage.getItem('token');
+    if(modalTableData.length>200){
+      setErrormessage(`There can be 200 maximum entries at a time.`);
+      showErormessage();
+      
+      errorAudioRef?.current?.play();
+      return;
+    }
     let tempmodaldata = [...modalTableData];
+
     let invalidEntries = [];
 
     // Check for invalid entries

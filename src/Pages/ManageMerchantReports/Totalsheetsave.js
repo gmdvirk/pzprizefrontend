@@ -198,8 +198,131 @@ const AddProductForm = ({draws,sheets,userdata, setProducts,products}) => {
 
     }
   };
-  const downloadinvoice1 = (arr, userData1) => {
+  const downloadinvoice2 = (arr, type) => {
+    const filteredPayments = [...arr];
+    let totalFirst1 = 0;
+    let totalSecond1 = 0;
+    let total1 = 0;
     
+    filteredPayments.forEach((pay) => {
+      totalFirst1 += parseFloat(pay.f) || 0;
+      totalSecond1 += parseFloat(pay.s) || 0;
+      total1 += (parseFloat(pay.f) || 0) + (parseFloat(pay.s) || 0);
+    });
+  
+    const doc = new jsPDF();
+    doc.setFontSize(16);
+    doc.setTextColor(40);
+    
+    if(type==="sale"){
+      doc.text('Total General Sale Report', 14, 22);
+    } else {
+      doc.text('Total Over Sale Report', 14, 22);
+    }
+    
+    doc.text(`Total: ${total1.toFixed(2)}`, 14, 42);
+    doc.setFontSize(10);
+    
+    if (userdata && userdata.username) {
+      doc.text(`User: ${userdata.name}`, 14, 30);
+      doc.text(`Username: ${userdata.username}`, 80, 30);
+      doc.text(`Draw: ${drawdate.date}`, 150, 30);
+      doc.text(`Draw Title: ${drawdate.title}`, 14, 35);
+      doc.text(`Sheet: ${selectedsheet.sheetname}`, 80, 35);
+    }
+  
+    let startY = 60;
+    let startX = 14;
+    const blockWidth = 15;
+    const blockHeight = 8;
+  
+    doc.setFontSize(12);
+    doc.text(`Total of First: ${totalFirst1.toFixed(2)}`, 14, startY);
+    doc.text(`Total of Second: ${totalSecond1.toFixed(2)}`, 84, startY);
+    doc.text(`Total: ${total1.toFixed(2)}`, 154, startY);
+    
+    startY += 10;
+  
+    // Header blocks
+    for (let k = 0; k < 4; k++) {
+      // Bundle header
+      doc.setFillColor(75, 0, 130);
+      doc.setDrawColor(75, 0, 130);
+      doc.rect(startX, startY, blockWidth, blockHeight, 'FD');
+      doc.setTextColor(255, 255, 255);
+      doc.text("Bundle", startX + blockWidth / 2, startY + blockHeight / 2, { align: 'center' });
+  
+      // First header
+      doc.rect(startX + blockWidth, startY, blockWidth, blockHeight, 'FD');
+      doc.text("First", startX + blockWidth + blockWidth / 2, startY + blockHeight / 2, { align: 'center' });
+  
+      // Second header
+      doc.rect(startX + 2 * blockWidth, startY, blockWidth, blockHeight, 'FD');
+      doc.text("Second", startX + 2 * blockWidth + blockWidth / 2, startY + blockHeight / 2, { align: 'center' });
+  
+      startX += 3 * blockWidth;
+  
+      if (startX + 3 * blockWidth > doc.internal.pageSize.width - 14) {
+        startX = 14;
+        startY += blockHeight;
+  
+        if (startY + blockHeight > doc.internal.pageSize.height - 20) {
+          doc.addPage();
+          startY = 20;
+        }
+      }
+    }
+  
+    startY += blockHeight;
+    startX = 14;
+  
+    // Data rows
+    filteredPayments.forEach((pay) => {
+      // Bundle cell
+      doc.setFillColor(211, 211, 211);
+      doc.setDrawColor(75, 0, 130);
+      doc.setTextColor(0, 0, 0);
+      doc.rect(startX, startY, blockWidth, blockHeight, 'FD');
+      doc.setFont(undefined, 'bold');
+      doc.text(pay.bundle.toString(), startX + blockWidth / 2, startY + blockHeight / 2, { align: 'center' });
+      doc.setFont(undefined, 'normal');
+  
+      // First value cell
+      doc.setFillColor(255, 255, 255);
+      doc.rect(startX + blockWidth, startY, blockWidth, blockHeight, 'FD');
+      if(type === "oversale"){
+        doc.setTextColor(255, 0, 0);
+      }
+      doc.text(pay.f.toString(), startX + blockWidth + blockWidth / 2, startY + blockHeight / 2, { align: 'center' });
+  
+      // Second value cell
+      doc.rect(startX + 2 * blockWidth, startY, blockWidth, blockHeight, 'FD');
+      doc.text(pay.s.toString(), startX + 2 * blockWidth + blockWidth / 2, startY + blockHeight / 2, { align: 'center' });
+      doc.setTextColor(0, 0, 0);
+  
+      startX += 3 * blockWidth;
+  
+      if (startX + 3 * blockWidth > doc.internal.pageSize.width - 14) {
+        startX = 14;
+        startY += blockHeight;
+  
+        if (startY + blockHeight > doc.internal.pageSize.height - 20) {
+          doc.addPage();
+          startY = 20;
+        }
+      }
+    });
+  
+    // Final totals
+    startY += blockHeight + 10;
+    doc.setFontSize(10);
+    doc.text(`Total First : ${totalFirst1}`, 14, startY);
+    doc.text(`Total Second : ${totalSecond1}`, 64, startY);
+    doc.text(`Total : ${total1}`, 114, startY);
+  
+    doc.save('Oversale Report.pdf');
+  };
+  const downloadinvoice1 = (arr, userData1) => {
     const doc = new jsPDF();
     let filteredPayments = [
       ...arr.sales
@@ -213,223 +336,239 @@ const AddProductForm = ({draws,sheets,userdata, setProducts,products}) => {
     let totalFirstf = 0;
     let totalSecondf = 0;
     let totalf = 0;
-      filteredPayments.forEach((pay) => {
-        totalFirst1 += parseFloat(pay.f) || 0;
-        totalSecond1 += parseFloat(pay.s) || 0;
-        total1 += (parseFloat(pay.f) || 0) + (parseFloat(pay.s) || 0);
-      })
-      arr.oversales.forEach((pay) => {
-        totalFirst2 += parseFloat(pay.f) || 0;
-        totalSecond2 += parseFloat(pay.s) || 0;
-        total2 += (parseFloat(pay.f) || 0) + (parseFloat(pay.s) || 0);
-      })
-    totalFirstf=totalFirst1+totalFirst2
-    totalSecondf=totalSecond1+totalSecond2
-    totalf=total1+total2
-    // doc.text(`Total of First: ${totalFirstf.toFixed(2)}`, 14, 42);
-    // doc.text(`Total of Second: ${totalSecondf.toFixed(2)}`, 84, 42);
+  
+    // Calculate totals for sales
+    filteredPayments.forEach((pay) => {
+      totalFirst1 += parseFloat(pay.f) || 0;
+      totalSecond1 += parseFloat(pay.s) || 0;
+      total1 += (parseFloat(pay.f) || 0) + (parseFloat(pay.s) || 0);
+    });
+  
+    // Calculate totals for oversales
+    arr.oversales.forEach((pay) => {
+      totalFirst2 += parseFloat(pay.f) || 0;
+      totalSecond2 += parseFloat(pay.s) || 0;
+      total2 += (parseFloat(pay.f) || 0) + (parseFloat(pay.s) || 0);
+    });
+  
+    // Aggregate totals
+    totalFirstf = totalFirst1 + totalFirst2;
+    totalSecondf = totalSecond1 + totalSecond2;
+    totalf = total1 + total2;
+  
+    // Add overall total to the document
+    doc.setFontSize(12);
+    doc.setFont(undefined, 'bold');
     doc.text(`Total: ${totalf.toFixed(2)}`, 14, 42);
-    for (let i=0;i<2;i++){
-    // let arr1 = filteredPayments.filter((obj) => obj.bundle.length === 1);
-    // let arr2 = filteredPayments.filter((obj) => obj.bundle.length === 2);
-    // let arr3 = filteredPayments.filter((obj) => obj.bundle.length === 3);
-    // let arr4 = filteredPayments.filter((obj) => obj.bundle.length === 4);
-    let temparr = [filteredPayments];
-  
-    doc.setFontSize(16);
-
-    doc.setTextColor(40);
-    if(i===0){
-      doc.text('Save Sheet Report ', 14, 22);
-    }else{
-      
-      doc.setTextColor(255, 0, 0); // Red text
-      doc.text('Over Sale Save Sheet', 14, 22);
-      doc.setTextColor(40);
-    }
-  
-    doc.setFontSize(10);
+    doc.setFont(undefined, 'normal');
     if (userdata && userdata.username) {
       doc.text(`User: ${userdata.name}`, 14, 30);
       doc.text(`Username: ${userdata.username}`, 80, 30);
       doc.text(`Draw: ${drawdate.date}`, 150, 30);
       doc.text(`Draw Title: ${drawdate.title}`, 14, 35);
-        doc.text(`Sheet: ${selectedsheet.sheetname}`, 80, 35);
+      doc.text(`Sheet: ${selectedsheet.sheetname}`, 80, 35);
     }
   
-    let startY = 35; // Initial Y position for the first section
-    let startX = 14; // Initial X position
-    const blockWidth = 15; // Smaller width for each block
-    const blockHeight = 8; // Smaller height for each block
-    // temparr.forEach((filteredPayments, arrIndex) => {
-      
-    //   if(filteredPayments.length>0){
-    //   filteredPayments.forEach((pay) => {
-    //     totalFirst1 += parseFloat(pay.f) || 0;
-    //     totalSecond1 += parseFloat(pay.s) || 0;
-    //     total1 += (parseFloat(pay.f) || 0) + (parseFloat(pay.s) || 0);
-    //   })
-    // }
-    // })
-    
-    doc.setFontSize(12);
-    // doc.text(`Total of First: ${totalFirst1.toFixed(2)}`, 14, startY);
-    // doc.text(`Total of Second: ${totalSecond1.toFixed(2)}`, 84, startY);
-    // doc.text(`Total: ${total1.toFixed(2)}`, 154, startY);
-    startY += 10; // Add some spacing before the totals
-    temparr.forEach((filteredPayments, arrIndex) => {
-      
-      if(filteredPayments.length>0){
-      startX = 14; // Reset X position for each section
-      let totalFirst = 0;
-      let totalSecond = 0;
-      let total = 0;
+    // Loop for both sections: sales and oversales
+    for (let i = 0; i < 2; i++) {
+      // Define current section data
+      let currentPayments = i === 0 ? filteredPayments : arr.oversales;
+      let sectionTitle = i === 0 ? 'Save Sheet Report' : 'Over Sale Save Sheet';
+      let sectionTotal = i === 0 ? total1 : total2;
   
-      for (let k = 0; k < 4; k++) {
-        // Draw bundle block with dark blue background and white text
-        doc.setFillColor(75, 0, 130); // Dark blue background
-        doc.setDrawColor(75, 0, 130); // Dark blue border
-        doc.rect(startX, startY, blockWidth, blockHeight, 'FD');
-        doc.setTextColor(255, 255, 255); // White text
-        doc.text("Bundle", startX + blockWidth / 2, startY + blockHeight / 2, { align: 'center' });
-  
-        // Draw f block with dark blue background and white text
-        doc.setFillColor(75, 0, 130); // Dark blue background
-        doc.setDrawColor(75, 0, 130); // Dark blue border
-        doc.rect(startX + blockWidth, startY, blockWidth, blockHeight, 'FD');
-        doc.text("First", startX + blockWidth + blockWidth / 2, startY + blockHeight / 2, { align: 'center' });
-  
-        // Draw s block with dark blue background and white text
-        doc.setFillColor(75, 0, 130); // Dark blue background
-        doc.setDrawColor(75, 0, 130); // Dark blue border
-        doc.rect(startX + 2 * blockWidth, startY, blockWidth, blockHeight, 'FD');
-        doc.text("Second", startX + 2 * blockWidth + blockWidth / 2, startY + blockHeight / 2, { align: 'center' });
-  
-        // Move to the next block position
-        startX += 3 * blockWidth;
-  
-        // Check if we need to move to the next row
-        if (startX + 3 * blockWidth > doc.internal.pageSize.width - 14) {
-          startX = 14; // Reset X position
-          startY += blockHeight; // Move to the next row
-  
-          // Check if we need to add a new page
-          if (startY + blockHeight > doc.internal.pageSize.height - 20) {
-            doc.addPage();
-            startY = 20; // Reset Y position for the new page
-  
-          
-          }
-        }
+      // Set text color based on section
+      if (i === 1) {
+        doc.setTextColor(255, 0, 0); // Red text for oversales
+      } else {
+        doc.setTextColor(40); // Default text color
       }
   
-      filteredPayments.forEach((pay) => {
-        totalFirst += parseFloat(pay.f) || 0;
-        totalSecond += parseFloat(pay.s) || 0;
-        total += (parseFloat(pay.f) || 0) + (parseFloat(pay.s) || 0);
+      // Add section title
+      doc.setFontSize(16);
+      doc.text(sectionTitle, 14, 22);
+      doc.setFontSize(10);
+      doc.setTextColor(40);
   
-        // Draw bundle block with grey background and dark blue/purplish border
-        doc.setFillColor(211, 211, 211); // White background
-        doc.setDrawColor(75, 0, 130); // Dark blue/purplish border
-        doc.setTextColor(0, 0, 0); // White text
-        doc.rect(startX, startY, blockWidth, blockHeight, 'FD');
-        let  isFirstInRed=false;
-        let isFSecondInRed=false
-        if(userData1){
-          isFirstInRed = userData1.firstprefixes.includes(pay.bundle);
-          isFSecondInRed =userData1.secondprefixes1.includes(pay.bundle) || userData1.secondprefixes2.includes(pay.bundle)||userData1.secondprefixes3.includes(pay.bundle)||userData1.secondprefixes4.includes(pay.bundle)||userData1.secondprefixes5.includes(pay.bundle);
-          
-        }
-            if (isFirstInRed) {
-                doc.setTextColor(255, 0, 0); // Red text
-            } else {
-                doc.setTextColor(0, 0, 0); // Black text
-            }
-            if (!(isFirstInRed) && isFSecondInRed) {
-             doc.setTextColor(0, 0, 255); // Blue text
-            } 
-            doc.setFont(undefined, 'bold');
-        doc.text(pay.bundle.toString(), startX + blockWidth / 2, startY + blockHeight / 2, { align: 'center' });
-        doc.setFont(undefined, 'normal');
-        // Draw f block with dark blue/purplish border
-        doc.setFillColor(255, 255, 255); // White background
-        doc.setDrawColor(75, 0, 130); // Dark blue/purplish border
-        doc.rect(startX + blockWidth, startY, blockWidth, blockHeight, 'FD');
-        if(i===1){
-          doc.setTextColor(255, 0, 0); // Red text
-        }
-        doc.text(pay.f.toString(), startX + blockWidth + blockWidth / 2, startY + blockHeight / 2, { align: 'center' });
+      // Add user information
+      if (userData1 && userData1.username) {
+        doc.text(`User: ${userData1.name}`, 14, 30);
+        doc.text(`Username: ${userData1.username}`, 80, 30);
+        doc.text(`Draw: ${userData1.drawdate.date}`, 150, 30);
+        doc.text(`Draw Title: ${userData1.drawdate.title}`, 14, 35);
+        doc.text(`Sheet: ${userData1.selectedsheet.sheetname}`, 80, 35);
+      }
   
-        // Draw s block with dark blue/purplish border
-        doc.setFillColor(255, 255, 255); // White background
-        doc.setDrawColor(75, 0, 130); // Dark blue/purplish border
-        doc.rect(startX + 2 * blockWidth, startY, blockWidth, blockHeight, 'FD');
-        if(i===1){
-          doc.setTextColor(255, 0, 0); // Red text
-        }
-        doc.text(pay.s.toString(), startX + 2 * blockWidth + blockWidth / 2, startY + blockHeight / 2, { align: 'center' });
+      // Initialize starting positions
+      let initialX = 14;
+      let initialY = 45; // Start below the header
+      let currentX = initialX;
+      let currentY = initialY;
   
-        // Move to the next block position
-        startX += 3 * blockWidth;
+      const blockWidth = 15; // Width of each block
+      const blockHeight = 8; // Height of each block
+      const pageWidth = doc.internal.pageSize.width;
+      const pageHeight = doc.internal.pageSize.height;
+      const rightMargin = 14;
+      const bottomMargin = 20;
   
-        // Check if we need to move to the next row
-        if (startX + 3 * blockWidth > doc.internal.pageSize.width - 14) {
-          startX = 14; // Reset X position
-          startY += blockHeight; // Move to the next row
+      // Function to draw headers at the top of each column
+      const drawHeaders = (x, y) => {
+        // Bundle Header
+        doc.setFillColor(75, 0, 130); // Dark blue background
+        doc.setDrawColor(75, 0, 130); // Dark blue border
+        doc.rect(x, y, blockWidth, blockHeight, 'FD');
+        doc.setTextColor(255, 255, 255); // White text
+        doc.text("Bundle", x + blockWidth / 2, y + blockHeight / 2, { align: 'center', baseline: 'middle' });
   
-          // Check if we need to add a new page
-          if (startY + blockHeight > doc.internal.pageSize.height - 20) {
+        // First Header
+        doc.setFillColor(75, 0, 130);
+        doc.setDrawColor(75, 0, 130);
+        doc.rect(x + blockWidth, y, blockWidth, blockHeight, 'FD');
+        doc.text("First", x + blockWidth + blockWidth / 2, y + blockHeight / 2, { align: 'center', baseline: 'middle' });
+  
+        // Second Header
+        doc.setFillColor(75, 0, 130);
+        doc.setDrawColor(75, 0, 130);
+        doc.rect(x + 2 * blockWidth, y, blockWidth, blockHeight, 'FD');
+        doc.text("Second", x + 2 * blockWidth + blockWidth / 2, y + blockHeight / 2, { align: 'center', baseline: 'middle' });
+  
+        // Reset text color after headers
+        doc.setTextColor(0, 0, 0);
+      };
+  
+      // Draw headers for the first column
+      drawHeaders(currentX, currentY);
+      currentY += blockHeight; // Move below headers
+  
+      // Iterate through each payment and place them column-wise
+      currentPayments.forEach((pay) => {
+        // Check if adding the next block exceeds the page height
+        if (currentY + blockHeight > pageHeight - bottomMargin) {
+          // Move to next column
+          currentX += 3 * blockWidth;
+          // Check if the next column exceeds page width
+          if (currentX + 3 * blockWidth > pageWidth - rightMargin) {
+            // Add a new page
             doc.addPage();
-            startY = 20; // Reset Y position for the new page
+            currentX = initialX;
+            currentY = initialY;
+  
+            // Draw headers for the new column on the new page
+            drawHeaders(currentX, currentY);
+            currentY += blockHeight;
+          } else {
+            // Draw headers for the new column
+            drawHeaders(currentX, initialY);
+            currentY = initialY + blockHeight;
           }
         }
-      
+  
+        // Draw Bundle Block
+        doc.setFillColor(211, 211, 211); // Light grey background
+        doc.setDrawColor(75, 0, 130); // Dark blue/purplish border
+        doc.rect(currentX, currentY, blockWidth, blockHeight, 'FD');
+  
+        // Determine text color based on prefixes
+        let isFirstInRed = false;
+        let isSecondInBlue = false;
+        if (userData1) {
+          isFirstInRed = userData1.firstprefixes.includes(pay.bundle);
+          isSecondInBlue = userData1.secondprefixes1.includes(pay.bundle) ||
+                           userData1.secondprefixes2.includes(pay.bundle) ||
+                           userData1.secondprefixes3.includes(pay.bundle) ||
+                           userData1.secondprefixes4.includes(pay.bundle) ||
+                           userData1.secondprefixes5.includes(pay.bundle);
+        }
+  
+        if (isFirstInRed) {
+          doc.setTextColor(255, 0, 0); // Red text
+        } else if (isSecondInBlue) {
+          doc.setTextColor(0, 0, 255); // Blue text
+        } else {
+          doc.setTextColor(0, 0, 0); // Black text
+        }
+  
+        doc.setFont(undefined, 'bold');
+        doc.text(pay.bundle.toString(), currentX + blockWidth / 2, currentY + blockHeight / 2, { align: 'center', baseline: 'middle' });
+        doc.setFont(undefined, 'normal');
+        doc.setTextColor(0, 0, 0); // Reset to black for next blocks
+  
+        // Draw First Block
+        doc.setFillColor(255, 255, 255); // White background
+        doc.setDrawColor(75, 0, 130); // Dark blue/purplish border
+        doc.rect(currentX + blockWidth, currentY, blockWidth, blockHeight, 'FD');
+  
+        if (i === 1) {
+          doc.setTextColor(255, 0, 0); // Red text for oversales
+        }
+        doc.text(pay.f.toString(), currentX + blockWidth + blockWidth / 2, currentY + blockHeight / 2, { align: 'center', baseline: 'middle' });
+        doc.setTextColor(0, 0, 0); // Reset to black
+  
+        // Draw Second Block
+        doc.setFillColor(255, 255, 255); // White background
+        doc.setDrawColor(75, 0, 130); // Dark blue/purplish border
+        doc.rect(currentX + 2 * blockWidth, currentY, blockWidth, blockHeight, 'FD');
+  
+        if (i === 1) {
+          doc.setTextColor(255, 0, 0); // Red text for oversales
+        }
+        doc.text(pay.s.toString(), currentX + 2 * blockWidth + blockWidth / 2, currentY + blockHeight / 2, { align: 'center', baseline: 'middle' });
+        doc.setTextColor(0, 0, 0); // Reset to black
+  
+        // Move down for the next pay
+        currentY += blockHeight;
       });
   
-      // Move startY down for the next section
-      startY += blockHeight + 10;
+      // After placing all pays, add totals for the section
+      // Ensure there's space for totals
+      if (currentY + blockHeight + 10 > pageHeight - bottomMargin) {
+        // Add a new page if not enough space
+        doc.addPage();
+        currentX = initialX;
+        currentY = initialY;
+  
+        // Draw headers for the new column on the new page
+        drawHeaders(currentX, currentY);
+        currentY += blockHeight;
+      } else {
+        // Move to a new line after the last pay
+        currentY += 5;
+      }
+  
+      // Add totals
       doc.setFontSize(10);
-      doc.text(`Total First : ${totalFirst}`, 14, startY);
-      doc.text(`Total Second : ${totalSecond}`, 64, startY);
-      doc.text(`Total : ${total}`, 114, startY);
+      doc.text(`Total First : ${i === 0 ? totalFirst1 : totalFirst2}`, initialX, pageHeight-10);
+      doc.text(`Total Second : ${i === 0 ? totalSecond1 : totalSecond2}`, initialX + 50, pageHeight-10);
+      doc.text(`Total : ${sectionTotal}`, initialX + 100, pageHeight-10);
+      doc.setFontSize(12);
+      doc.setFont(undefined, 'bold');
   
-      startY += 5; // Adjust startY for the totals
-    }
-    });
-     // Add totals at the end of the tables
-     startY -=5; // Add some spacing before the totals
+      // Add section total in bold
+      if (i === 0) {
+        doc.text(`Total : ${total1}`, initialX + 120, pageHeight-10);
+      } else {
+        doc.setTextColor(255, 0, 0); // Red text for oversales total
+        doc.text(`Total : ${total2}`, initialX + 120, pageHeight-10);
+        doc.setTextColor(0, 0, 0); // Reset to black
+      }
   
-     doc.setFontSize(12);
-     doc.setFont(undefined, 'bold');
-     if(i===0){
-       doc.text(`Total : ${total1}`, 134, startY);
-     }else{
-      doc.setTextColor(255, 0, 0); // Red text
-       
-       doc.text(`Total : ${total2}`, 134, startY);
-     }
-     
-    // if(i===0){
-    //   doc.text(`Total of First: ${totalFirst1.toFixed(2)}`, 14, startY);
-    //   doc.text(`Total of Second: ${totalSecond1.toFixed(2)}`, 84, startY);
-    //   doc.text(`Total: ${total1.toFixed(2)}`, 154, startY);
-    // }else{
-    //   doc.text(`Total of First: ${totalFirst2.toFixed(2)}`, 14, startY);
-    // doc.text(`Total of Second: ${totalSecond2.toFixed(2)}`, 84, startY);
-    // doc.text(`Total: ${total2.toFixed(2)}`, 154, startY);
-    // }
-    
-    doc.setFont(undefined, 'normal');
-    doc.addPage();
-    startY = 20; 
-    filteredPayments = [
-      ...arr.oversales
-    ];
+      doc.setFont(undefined, 'normal');
+  
+      // Add a new page if not the last section
+      if (i === 0) {
+        doc.addPage();
+        currentX = initialX;
+        currentY = initialY;
+        filteredPayments = [
+          ...arr.oversales
+        ];
+      }
     }
-    
-   
+  
+    // Save the PDF
     doc.save('merchant_save_sheet_report.pdf');
   };
+  
   
   const onFinish = async (values) => {
     setLoading(true)
@@ -481,7 +620,7 @@ const AddProductForm = ({draws,sheets,userdata, setProducts,products}) => {
             });
             if (response1.ok) {
               const userData1 = await response1.json();
-            downloadinvoice(userData,values,userData1)
+            downloadinvoice2(userData,values,userData1)
           } else {
             const userData = await response.json();
             alert(userData.Message)

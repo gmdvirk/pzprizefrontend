@@ -298,6 +298,7 @@ const AddProductForm = ({ userdata,setProducts,draws,products}) => {
 // Define the table columns and rows
 const columns = [
   { header: 'Username', dataKey: 'username' },
+  { header: 'Name', dataKey: 'name' },
   { header: 'Grand Total', dataKey: 'grandTotal' },
   { header: 'Commission', dataKey: 'commissionAmountTotal' },
   { header: 'Safi Total', dataKey: 'safitotal' },

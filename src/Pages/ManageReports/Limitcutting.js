@@ -910,7 +910,7 @@ const AddProductForm = ({ userdata,draws,setProducts,products,limits}) => {
       doc.text(`Total Comsission: ${pcPercentageAmount+commissionAmount}`, 14, doc.autoTable.previous.finalY + 30);
       const safeSale=(totalF + totalS+totalFfour+totalSfour)-pcPercentageAmount-commissionAmount
       doc.text(`Safi Sale: ${safeSale.toFixed(2)}`, 14, doc.autoTable.previous.finalY + 35);
-      doc.text(`Total Prizes: ${totalPrizes}`, 14, doc.autoTable.previous.finalY + 40);
+      doc.text(`Total Prizes: ${totalPrizes.toFixed(2)}`, 14, doc.autoTable.previous.finalY + 40);
       doc.text(`Bill: ${((totalF + totalS+totalFfour+totalSfour)- Number(totalPrizes)-pcPercentageAmount-commissionAmount).toFixed(2)}`, 14, doc.autoTable.previous.finalY + 45);
     
     

@@ -94,14 +94,15 @@ const EditProductForm = (props) => {
      <Form form={form} onFinish={onFinish} layout="vertical">
     <Row gutter={16}>
        
-       <Col xs={24} sm={8}>
-       <Form.Item name="username" label="Username" rules={[{ required: true, message: 'Please enter a username' }]} disabled>
-         <Input placeholder="Enter Username" disabled/>
-       </Form.Item>
-       </Col>
+      
        <Col xs={24} sm={8}>
        <Form.Item name="name" label="Name" rules={[{ required: true, message: 'Please enter a name' }]}>
          <Input placeholder="Enter name" />
+       </Form.Item>
+       </Col>
+       <Col xs={24} sm={8}>
+       <Form.Item name="username" label="Username" rules={[{ required: true, message: 'Please enter a username' }]} disabled>
+         <Input placeholder="Enter Username" disabled/>
        </Form.Item>
        </Col>
        <Col xs={24} sm={8}>

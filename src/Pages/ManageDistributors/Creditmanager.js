@@ -125,7 +125,7 @@ const EditProductForm = ({selectedProduct,setSelectedProduct,payment,setPayment,
         setLoading(false) 
         return;
       }
-      if(values.type==="Withdraw"&&(0===(Number(selectedProduct.payment.credit)+Number(selectedProduct.payment.cash)))){
+      if(values.type==="Withdraw"&&(0===(Number(selectedProduct.payment.availablebalance)))){
         setErrormessage(`You do not have availbale balance`)
         setErrorModalVisible(true)
         setLoading(false) 

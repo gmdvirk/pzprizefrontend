@@ -113,8 +113,8 @@ const EditProductForm = ({selectedProduct,setSelectedProduct,payment,setPayment,
     values.type="Withdraw";
     setLoading(true)
     try {
-      if(values.type==="Withdraw"&&(Number(values.amount)>(Number(selectedProduct.payment.cash)+Number(selectedProduct.payment.credit)))){
-        setErrormessage(`You can not with draw more than the available balance that is :${Number(selectedProduct.payment.cash)+Number(selectedProduct.payment.credit)}`)
+      if(values.type==="Withdraw"&&(Number(values.amount)>(Number(selectedProduct.payment.availablebalance)))){
+        setErrormessage(`You can not with draw more than the available balance that is :${Number(selectedProduct.payment.availablebalance)}`)
         setErrorModalVisible(true)
        setLoading(false) 
         return;

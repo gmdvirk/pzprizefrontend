@@ -17,6 +17,7 @@ const navigate=useNavigate();
   const [employees, setEmployees] = useState([]);
   const [loading, setLoading] = useState(true);
   const [userdata,setUserdata]=useState(null)
+    const [aloud, setAloud] = useState(false);
   const [completeuserdata,setCompleteUserdata]=useState(null)
   const [noaccess,setNoaccess]=useState(false)
   const isMobile = useMedia('(max-width: 768px)'); // Adjust the breakpoint as needed
@@ -36,6 +37,7 @@ const navigate=useNavigate();
         userdata={userdata}
         completeuserdata={completeuserdata}
         products={employees}
+        aloud={aloud}
         setProducts={setEmployees}
         />
     },
@@ -87,6 +89,7 @@ const navigate=useNavigate();
        
         setEmployees(userData1.reverse())
       }
+
       const response2 = await fetch(`${linkurl}/user/getBalance`, {
         method: 'GET',
         headers: {
@@ -97,6 +100,26 @@ const navigate=useNavigate();
         const userData1 = await response2.json();
         setCompleteUserdata(userData1)
       }
+      const response3 = await fetch(`${linkurl}/report/getDistributorHaddLimitAloudornot`, {
+        method: 'GET',
+        headers: {
+          token: `${token}`,
+        },
+      });
+      if (response3.ok) {
+        const userData1 = await response3.json();
+        setAloud(userData1)
+      }
+      // const response10 = await fetch(`${linkurl}/report/getDistributorHaddLimitAloudornot`, {
+      //           method: 'GET',
+      //           headers: {
+      //             token: `${token}`,
+      //           },
+      //         });
+      //         if (response10.ok) {
+      //           const userData10 = await response10.json();
+      //           setAloud(userData10);
+      //         }
     } else {
       console.error('Failed to fetch user data:', response.statusText);
       navigate("/login");

@@ -71,7 +71,7 @@ const navigate=useNavigate();
       });
       if (response1.ok) {
         const userData1 = await response1.json();
-        setEmployees(userData1)
+        setEmployees(userData1.reverse())
       }
     } else {
       console.error('Failed to fetch user data:', response.statusText);

@@ -9,6 +9,7 @@ import COLORS from '../../colors';
 import Cashmanager from "./Cashmanager"
 import Creditmanager from "./Creditmanager"
 import Loginasanother from "./Loginasanother"
+import EditLimit from"./EditLimit"
 import Stats from "./NewStats"
 import { linkurl } from '../../link';
 import jsPDF from 'jspdf';
@@ -20,7 +21,7 @@ const { Option } = Select;
 const { TabPane } = Tabs;
 
 
-const ProductTable = ({ products, setProducts,userdata,completeuserdata }) => {
+const ProductTable = ({ products,aloud, setProducts,userdata,completeuserdata }) => {
   const [form] = Form.useForm();
   const [visible, setVisible] = useState(false);
   const [visibledetail, setVisibleDetail] = useState(false);
@@ -28,8 +29,10 @@ const ProductTable = ({ products, setProducts,userdata,completeuserdata }) => {
   const [loading,setLoading]=useState(false)
   const [transactionhistory,setTransactionhistory]=useState([])
   const [visiblechange, setVisibleChange] = useState(false);
+  const [alldraws, setAllDraws] = useState([]);
   const [loginvisible,setLoginVisible] = useState(false)
   const [searchText, setSearchText] = useState('');
+  const [limits, setLimits] = useState([]);
   const [creditopen,setCreditopen] = useState(false)
   const [cashopen,setCashopen] = useState(false)
   const [searchedColumn, setSearchedColumn] = useState('');
@@ -339,9 +342,44 @@ const handleLoginasanother =(record)=>{
     
   ];
   const handleEdit = async(product) => {
+    const token = localStorage.getItem('token');
+    if(!token){
+      alert("Sign in to proceed!")
+      return;
+    }
+    try{
+
+    
     setSelectedProduct(product);
+const response = await fetch(`${linkurl}/user/getLimitByUserId/${product._id}`, {
+      method: 'GET',
+      headers: {
+        token: `${token}`,
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error(`Error: ${response.statusText}`);
+    }
+    const response1 = await fetch(`${linkurl}/draw/getlasttendrawsmerchant`, {
+      method: 'GET',
+      headers: {
+        token: `${token}`,
+      },
+    });
+    if (response1.ok) {
+      const userData1 = await response1.json();
+      setAllDraws(userData1);
+    }
+    const data = await response.json();
+    setLimits(data)
+    console.log(data)
+
    
   setVisible(true);
+} catch (error) {
+  console.error('Error fetching limit by user ID:', error);
+}
   };
 
   const handleDetail = (record) => {
@@ -382,11 +420,28 @@ const handleLoginasanother =(record)=>{
       products={products}
     />
   );
+  const renderLimit = () => (
+    <EditLimit
+    initialValues={selectedProduct}
+    userdata={userdata}
+    onCancel={() => setVisible(false)}
+    setProducts={setProducts}
+    products={products}
+    limits={limits}
+    alldraws={alldraws}
+    setLimits={setLimits}
+    setAllDraws={setAllDraws}
+  />
+  );
     return (
       <Tabs defaultActiveKey="mobile" type="card">
       {/* <TabPane tab="Comission Settings" key="comission">
         {renderComission()}
       </TabPane> */}
+
+    {aloud&&userdata.role!=="subdistributor"&&  <TabPane tab="Limit Cutting" key="limit">
+        {renderLimit()}
+      </TabPane>}
       <TabPane tab="General Info" key="general">
         {renderGeneral()}
       </TabPane>
