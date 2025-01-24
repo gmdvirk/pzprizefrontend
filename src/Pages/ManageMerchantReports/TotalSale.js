@@ -236,7 +236,7 @@ const AddProductForm = ({userdata,draws, setProducts,products}) => {
     totalf=total1+total2
     // doc.text(`Total of First: ${totalFirstf.toFixed(2)}`, 14, 42);
     // doc.text(`Total of Second: ${totalSecondf.toFixed(2)}`, 84, 42);
-    doc.text(`Total: ${totalf.toFixed(2)}`, 14, 42);
+    // doc.text(`Total: ${totalf.toFixed(2)}`, 14, 42);
     for (let i=0;i<1;i++){
     
     let arr1 = filteredPayments.filter((obj) => obj.bundle.length === 1);

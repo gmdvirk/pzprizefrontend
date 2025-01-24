@@ -164,10 +164,10 @@ marginBottom:20,
   <p><strong>Credit:</strong> {paymentfigures.credit}</p>
 </Col>
 <Col xs={24} sm={12} md={6}>
-  <p style={{color:paymentfigures.balanceupline<0? "red":"green"}}><strong style={{color:paymentfigures.balanceupline<0?  "red":"green"}}>Balance Upline:</strong> {paymentfigures.balanceupline}</p>
+  <p style={{color:paymentfigures.balanceupline<0? "red":"green"}}><strong style={{color:paymentfigures.balanceupline<0?  "red":"green"}}>Balance Upline:</strong> {paymentfigures.balanceupline.toFixed(0)}</p>
 </Col>
 <Col xs={24} sm={12} md={6}>
-  <p><strong>Available Balance:</strong> {paymentfigures.availablebalance}</p>
+  <p><strong>Available Balance:</strong> {paymentfigures.availablebalance.toFixed(0)}</p>
 </Col>
 </Row>
     </div>}

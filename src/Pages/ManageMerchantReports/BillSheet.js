@@ -429,7 +429,7 @@ else if (values.saletype==="oversale"){
     initialValues={{ saletype: 'sale' }} onFinish={onFinish} layout="vertical">
    <Row gutter={16}>
        
-       <Col xs={24} sm={8}>
+       <Col xs={24} sm={16}>
        <Form.Item
        label={"Select Draw"}
                      name={ 'date'}
@@ -450,7 +450,7 @@ else if (values.saletype==="oversale"){
                        </Select>
                      </Form.Item>
        </Col>
-                      <Col xs={24} sm={8}>
+                      {/* <Col xs={24} sm={8}>
         <Form.Item
         label={"Sale type"}
                       name={ 'saletype'}
@@ -463,7 +463,7 @@ else if (values.saletype==="oversale"){
                           <Option value={"oversale"}>Oversale</Option>
                         </Select>
                       </Form.Item>
-                      </Col>
+                      </Col> */}
       </Row>
    
     <Form.Item>
@@ -474,7 +474,7 @@ else if (values.saletype==="oversale"){
                       }}
                       icon={<SaveFilled/>}
                       htmlType="submit">
-        Bill Sheet
+        Party Bill
       </Button>
       {" "}
       <Button   style={{
@@ -485,7 +485,7 @@ else if (values.saletype==="oversale"){
                       icon={<SaveFilled/>}
                       onClick={getAllbill}
                       >
-        All Sell Bill
+        General + Oversale Bill
       </Button>
   
     </Form.Item>

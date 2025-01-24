@@ -6,6 +6,7 @@ import BillSheet from './ManageDistrubutorReport/BillSheet';
 import Distributorssale from './ManageDistrubutorReport/Distributorssale';
 import TotalSale from "./ManageDistrubutorReport/TotalSale";
 import TotalHaddlimitSale from "./ManageDistrubutorReport/TotalHaddLimitSale";
+import TotalHaddlimitSaleDealer from "./ManageDistrubutorReport/DealerCutting";
 import { useNavigate } from 'react-router';
 import { linkurl } from '../link';
 import Noaccesspage from "./NoAccess";
@@ -18,6 +19,7 @@ const AdminHomePage = () => {
   const [draws, setDraws] = useState([]);
   const [noaccess, setNoaccess] = useState(false);
   const [aloud, setAloud] = useState(false);
+  const [disributoraloud, setDistributorAloud] = useState(false);
   const isMobile = useMedia('(max-width: 768px)'); // Adjust the breakpoint as needed
   let marginLeft = 280;
   let marginRight = 10;
@@ -71,10 +73,25 @@ const AdminHomePage = () => {
   // Conditionally add the "Total Hadd Limit" tab if `aloud` is true
   if (aloud) {
     Alltabs.push({
-      label: "Total Hadd Limit",
+      label: "Admin Cutting",
       key: "Total",
       children: (
         <TotalHaddlimitSale
+          userdata={userdata}
+          products={employees}
+          draws={draws}
+          aloud={aloud}
+          setProducts={setEmployees}
+        />
+      ),
+    });
+  }
+  if (disributoraloud) {
+    Alltabs.push({
+      label: "Dealer Cutting",
+      key: "dealercutting",
+      children: (
+        <TotalHaddlimitSaleDealer
           userdata={userdata}
           products={employees}
           draws={draws}
@@ -112,6 +129,16 @@ const AdminHomePage = () => {
         if (response10.ok) {
           const userData1 = await response10.json();
           setAloud(userData1);
+        }
+        const response11 = await fetch(`${linkurl}/report/getDistributorHaddLimitAloudornot`, {
+          method: 'GET',
+          headers: {
+            token: `${token}`,
+          },
+        });
+        if (response11.ok) {
+          const userData1 = await response11.json();
+          setDistributorAloud(userData1);
         }
         const response1 = await fetch(`${linkurl}/user/getAllMyusers`, {
           method: 'GET',

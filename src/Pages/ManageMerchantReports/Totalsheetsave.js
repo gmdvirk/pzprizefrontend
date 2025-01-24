@@ -571,6 +571,10 @@ const AddProductForm = ({draws,sheets,userdata, setProducts,products}) => {
   
   
   const onFinish = async (values) => {
+    if(!selectedsheet){
+      alert("No sheet selected plz select anyone sheet!");
+      return;
+    }
     setLoading(true)
     try {
       const token = localStorage.getItem('token');
@@ -604,6 +608,7 @@ const AddProductForm = ({draws,sheets,userdata, setProducts,products}) => {
                       });
                       if (response1.ok) {
                         const userData1 = await response1.json();
+                        console.log(selectedsheet)
                         downloadinvoice1(userData,userData1)
                       } else {
                         const userData = await response.json();
@@ -690,7 +695,10 @@ const getExpiredOrNot=(users)=>{
       onChange={(e) => {
         const temp = draws.find((obj) => obj.date === e)
         setDrawdate(temp)
-        setSelectedsheet(null)
+        setSelectedsheet({_id:"combinedsjkngkfjgnfkj",sheetname:"combined",drawid:drawdate._id})
+        form.resetFields();
+        form.setFieldsValue({date:e,sheet:"combinedsjkngkfjgnfkj"})
+        
         const tempsh = sheets.filter((obj) => obj.drawid === temp._id)
         setTempSheets(tempsh)
       }}
@@ -724,7 +732,7 @@ const getExpiredOrNot=(users)=>{
                             setSelectedsheet({_id:"sjkngkfjgnfkj",sheetname:"no save",drawid:drawdate._id})
                           }
                           else if(e==="combinedsjkngkfjgnfkj"){
-                            setSelectedsheet({_id:"sjkngkfjgnfkj",sheetname:"combined",drawid:drawdate._id})
+                            setSelectedsheet({_id:"combinedsjkngkfjgnfkj",sheetname:"combined",drawid:drawdate._id})
                           }
                           else{
                             const temp=sheets.find((obj)=>obj._id===e)
@@ -733,7 +741,7 @@ const getExpiredOrNot=(users)=>{
                           
                           }}
                        >
-                         {drawdate && <Option value={"combinedsjkngkfjgnfkj"}>{"combined"}</Option>}
+                         {drawdate && <Option value={"combinedsjkngkfjgnfkj"}>{"total general + oversale"}</Option>}
                          {drawdate && <Option value={"sjkngkfjgnfkj"}>{(0)+"---"+" no save"}</Option>}
                          
                         {

@@ -1109,7 +1109,7 @@ const AddProductForm = ({userdata,draws,aloud, setProducts,products}) => {
         },
         body: JSON.stringify({
           ...values,
-          requestfrom:false
+          requestfrom:true
         }),
       });
       if (response.ok) {
@@ -1162,7 +1162,7 @@ const AddProductForm = ({userdata,draws,aloud, setProducts,products}) => {
     },
     body: JSON.stringify({
       ...values,
-      requestfrom:false
+      requestfrom:true
     }),
   });
   if (response.ok) {
@@ -1216,7 +1216,7 @@ else if (values.dealer==="allcombined"){
     },
     body: JSON.stringify({
       ...values,
-      requestfrom:false
+      requestfrom:true
     }),
   });
   if (response.ok) {

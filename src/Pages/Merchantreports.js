@@ -30,7 +30,7 @@ const navigate=useNavigate();
   };
   const Alltabs=[
     {
-        label:"Total Sale",
+        label:"Total Party Sale",
         key:"alldistributors",
         children: <TotalSale
         userdata={userdata}
