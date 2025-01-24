@@ -9,7 +9,7 @@ import 'jspdf-autotable';
 import { CheckCircleFilled, CloseCircleFilled, DeleteFilled, PlusCircleFilled, SaveFilled, ScanOutlined, SecurityScanFilled,SearchOutlined } from '@ant-design/icons';
 const { Option } = Select;
 
-const AddProductForm = ({userdata,draws,aloud, setProducts,products}) => {
+const AddProductForm = ({userdata,draws,aloud, setProducts,adminaloud,products}) => {
   const [form] = Form.useForm();
   const [successModalVisible, setSuccessModalVisible] = useState(false);
   const [errorModalVisible, setErrorModalVisible] = useState(false);
@@ -26,26 +26,26 @@ const AddProductForm = ({userdata,draws,aloud, setProducts,products}) => {
 
   const downloadinvoice = (arr,values,limits,name,username,userData1) => {
     let filteredPayments = arr;
-    for (let i=0;i<filteredPayments.length;i++){
-      if(filteredPayments[i].bundle.length===1){
-        filteredPayments[i].f=filteredPayments[i].f-Number(limits.hindsaa)
-        filteredPayments[i].s=filteredPayments[i].s-Number(limits.hindsab)
-      }
-      if(filteredPayments[i].bundle.length===2){
-        filteredPayments[i].f=filteredPayments[i].f-Number(limits.akraa)
-        filteredPayments[i].s=filteredPayments[i].s-Number(limits.akrab)
+    // for (let i=0;i<filteredPayments.length;i++){
+    //   if(filteredPayments[i].bundle.length===1){
+    //     filteredPayments[i].f=filteredPayments[i].f-Number(limits.hindsaa)
+    //     filteredPayments[i].s=filteredPayments[i].s-Number(limits.hindsab)
+    //   }
+    //   if(filteredPayments[i].bundle.length===2){
+    //     filteredPayments[i].f=filteredPayments[i].f-Number(limits.akraa)
+    //     filteredPayments[i].s=filteredPayments[i].s-Number(limits.akrab)
         
-      }
-      if(filteredPayments[i].bundle.length===3){
-        filteredPayments[i].f=filteredPayments[i].f-Number(limits.tendolaa)
-        filteredPayments[i].s=filteredPayments[i].s-Number(limits.tendolab)
+    //   }
+    //   if(filteredPayments[i].bundle.length===3){
+    //     filteredPayments[i].f=filteredPayments[i].f-Number(limits.tendolaa)
+    //     filteredPayments[i].s=filteredPayments[i].s-Number(limits.tendolab)
         
-      }
-      if(filteredPayments[i].bundle.length===4){
-        filteredPayments[i].f=filteredPayments[i].f-Number(limits.panogadaa)
-        filteredPayments[i].s=filteredPayments[i].s-Number(limits.panogadab)
-      }
-    }
+    //   }
+    //   if(filteredPayments[i].bundle.length===4){
+    //     filteredPayments[i].f=filteredPayments[i].f-Number(limits.panogadaa)
+    //     filteredPayments[i].s=filteredPayments[i].s-Number(limits.panogadab)
+    //   }
+    // }
     for (let i=0;i<filteredPayments.length;i++){
     if(Number(filteredPayments[i].f)<0){
       filteredPayments[i].f=0
@@ -859,61 +859,61 @@ const AddProductForm = ({userdata,draws,aloud, setProducts,products}) => {
   
   const downloadinvoice1 = (arr,values,limits,name,username,userData1) => {
     let filteredPayments = arr;
-    for (let i=0;i<filteredPayments.length;i++){
-      if(filteredPayments[i].bundle.length===1){
-        if(Number(limits.hindsaa)>filteredPayments[i].f){
-          filteredPayments[i].f=filteredPayments[i].f
-        }else{
-          filteredPayments[i].f=Number(limits.hindsaa)
-        }
-       if(filteredPayments[i].s<Number(limits.hindsab)){
-        filteredPayments[i].s=filteredPayments[i].s
-       }
-       else{
-        filteredPayments[i].s=Number(limits.hindsab)
-       }
-      }
-      if(filteredPayments[i].bundle.length===2){
-        if(filteredPayments[i].f<Number(limits.akraa)){
-          filteredPayments[i].f=filteredPayments[i].f
-        }else{
-          filteredPayments[i].f=Number(limits.akraa)
-        }
-        if(filteredPayments[i].s<Number(limits.akrab)){
-          filteredPayments[i].s=filteredPayments[i].s
-        }else{
-          filteredPayments[i].s=Number(limits.akrab)
-        }
+    // for (let i=0;i<filteredPayments.length;i++){
+    //   if(filteredPayments[i].bundle.length===1){
+    //     if(Number(limits.hindsaa)>filteredPayments[i].f){
+    //       filteredPayments[i].f=filteredPayments[i].f
+    //     }else{
+    //       filteredPayments[i].f=Number(limits.hindsaa)
+    //     }
+    //    if(filteredPayments[i].s<Number(limits.hindsab)){
+    //     filteredPayments[i].s=filteredPayments[i].s
+    //    }
+    //    else{
+    //     filteredPayments[i].s=Number(limits.hindsab)
+    //    }
+    //   }
+    //   if(filteredPayments[i].bundle.length===2){
+    //     if(filteredPayments[i].f<Number(limits.akraa)){
+    //       filteredPayments[i].f=filteredPayments[i].f
+    //     }else{
+    //       filteredPayments[i].f=Number(limits.akraa)
+    //     }
+    //     if(filteredPayments[i].s<Number(limits.akrab)){
+    //       filteredPayments[i].s=filteredPayments[i].s
+    //     }else{
+    //       filteredPayments[i].s=Number(limits.akrab)
+    //     }
         
-      }
-      if(filteredPayments[i].bundle.length===3){
-        if(filteredPayments[i].f<Number(limits.tendolaa)){
-          filteredPayments[i].f=filteredPayments[i].f
-        }else{
-          filteredPayments[i].f=Number(limits.tendolaa)
-        }
-        if(filteredPayments[i].s<Number(limits.tendolab)){
-          filteredPayments[i].s=filteredPayments[i].s
-        }
-        else{
-          filteredPayments[i].s=Number(limits.tendolab)
-        }
+    //   }
+    //   if(filteredPayments[i].bundle.length===3){
+    //     if(filteredPayments[i].f<Number(limits.tendolaa)){
+    //       filteredPayments[i].f=filteredPayments[i].f
+    //     }else{
+    //       filteredPayments[i].f=Number(limits.tendolaa)
+    //     }
+    //     if(filteredPayments[i].s<Number(limits.tendolab)){
+    //       filteredPayments[i].s=filteredPayments[i].s
+    //     }
+    //     else{
+    //       filteredPayments[i].s=Number(limits.tendolab)
+    //     }
         
-      }
-      if(filteredPayments[i].bundle.length===4){
-        if(filteredPayments[i].f<Number(limits.panogadaa)){
-          filteredPayments[i].f=filteredPayments[i].f
-        }else{
-          filteredPayments[i].f=Number(limits.panogadaa)
-        }
+    //   }
+    //   if(filteredPayments[i].bundle.length===4){
+    //     if(filteredPayments[i].f<Number(limits.panogadaa)){
+    //       filteredPayments[i].f=filteredPayments[i].f
+    //     }else{
+    //       filteredPayments[i].f=Number(limits.panogadaa)
+    //     }
         
-        if(filteredPayments[i].s<Number(limits.panogadab)){
-          filteredPayments[i].s=filteredPayments[i].s
-        }else{
-          filteredPayments[i].s=Number(limits.panogadab)
-        }
-      }
-    }
+    //     if(filteredPayments[i].s<Number(limits.panogadab)){
+    //       filteredPayments[i].s=filteredPayments[i].s
+    //     }else{
+    //       filteredPayments[i].s=Number(limits.panogadab)
+    //     }
+    //   }
+    // }
    
   
     const doc = new jsPDF();
@@ -1101,7 +1101,7 @@ const AddProductForm = ({userdata,draws,aloud, setProducts,products}) => {
         return;
       }
       if(values.dealer!=="allcombined"&&values.dealer!=="allseparate"){
-        const response = await fetch(`${linkurl}/report/getHaddLimitReportforparticulardistributorbyme`, {
+        const response = await fetch(`${linkurl}/report/getHaddLimitReportforparticulardistributorbymedealercutting`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -1154,7 +1154,7 @@ const AddProductForm = ({userdata,draws,aloud, setProducts,products}) => {
         alert(userData.Message)
       }
 }else if (values.dealer==="allseparate"){
-  const response = await fetch(`${linkurl}/report/getHaddLimitReportforalldistributorbyme`, {
+  const response = await fetch(`${linkurl}/report/getHaddLimitReportforalldistributorbymedealercutting`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -1208,7 +1208,7 @@ const AddProductForm = ({userdata,draws,aloud, setProducts,products}) => {
   }
 }
 else if (values.dealer==="allcombined"){
-  const response = await fetch(`${linkurl}/report/getHaddLimitReportforalldistributorbyme`, {
+  const response = await fetch(`${linkurl}/report/getHaddLimitReportforalldistributorbymedealercutting`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -1225,6 +1225,9 @@ else if (values.dealer==="allcombined"){
     let alldraws=[]
       let drawtosend={}
       if(values.limittype==="uplimit"){
+        if(adminaloud){
+
+       
 
         userData.forEach((Payments) => {
           let filteredPayments=Payments.drawarrtosend
@@ -1311,7 +1314,24 @@ else if (values.dealer==="allcombined"){
             const userData = await response.json();
             alert(userData.Message)
           }
+        }else{
+          const response1 = await fetch(`${linkurl}/report/getPrefixes/${values.date}`, {
+            method: 'GET',
+            headers: {
+              'Content-Type': 'application/json',
+              token: token,
+            }
+          });
+          if (response1.ok) {
+            const userData1 = await response1.json();
+          downloadinvoice4(userData,values,userData1)
+          } else {
+            const userData = await response.json();
+            alert(userData.Message)
+          }
+        }
       }else{
+        if(adminaloud){
         
     userData.forEach((Payments) => {
       let filteredPayments=Payments.drawarrtosend
@@ -1410,7 +1430,23 @@ else if (values.dealer==="allcombined"){
             alert(userData.Message)
           }
       // downloadinvoice4(drawarrtosend,values)
+      }else{
+        const response1 = await fetch(`${linkurl}/report/getPrefixes/${values.date}`, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            token: token,
+          }
+        });
+        if (response1.ok) {
+          const userData1 = await response1.json();
+        downloadinvoice4(userData,values,userData1)
+        } else {
+          const userData = await response.json();
+          alert(userData.Message)
+        }
       }
+    }
     // form.resetFields();
   } else {
     const userData = await response.json();
@@ -1495,7 +1531,7 @@ else if (values.dealer==="allcombined"){
                          <Option value={"allseparate"}>All Distributors Separate</Option>
                          {products.map((element)=>{
                           return(
-                            <Option value={element._id}>{element.username}</Option>
+                            <Option value={element._id}>{element.username+" ("+element.name+" )"}</Option>
                           )
                          })}
 

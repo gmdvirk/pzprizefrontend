@@ -95,7 +95,8 @@ const AdminHomePage = () => {
           userdata={userdata}
           products={employees}
           draws={draws}
-          aloud={aloud}
+          aloud={disributoraloud}
+          adminaloud={aloud}
           setProducts={setEmployees}
         />
       ),

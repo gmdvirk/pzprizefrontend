@@ -369,7 +369,7 @@ const AddProductForm = ({ userdata,draws, setProducts, products }) => {
                   <Option value={"alldistributors"}>All Distributors</Option>
                   {products.map((element) => {
                     return (
-                      <Option key={element._id} value={element._id}>{element.username}</Option>
+                      <Option key={element._id} value={element._id}>{element.username+" ("+element.name+" )"}</Option>
                     );
                   })}
                 </Select>

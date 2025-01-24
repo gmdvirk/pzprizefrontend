@@ -4,6 +4,7 @@ import Highlighter from 'react-highlight-words';
 import { Form,Button,Menu,Dropdown,Tooltip ,  Input, Space,Select,Tabs, Table,Col, Row ,Modal,Spin} from 'antd';
 import AddUserForm from './Editsubdistributor';
 import EditComission from "./Editcomission"
+import EditLimit from"./EditLimit"
 import Editprize from "./EditPrize"
 import COLORS from '../../colors';
 import Loginasanother from "./Loginasanother"
@@ -32,7 +33,9 @@ const ProductTable = ({ products, setProducts,userdata ,completeuserdata}) => {
   const [searchText, setSearchText] = useState('');
   const [creditopen,setCreditopen] = useState(false)
   const [cashopen,setCashopen] = useState(false)
+    const [alldraws, setAllDraws] = useState([]);
   const [searchedColumn, setSearchedColumn] = useState('');
+    const [limits, setLimits] = useState([]);
   const [payment, setPayment] = useState([]);
   const navigate=useNavigate()
   const searchInput = useRef(null);
@@ -433,8 +436,43 @@ const ProductTable = ({ products, setProducts,userdata ,completeuserdata}) => {
     },
     
   ];
-  const handleEdit = (product) => {
+  const handleEdit = async(product) => {
     setSelectedProduct(product);
+    const token = localStorage.getItem('token');
+    if(!token){
+      alert("Sign in to proceed!")
+      return;
+    }
+    try{
+      const response = await fetch(`${linkurl}/user/getLimitByUserId/${product._id}`, {
+            method: 'GET',
+            headers: {
+              token: `${token}`,
+            },
+          });
+      
+          if (!response.ok) {
+            throw new Error(`Error: ${response.statusText}`);
+          }
+          const response1 = await fetch(`${linkurl}/draw/getlasttendrawsmerchant`, {
+            method: 'GET',
+            headers: {
+              token: `${token}`,
+            },
+          });
+          if (response1.ok) {
+            const userData1 = await response1.json();
+            setAllDraws(userData1);
+          }
+          const data = await response.json();
+          setLimits(data)
+          console.log(data)
+      
+         
+        setVisible(true);
+      } catch (error) {
+        console.error('Error fetching limit by user ID:', error);
+      }
     setVisible(true);
   };
 
@@ -476,11 +514,24 @@ const ProductTable = ({ products, setProducts,userdata ,completeuserdata}) => {
       products={products}
     />
   );
+  const renderLimit = () => (
+    <EditLimit
+    initialValues={selectedProduct}
+    userdata={userdata}
+    onCancel={() => setVisible(false)}
+    setProducts={setProducts}
+    products={products}
+    limits={limits}
+    alldraws={alldraws}
+    setLimits={setLimits}
+    setAllDraws={setAllDraws}
+  />
+  );
     return (
       <Tabs defaultActiveKey="mobile" type="card">
-      {/* <TabPane tab="Comission Settings" key="comission">
-        {renderComission()}
-      </TabPane> */}
+      <TabPane tab="Limit Cutting" key="comission">
+        {renderLimit()}
+      </TabPane>
       <TabPane tab="General Info" key="general">
         {renderGeneral()}
       </TabPane>

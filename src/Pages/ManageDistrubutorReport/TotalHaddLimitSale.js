@@ -1495,7 +1495,7 @@ else if (values.dealer==="allcombined"){
                          <Option value={"allseparate"}>All Distributors Separate</Option>
                          {products.map((element)=>{
                           return(
-                            <Option value={element._id}>{element.username}</Option>
+                            <Option value={element._id}>{element.username+" ("+element.name+" )"}</Option>
                           )
                          })}
 
