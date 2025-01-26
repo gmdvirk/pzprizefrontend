@@ -26,26 +26,26 @@ const AddProductForm = ({userdata,draws,aloud, setProducts,adminaloud,products})
 
   const downloadinvoice = (arr,values,limits,name,username,userData1) => {
     let filteredPayments = arr;
-    // for (let i=0;i<filteredPayments.length;i++){
-    //   if(filteredPayments[i].bundle.length===1){
-    //     filteredPayments[i].f=filteredPayments[i].f-Number(limits.hindsaa)
-    //     filteredPayments[i].s=filteredPayments[i].s-Number(limits.hindsab)
-    //   }
-    //   if(filteredPayments[i].bundle.length===2){
-    //     filteredPayments[i].f=filteredPayments[i].f-Number(limits.akraa)
-    //     filteredPayments[i].s=filteredPayments[i].s-Number(limits.akrab)
+    for (let i=0;i<filteredPayments.length;i++){
+      if(filteredPayments[i].bundle.length===1){
+        filteredPayments[i].f=filteredPayments[i].f-Number(limits.hindsaa)
+        filteredPayments[i].s=filteredPayments[i].s-Number(limits.hindsab)
+      }
+      if(filteredPayments[i].bundle.length===2){
+        filteredPayments[i].f=filteredPayments[i].f-Number(limits.akraa)
+        filteredPayments[i].s=filteredPayments[i].s-Number(limits.akrab)
         
-    //   }
-    //   if(filteredPayments[i].bundle.length===3){
-    //     filteredPayments[i].f=filteredPayments[i].f-Number(limits.tendolaa)
-    //     filteredPayments[i].s=filteredPayments[i].s-Number(limits.tendolab)
+      }
+      if(filteredPayments[i].bundle.length===3){
+        filteredPayments[i].f=filteredPayments[i].f-Number(limits.tendolaa)
+        filteredPayments[i].s=filteredPayments[i].s-Number(limits.tendolab)
         
-    //   }
-    //   if(filteredPayments[i].bundle.length===4){
-    //     filteredPayments[i].f=filteredPayments[i].f-Number(limits.panogadaa)
-    //     filteredPayments[i].s=filteredPayments[i].s-Number(limits.panogadab)
-    //   }
-    // }
+      }
+      if(filteredPayments[i].bundle.length===4){
+        filteredPayments[i].f=filteredPayments[i].f-Number(limits.panogadaa)
+        filteredPayments[i].s=filteredPayments[i].s-Number(limits.panogadab)
+      }
+    }
     for (let i=0;i<filteredPayments.length;i++){
     if(Number(filteredPayments[i].f)<0){
       filteredPayments[i].f=0
@@ -226,7 +226,9 @@ const AddProductForm = ({userdata,draws,aloud, setProducts,adminaloud,products})
   };
   
   const downloadinvoice4 = (arr,values,userData1) => {
-    let filteredPayments = [...arr];
+   
+    let filteredPayments = [...arr ];
+  
     const doc = new jsPDF();
     const columns = [
       { title: 'Bundle', dataKey: 'bundle' },
@@ -639,63 +641,66 @@ const AddProductForm = ({userdata,draws,aloud, setProducts,adminaloud,products})
           doc.text(`Draw: ${drawdate.date}`, 150, 30);
           doc.text(`Draw Title: ${drawdate.title}`, 14, 35);
         }
-      for (let i = 0; i < filteredPayments.length; i++) {
-        if(filteredPayments[i].bundle.length===1){
-          if(Number(Payments.limits.hindsaa)>filteredPayments[i].f){
-            filteredPayments[i].f=filteredPayments[i].f
-          }else{
-            filteredPayments[i].f=Number(Payments.limits.hindsaa)
+        if(adminaloud){
+          for (let i = 0; i < filteredPayments.length; i++) {
+            if(filteredPayments[i].bundle.length===1){
+              if(Number(Payments.limits.hindsaa)>filteredPayments[i].f){
+                filteredPayments[i].f=filteredPayments[i].f
+              }else{
+                filteredPayments[i].f=Number(Payments.limits.hindsaa)
+              }
+             if(filteredPayments[i].s<Number(Payments.limits.hindsab)){
+              filteredPayments[i].s=filteredPayments[i].s
+             }
+             else{
+              filteredPayments[i].s=Number(Payments.limits.hindsab)
+             }
+            }
+            if(filteredPayments[i].bundle.length===2){
+              if(filteredPayments[i].f<Number(Payments.limits.akraa)){
+                filteredPayments[i].f=filteredPayments[i].f
+              }else{
+                filteredPayments[i].f=Number(Payments.limits.akraa)
+              }
+              if(filteredPayments[i].s<Number(Payments.limits.akrab)){
+                filteredPayments[i].s=filteredPayments[i].s
+              }else{
+                filteredPayments[i].s=Number(Payments.limits.akrab)
+              }
+              
+            }
+            if(filteredPayments[i].bundle.length===3){
+              if(filteredPayments[i].f<Number(Payments.limits.tendolaa)){
+                filteredPayments[i].f=filteredPayments[i].f
+              }else{
+                filteredPayments[i].f=Number(Payments.limits.tendolaa)
+              }
+              if(filteredPayments[i].s<Number(Payments.limits.tendolab)){
+                filteredPayments[i].s=filteredPayments[i].s
+              }
+              else{
+                filteredPayments[i].s=Number(Payments.limits.tendolab)
+              }
+              
+            }
+            if(filteredPayments[i].bundle.length===4){
+              if(filteredPayments[i].f<Number(Payments.limits.panogadaa)){
+                filteredPayments[i].f=filteredPayments[i].f
+              }else{
+                filteredPayments[i].f=Number(Payments.limits.panogadaa)
+              }
+              
+              if(filteredPayments[i].s<Number(Payments.limits.panogadab)){
+                filteredPayments[i].s=filteredPayments[i].s
+              }else{
+                filteredPayments[i].s=Number(Payments.limits.panogadab)
+              }
+              
+             
+            }
           }
-         if(filteredPayments[i].s<Number(Payments.limits.hindsab)){
-          filteredPayments[i].s=filteredPayments[i].s
-         }
-         else{
-          filteredPayments[i].s=Number(Payments.limits.hindsab)
-         }
         }
-        if(filteredPayments[i].bundle.length===2){
-          if(filteredPayments[i].f<Number(Payments.limits.akraa)){
-            filteredPayments[i].f=filteredPayments[i].f
-          }else{
-            filteredPayments[i].f=Number(Payments.limits.akraa)
-          }
-          if(filteredPayments[i].s<Number(Payments.limits.akrab)){
-            filteredPayments[i].s=filteredPayments[i].s
-          }else{
-            filteredPayments[i].s=Number(Payments.limits.akrab)
-          }
-          
-        }
-        if(filteredPayments[i].bundle.length===3){
-          if(filteredPayments[i].f<Number(Payments.limits.tendolaa)){
-            filteredPayments[i].f=filteredPayments[i].f
-          }else{
-            filteredPayments[i].f=Number(Payments.limits.tendolaa)
-          }
-          if(filteredPayments[i].s<Number(Payments.limits.tendolab)){
-            filteredPayments[i].s=filteredPayments[i].s
-          }
-          else{
-            filteredPayments[i].s=Number(Payments.limits.tendolab)
-          }
-          
-        }
-        if(filteredPayments[i].bundle.length===4){
-          if(filteredPayments[i].f<Number(Payments.limits.panogadaa)){
-            filteredPayments[i].f=filteredPayments[i].f
-          }else{
-            filteredPayments[i].f=Number(Payments.limits.panogadaa)
-          }
-          
-          if(filteredPayments[i].s<Number(Payments.limits.panogadab)){
-            filteredPayments[i].s=filteredPayments[i].s
-          }else{
-            filteredPayments[i].s=Number(Payments.limits.panogadab)
-          }
-          
-         
-        }
-      }
+     
       
     filteredPayments=filteredPayments.filter((obj)=>obj.f>0 || obj.s >0)
    
@@ -859,62 +864,65 @@ const AddProductForm = ({userdata,draws,aloud, setProducts,adminaloud,products})
   
   const downloadinvoice1 = (arr,values,limits,name,username,userData1) => {
     let filteredPayments = arr;
-    // for (let i=0;i<filteredPayments.length;i++){
-    //   if(filteredPayments[i].bundle.length===1){
-    //     if(Number(limits.hindsaa)>filteredPayments[i].f){
-    //       filteredPayments[i].f=filteredPayments[i].f
-    //     }else{
-    //       filteredPayments[i].f=Number(limits.hindsaa)
-    //     }
-    //    if(filteredPayments[i].s<Number(limits.hindsab)){
-    //     filteredPayments[i].s=filteredPayments[i].s
-    //    }
-    //    else{
-    //     filteredPayments[i].s=Number(limits.hindsab)
-    //    }
-    //   }
-    //   if(filteredPayments[i].bundle.length===2){
-    //     if(filteredPayments[i].f<Number(limits.akraa)){
-    //       filteredPayments[i].f=filteredPayments[i].f
-    //     }else{
-    //       filteredPayments[i].f=Number(limits.akraa)
-    //     }
-    //     if(filteredPayments[i].s<Number(limits.akrab)){
-    //       filteredPayments[i].s=filteredPayments[i].s
-    //     }else{
-    //       filteredPayments[i].s=Number(limits.akrab)
-    //     }
-        
-    //   }
-    //   if(filteredPayments[i].bundle.length===3){
-    //     if(filteredPayments[i].f<Number(limits.tendolaa)){
-    //       filteredPayments[i].f=filteredPayments[i].f
-    //     }else{
-    //       filteredPayments[i].f=Number(limits.tendolaa)
-    //     }
-    //     if(filteredPayments[i].s<Number(limits.tendolab)){
-    //       filteredPayments[i].s=filteredPayments[i].s
-    //     }
-    //     else{
-    //       filteredPayments[i].s=Number(limits.tendolab)
-    //     }
-        
-    //   }
-    //   if(filteredPayments[i].bundle.length===4){
-    //     if(filteredPayments[i].f<Number(limits.panogadaa)){
-    //       filteredPayments[i].f=filteredPayments[i].f
-    //     }else{
-    //       filteredPayments[i].f=Number(limits.panogadaa)
-    //     }
-        
-    //     if(filteredPayments[i].s<Number(limits.panogadab)){
-    //       filteredPayments[i].s=filteredPayments[i].s
-    //     }else{
-    //       filteredPayments[i].s=Number(limits.panogadab)
-    //     }
-    //   }
-    // }
-   
+    if(adminaloud){
+      for (let i=0;i<filteredPayments.length;i++){
+        if(filteredPayments[i].bundle.length===1){
+          if(Number(limits.hindsaa)>filteredPayments[i].f){
+            filteredPayments[i].f=filteredPayments[i].f
+          }else{
+            filteredPayments[i].f=Number(limits.hindsaa)
+          }
+         if(filteredPayments[i].s<Number(limits.hindsab)){
+          filteredPayments[i].s=filteredPayments[i].s
+         }
+         else{
+          filteredPayments[i].s=Number(limits.hindsab)
+         }
+        }
+        if(filteredPayments[i].bundle.length===2){
+          if(filteredPayments[i].f<Number(limits.akraa)){
+            filteredPayments[i].f=filteredPayments[i].f
+          }else{
+            filteredPayments[i].f=Number(limits.akraa)
+          }
+          if(filteredPayments[i].s<Number(limits.akrab)){
+            filteredPayments[i].s=filteredPayments[i].s
+          }else{
+            filteredPayments[i].s=Number(limits.akrab)
+          }
+          
+        }
+        if(filteredPayments[i].bundle.length===3){
+          if(filteredPayments[i].f<Number(limits.tendolaa)){
+            filteredPayments[i].f=filteredPayments[i].f
+          }else{
+            filteredPayments[i].f=Number(limits.tendolaa)
+          }
+          if(filteredPayments[i].s<Number(limits.tendolab)){
+            filteredPayments[i].s=filteredPayments[i].s
+          }
+          else{
+            filteredPayments[i].s=Number(limits.tendolab)
+          }
+          
+        }
+        if(filteredPayments[i].bundle.length===4){
+          if(filteredPayments[i].f<Number(limits.panogadaa)){
+            filteredPayments[i].f=filteredPayments[i].f
+          }else{
+            filteredPayments[i].f=Number(limits.panogadaa)
+          }
+          
+          if(filteredPayments[i].s<Number(limits.panogadab)){
+            filteredPayments[i].s=filteredPayments[i].s
+          }else{
+            filteredPayments[i].s=Number(limits.panogadab)
+          }
+        }
+      }
+     
+    }
+    
   
     const doc = new jsPDF();
     const columns = [
@@ -1225,7 +1233,7 @@ else if (values.dealer==="allcombined"){
     let alldraws=[]
       let drawtosend={}
       if(values.limittype==="uplimit"){
-        if(adminaloud){
+        // if(adminaloud){
 
        
 
@@ -1314,22 +1322,23 @@ else if (values.dealer==="allcombined"){
             const userData = await response.json();
             alert(userData.Message)
           }
-        }else{
-          const response1 = await fetch(`${linkurl}/report/getPrefixes/${values.date}`, {
-            method: 'GET',
-            headers: {
-              'Content-Type': 'application/json',
-              token: token,
-            }
-          });
-          if (response1.ok) {
-            const userData1 = await response1.json();
-          downloadinvoice4(userData,values,userData1)
-          } else {
-            const userData = await response.json();
-            alert(userData.Message)
-          }
-        }
+        // }
+        // else{
+        //   const response1 = await fetch(`${linkurl}/report/getPrefixes/${values.date}`, {
+        //     method: 'GET',
+        //     headers: {
+        //       'Content-Type': 'application/json',
+        //       token: token,
+        //     }
+        //   });
+        //   if (response1.ok) {
+        //     const userData1 = await response1.json();
+        //   downloadinvoice4(userData[0].drawarrtosend,values,userData1)
+        //   } else {
+        //     const userData = await response.json();
+        //     alert(userData.Message)
+        //   }
+        // }
       }else{
         if(adminaloud){
         
@@ -1440,7 +1449,7 @@ else if (values.dealer==="allcombined"){
         });
         if (response1.ok) {
           const userData1 = await response1.json();
-        downloadinvoice4(userData,values,userData1)
+        downloadinvoice4(userData[0].drawarrtosend ,values,userData1)
         } else {
           const userData = await response.json();
           alert(userData.Message)

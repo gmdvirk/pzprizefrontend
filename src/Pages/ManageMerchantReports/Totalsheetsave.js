@@ -695,7 +695,7 @@ const getExpiredOrNot=(users)=>{
       onChange={(e) => {
         const temp = draws.find((obj) => obj.date === e)
         setDrawdate(temp)
-        setSelectedsheet({_id:"combinedsjkngkfjgnfkj",sheetname:"combined",drawid:drawdate._id})
+        setSelectedsheet({_id:"combinedsjkngkfjgnfkj",sheetname:"combined",drawid:temp._id})
         form.resetFields();
         form.setFieldsValue({date:e,sheet:"combinedsjkngkfjgnfkj"})
         
