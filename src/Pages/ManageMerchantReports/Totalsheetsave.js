@@ -253,11 +253,17 @@ const AddProductForm = ({draws,sheets,userdata, setProducts,products}) => {
       doc.text("Bundle", startX + blockWidth / 2, startY + blockHeight / 2, { align: 'center' });
   
       // First header
+      doc.setFillColor(75, 0, 130);
+      doc.setDrawColor(75, 0, 130);
       doc.rect(startX + blockWidth, startY, blockWidth, blockHeight, 'FD');
+      doc.setTextColor(255, 255, 255);
       doc.text("First", startX + blockWidth + blockWidth / 2, startY + blockHeight / 2, { align: 'center' });
   
       // Second header
+      doc.setFillColor(75, 0, 130);
+      doc.setDrawColor(75, 0, 130);
       doc.rect(startX + 2 * blockWidth, startY, blockWidth, blockHeight, 'FD');
+      doc.setTextColor(255, 255, 255);
       doc.text("Second", startX + 2 * blockWidth + blockWidth / 2, startY + blockHeight / 2, { align: 'center' });
   
       startX += 3 * blockWidth;
@@ -296,6 +302,7 @@ const AddProductForm = ({draws,sheets,userdata, setProducts,products}) => {
       doc.text(pay.f.toString(), startX + blockWidth + blockWidth / 2, startY + blockHeight / 2, { align: 'center' });
   
       // Second value cell
+      doc.setFillColor(255, 255, 255);
       doc.rect(startX + 2 * blockWidth, startY, blockWidth, blockHeight, 'FD');
       doc.text(pay.s.toString(), startX + 2 * blockWidth + blockWidth / 2, startY + blockHeight / 2, { align: 'center' });
       doc.setTextColor(0, 0, 0);
@@ -319,8 +326,12 @@ const AddProductForm = ({draws,sheets,userdata, setProducts,products}) => {
     doc.text(`Total First : ${totalFirst1}`, 14, startY);
     doc.text(`Total Second : ${totalSecond1}`, 64, startY);
     doc.text(`Total : ${total1}`, 114, startY);
-  
-    doc.save('Oversale Report.pdf');
+    if(type === "oversale"){
+      doc.save('Oversale Report.pdf');
+    }else{
+      doc.save('General Report.pdf');
+    }
+    
   };
   const downloadinvoice1 = (arr, userData1) => {
     const doc = new jsPDF();
@@ -625,7 +636,7 @@ const AddProductForm = ({draws,sheets,userdata, setProducts,products}) => {
             });
             if (response1.ok) {
               const userData1 = await response1.json();
-            downloadinvoice2(userData,values,userData1)
+            downloadinvoice2(userData,values.report,userData1)
           } else {
             const userData = await response.json();
             alert(userData.Message)
