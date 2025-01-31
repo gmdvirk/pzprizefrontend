@@ -1112,6 +1112,7 @@ const AddProductForm = ({userdata,draws, setProducts,products}) => {
   });
   if (response.ok) {
     const userData = await response.json();
+    console.log(userData)
     // let tempobj=userData.drawarrtosend;
     if(values.limittype==="uplimit"){
       const response1 = await fetch(`${linkurl}/report/getPrefixes/${values.date}`, {

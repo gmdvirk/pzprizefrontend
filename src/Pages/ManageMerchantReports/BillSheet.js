@@ -343,7 +343,7 @@ doc.autoTable({
         
         return;
       }
-      if(values.saletype==="sale"){
+      // if(values.saletype==="sale"){
         const response = await fetch(`${linkurl}/report/getBillSheetReportforparticularmerchantme`, {
         method: 'POST',
         headers: {
@@ -356,7 +356,6 @@ doc.autoTable({
       });
       if (response.ok) {
         const userData = await response.json();
-        console.log(userData)
         let tempobj=userData.drawarrtosend;
         generatePDFReport(userData)
         // form.resetFields();
@@ -364,28 +363,28 @@ doc.autoTable({
         const userData = await response.json();
         alert(userData.Message)
       }
-}
-else if (values.saletype==="oversale"){
-  const response = await fetch(`${linkurl}/report/getBillSheetReportforparticularmerchantmeoversale`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      token: token,
-    },
-    body: JSON.stringify({
-      ...values
-    }),
-  });
-  if (response.ok) {
-    const userData = await response.json();
- generatePDFReport(userData)
-      // downloadinvoice4(drawarrtosend,values)
-    // form.resetFields();
-  } else {
-    const userData = await response.json();
-    alert(userData.Message)
-  }
-}
+// }
+// else if (values.saletype==="oversale"){
+//   const response = await fetch(`${linkurl}/report/getBillSheetReportforparticularmerchantmeoversale`, {
+//     method: 'POST',
+//     headers: {
+//       'Content-Type': 'application/json',
+//       token: token,
+//     },
+//     body: JSON.stringify({
+//       ...values
+//     }),
+//   });
+//   if (response.ok) {
+//     const userData = await response.json();
+//  generatePDFReport(userData)
+//       // downloadinvoice4(drawarrtosend,values)
+//     // form.resetFields();
+//   } else {
+//     const userData = await response.json();
+//     alert(userData.Message)
+//   }
+// }
     }catch(error){
       alert(error.message)
     }
