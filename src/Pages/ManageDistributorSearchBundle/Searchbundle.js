@@ -84,7 +84,7 @@ const AddProductForm = ({ setProducts,draws,products}) => {
         for(let i=0;i<userData.length;i++){
           let temp={f:0,s:0}
           for(let j=0;j<userData[i].saledata.length;j++){
-            if(userData[i].saledata[j].bundle===values.bundle){
+            if(userData[i].saledata[j].bundle===values.bundle&&userData[i].saledata[j].type==="sale"){
               temp.f=Number(temp.f)+Number(userData[i].saledata[j].f)
               temp.s=Number(temp.s)+Number(userData[i].saledata[j].s)
             }
@@ -492,7 +492,7 @@ color: "white"
       responsive={true} // Enable responsive behavior
       />
         <p><strong>Over Sale :</strong></p>
-        {selectedRowKeys && selectedRowKeys.length > 0 && <Button onClick={() => setDeleteConfirmationVisible1(true)} type="primary">Delete</Button>}{' '}
+        {selectedRowKeys && selectedRowKeys.length > 0 && <Button onClick={() => setDeleteConfirmationVisible(true)} type="primary">Delete</Button>}{' '}
       <Table columns={columns1} dataSource={[...selected.filter((obj)=>obj.type==="oversale")]} rowKey="_id"
         rowSelection={rowSelection}
       scroll={{ x: true }} // Enable horizontal scrolling

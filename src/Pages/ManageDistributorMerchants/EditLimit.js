@@ -45,7 +45,23 @@ const EditProductForm = (props) => {
     form.setFieldsValue(limitsetting);
   }, [limitsetting, form]);
 
-
+  const getExpiredOrNotBoolValue=(users)=>{
+    // Parse the draw date and time from the users object
+    
+    const drawDateTime = new Date(`${users.date}T${users.time}Z`);
+    let currentDatetime = new Date();
+    let currentDate = currentDatetime.toLocaleDateString('en-CA'); // 'YYYY-MM-DD'
+    let currentTime = currentDatetime.toLocaleTimeString('en-GB', { hour12: false }).slice(0, 5); // 'HH:MM'
+    // Check if the current date and time are less than the draw date and time
+    const drawDateTime1 = new Date(`${currentDate}T${currentTime}Z`);
+    if (drawDateTime1 >= drawDateTime) {
+        return false
+    }
+    if (users.status === 'active') {
+     return true
+  }
+    return false
+  }
   const onFinish = async (values) => {
     setLoading(true)
     try {
@@ -128,6 +144,7 @@ const EditProductForm = (props) => {
  }
     return "deactive"
  }
+
   return (
     <div>
     {loading ? (
@@ -174,7 +191,10 @@ const EditProductForm = (props) => {
                         
                       {props.alldraws.draws.map((obj)=>{
                         return(
-                          <Option style={{color:getExpiredOrNot(obj)==="active"?"green":'red'}} value={obj.date}>{obj.title+"---"+obj.date+"--"+getExpiredOrNot(obj)}</Option>
+                          <>
+                            {getExpiredOrNot(obj)==="active"&&<Option style={{color:getExpiredOrNot(obj)==="active"?"green":'red'}} value={obj.date}>{obj.title+"---"+obj.date+"--"+getExpiredOrNot(obj)}</Option>}
+                          </>
+                        
                         )
                       })  }
                        </Select>

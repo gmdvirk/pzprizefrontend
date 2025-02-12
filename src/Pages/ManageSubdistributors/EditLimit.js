@@ -174,7 +174,10 @@ const EditProductForm = (props) => {
                         
                       {props.alldraws.draws.map((obj)=>{
                         return(
-                          <Option style={{color:getExpiredOrNot(obj)==="active"?"green":'red'}} value={obj.date}>{obj.title+"---"+obj.date+"--"+getExpiredOrNot(obj)}</Option>
+                          <>
+                          {getExpiredOrNot(obj)==="active"&&<Option style={{color:getExpiredOrNot(obj)==="active"?"green":'red'}} value={obj.date}>{obj.title+"---"+obj.date+"--"+getExpiredOrNot(obj)}</Option>}
+                        </>
+                      
                         )
                       })  }
                        </Select>

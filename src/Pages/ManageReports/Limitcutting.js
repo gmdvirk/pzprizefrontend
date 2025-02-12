@@ -115,7 +115,7 @@ const AddProductForm = ({ userdata,draws,setProducts,products,limits}) => {
     // doc.setFontSize(12);
     if (userdata && userdata.username) {
       doc.text(`User: ${userdata.name}`, 14, 30);
-      doc.text(`Username: ${userdata.username}`, 80, 30);
+      // doc.text(`Username: ${userdata.username}`, 80, 30);
       doc.text(`Draw: ${drawdate.date}`, 150, 30);
       doc.text(`Draw Title: ${drawdate.title}`, 14, 35);
     }
@@ -414,7 +414,7 @@ const AddProductForm = ({ userdata,draws,setProducts,products,limits}) => {
     // doc.setFontSize(12);
     if (userdata && userdata.username) {
       doc.text(`User: ${userdata.name}`, 14, 30);
-      doc.text(`Username: ${userdata.username}`, 80, 30);
+      // doc.text(`Username: ${userdata.username}`, 80, 30);
       doc.text(`Draw: ${drawdate.date}`, 150, 30);
       doc.text(`Draw Title: ${drawdate.title}`, 14, 35);
     }
@@ -869,11 +869,13 @@ const AddProductForm = ({ userdata,draws,setProducts,products,limits}) => {
       });
       doc.autoTable({
         startY: 80,
-        head: [['Name','Username', 'Comission', 'Pc percentage']],
+        head: [['Name',
+          // 'Username', 
+          'Comission', 'Pc percentage']],
         body: [
           [
             report.name,
-            report.username,
+            // report.username,
             report.comission.comission,
             report.comission.pcpercentage
           ]
@@ -909,11 +911,29 @@ const AddProductForm = ({ userdata,draws,setProducts,products,limits}) => {
       doc.text(`Total Sale: ${totalF + totalS+totalFfour+totalSfour}`, 14, doc.autoTable.previous.finalY + 25);
       doc.text(`Total Comsission: ${pcPercentageAmount+commissionAmount}`, 14, doc.autoTable.previous.finalY + 30);
       const safeSale=(totalF + totalS+totalFfour+totalSfour)-pcPercentageAmount-commissionAmount
-      doc.text(`Safi Sale: ${safeSale.toFixed(2)}`, 14, doc.autoTable.previous.finalY + 35);
-      doc.text(`Total Prizes: ${totalPrizes.toFixed(2)}`, 14, doc.autoTable.previous.finalY + 40);
-      doc.text(`Bill: ${((totalF + totalS+totalFfour+totalSfour)- Number(totalPrizes)-pcPercentageAmount-commissionAmount).toFixed(2)}`, 14, doc.autoTable.previous.finalY + 45);
-    
-    
+      doc.text(`Safi Sale: ${safeSale.toFixed(0)}`, 14, doc.autoTable.previous.finalY + 35);
+      doc.text(`Total Prizes: ${totalPrizes.toFixed(0)}`, 14, doc.autoTable.previous.finalY + 40);
+   // Calculate the numeric bill value
+const billValue = (totalF + totalS + totalFfour + totalSfour) - Number(totalPrizes) - pcPercentageAmount - commissionAmount;
+
+// Convert to a fixed string (if needed for display)
+const Bill = billValue.toFixed(0);
+
+// Set text color based on the bill value: red if negative, green if positive (or zero)
+if (billValue < 0) {
+  // Red color (RGB: 255, 0, 0)
+  doc.setTextColor(255, 0, 0);
+} else {
+  // Green color (RGB: 0, 128, 0)
+  doc.setTextColor(0, 128, 0);
+}
+
+// Add the text to the document
+doc.text(`Bill: ${Bill}`, 14, doc.autoTable.previous.finalY + 45);
+
+// Optionally, reset text color to default if needed later in the document
+doc.setTextColor(0);
+ 
       footer(doc.internal.getNumberOfPages());
     });
   
