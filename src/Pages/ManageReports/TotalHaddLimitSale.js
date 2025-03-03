@@ -13,8 +13,9 @@ const AddProductForm = ({userdata,draws, setProducts,products}) => {
   const [form] = Form.useForm();
   const [successModalVisible, setSuccessModalVisible] = useState(false);
   const [errorModalVisible, setErrorModalVisible] = useState(false);
-  const [type,setType]=useState(null)
+  const [type,setType]=useState("uplimit")
   const [drawdate,setDrawdate]=useState(null)
+    const [reporttype, setReportType] = useState("uplimit");
   const [loading, setLoading] = useState(false);
   const generateProductCode = () => {
     return `COLLECTION-${uuidv4()}`;
@@ -26,7 +27,7 @@ const AddProductForm = ({userdata,draws, setProducts,products}) => {
   }
 
   const downloadinvoice = (arr,values,limits,useritself,userData1) => {
-    console.log(userData1)
+    // console.log(arr,values,limits,useritself,userData1)
     let filteredPayments = arr;
     for (let i=0;i<filteredPayments.length;i++){
       if(filteredPayments[i].bundle.length===1){
@@ -60,7 +61,7 @@ const AddProductForm = ({userdata,draws, setProducts,products}) => {
   
     doc.setFontSize(16);
     doc.setTextColor(40);
-    doc.text('Total Sale Report', 14, 22);
+    doc.text(`Total Sale Report ${type}`, 14, 22);
   
     doc.setFontSize(10);
     if (userdata && userdata.username) {
@@ -190,9 +191,9 @@ const AddProductForm = ({userdata,draws, setProducts,products}) => {
         // Move startY down for the next section
         startY += blockHeight + 10;
         doc.setFontSize(10);
-        doc.text(`Total First: ${totalFirst.toFixed(2)}`, 14, startY);
-        doc.text(`Total Second: ${totalSecond.toFixed(2)}`, 84, startY);
-        doc.text(`Total: ${total.toFixed(2)}`, 154, startY);
+        doc.text(`Total First: ${totalFirst.toFixed(0)}`, 14, startY);
+        doc.text(`Total Second: ${totalSecond.toFixed(0)}`, 84, startY);
+        doc.text(`Total: ${total.toFixed(0)}`, 154, startY);
         startY += 5;
     });
   
@@ -208,9 +209,9 @@ const AddProductForm = ({userdata,draws, setProducts,products}) => {
   
     // Add totals outside the table at the end of the tables
     doc.setFontSize(10);
-    doc.text(`Total of First: ${totalFirst1.toFixed(2)}`, 14, startY);
-    doc.text(`Total of Second: ${totalSecond1.toFixed(2)}`, 84, startY);
-    doc.text(`Total: ${total1.toFixed(2)}`, 154, startY);
+    doc.text(`Total of First: ${totalFirst1.toFixed(0)}`, 14, startY);
+    doc.text(`Total of Second: ${totalSecond1.toFixed(0)}`, 84, startY);
+    doc.text(`Total: ${total1.toFixed(0)}`, 154, startY);
     doc.save('admin_total_sale_report.pdf');
   };
   const downloadinvoice4 = (arrList,values,userData1) => {
@@ -219,7 +220,7 @@ const AddProductForm = ({userdata,draws, setProducts,products}) => {
   filteredPayments=filteredPayments.filter((obj)=>obj.f>0 || obj.s >0)
     doc.setFontSize(16);
     doc.setTextColor(40);
-    doc.text('Total Sale Report', 14, 22);
+    doc.text(`Total Sale Report ${type}`, 14, 22);
   
     doc.setFontSize(10);
     if (userdata && userdata.username) {
@@ -308,7 +309,12 @@ const AddProductForm = ({userdata,draws, setProducts,products}) => {
             if (isFirstInRed) {
                 doc.setTextColor(255, 0, 0); // Red text
             } else {
+              if(type==="uplimit"){
                 doc.setTextColor(0, 0, 0); // Black text
+              }else{
+                doc.setTextColor(0, 100, 0); // Black text
+              }
+              
             }
             if (!(isFirstInRed) && isFSecondInRed) {
              doc.setTextColor(0, 0, 255); // Blue text
@@ -346,9 +352,9 @@ const AddProductForm = ({userdata,draws, setProducts,products}) => {
         // Move startY down for the next section
         startY += blockHeight + 10;
         doc.setFontSize(10);
-        doc.text(`Total First: ${totalFirst.toFixed(2)}`, 14, startY);
-        doc.text(`Total Second: ${totalSecond.toFixed(2)}`, 84, startY);
-        doc.text(`Total: ${total.toFixed(2)}`, 154, startY);
+        doc.text(`Total First: ${totalFirst.toFixed(0)}`, 14, startY);
+        doc.text(`Total Second: ${totalSecond.toFixed(0)}`, 84, startY);
+        doc.text(`Total: ${total.toFixed(0)}`, 154, startY);
         startY += 5;
     });
   
@@ -364,9 +370,9 @@ const AddProductForm = ({userdata,draws, setProducts,products}) => {
   
     // Add totals outside the table at the end of the tables
     doc.setFontSize(10);
-    doc.text(`Total of First: ${totalFirst1.toFixed(2)}`, 14, startY);
-    doc.text(`Total of Second: ${totalSecond1.toFixed(2)}`, 84, startY);
-    doc.text(`Total: ${total1.toFixed(2)}`, 154, startY);
+    doc.text(`Total of First: ${totalFirst1.toFixed(0)}`, 14, startY);
+    doc.text(`Total of Second: ${totalSecond1.toFixed(0)}`, 84, startY);
+    doc.text(`Total: ${total1.toFixed(0)}`, 154, startY);
     doc.save('admin_total_sale_report.pdf');
   };
   
@@ -386,7 +392,7 @@ const AddProductForm = ({userdata,draws, setProducts,products}) => {
   
     doc.setFontSize(16);
     doc.setTextColor(40);
-    doc.text('Total Sale Report', 14, 22);
+    doc.text(`Total Sale Report ${type}`, 14, 22);
   
     doc.setFontSize(10);
   
@@ -545,9 +551,9 @@ const AddProductForm = ({userdata,draws, setProducts,products}) => {
       // Move startY down for the next section
       startY += blockHeight + 10;
       doc.setFontSize(10);
-      doc.text(`Total First: ${totalFirst.toFixed(2)}`, 14, startY);
-      doc.text(`Total Second: ${totalSecond.toFixed(2)}`, 84, startY);
-      doc.text(`Total: ${total.toFixed(2)}`, 154, startY);
+      doc.text(`Total First: ${totalFirst.toFixed(0)}`, 14, startY);
+      doc.text(`Total Second: ${totalSecond.toFixed(0)}`, 84, startY);
+      doc.text(`Total: ${total.toFixed(0)}`, 154, startY);
       startY += 5;
       });
     const pageHeight = doc.internal.pageSize.height;
@@ -562,9 +568,9 @@ const AddProductForm = ({userdata,draws, setProducts,products}) => {
   
     // Add totals outside the table at the end of the tables
     doc.setFontSize(10);
-    doc.text(`Total of First: ${totalFirst1.toFixed(2)}`, 14, startY);
-    doc.text(`Total of Second: ${totalSecond1.toFixed(2)}`, 84, startY);
-    doc.text(`Total: ${total1.toFixed(2)}`, 154, startY);
+    doc.text(`Total of First: ${totalFirst1.toFixed(0)}`, 14, startY);
+    doc.text(`Total of Second: ${totalSecond1.toFixed(0)}`, 84, startY);
+    doc.text(`Total: ${total1.toFixed(0)}`, 154, startY);
   
       // Calculate the maximum height of any part
       // const maxRows = Math.max(...parts.map(part => part.length));
@@ -591,11 +597,9 @@ const AddProductForm = ({userdata,draws, setProducts,products}) => {
   
     // doc.setFontSize(18);
     // doc.setTextColor(40);
-    doc.text('Total Sale Report', 14, 22);
+    doc.text(`Total Sale Report ${type}`, 14, 22);
     doc.setFontSize(10);
-  
-   
-  
+    doc.setTextColor(0, 100, 0); // White text  
     dataArrays.forEach((Payments) => {
       let filteredPayments=Payments.drawarrtosend.filter((obj)=>obj.f>0 || obj.s >0)
       if(filteredPayments.length>0){
@@ -732,7 +736,7 @@ const AddProductForm = ({userdata,draws, setProducts,products}) => {
           // Draw bundle block with grey background and dark blue/purplish border
           doc.setFillColor(211, 211, 211); // Grey background
           doc.setDrawColor(75, 0, 130); // Dark blue/purplish border
-          doc.setTextColor(0, 0, 0); // Black text
+          doc.setTextColor(0, 100, 0); // Black text
           doc.rect(startX, startY, blockWidth, blockHeight, 'FD');
           let  isFirstInRed=false;
           let isFSecondInRed=false
@@ -744,7 +748,7 @@ const AddProductForm = ({userdata,draws, setProducts,products}) => {
             if (isFirstInRed) {
                 doc.setTextColor(255, 0, 0); // Red text
             } else {
-                doc.setTextColor(0, 0, 0); // Black text
+                doc.setTextColor(0, 100, 0); // Black text
             }
              if (!(isFirstInRed) && isFSecondInRed) {
              doc.setTextColor(0, 0, 255); // Blue text
@@ -782,9 +786,9 @@ const AddProductForm = ({userdata,draws, setProducts,products}) => {
       // Move startY down for the next section
       startY += blockHeight + 10;
       doc.setFontSize(10);
-      doc.text(`Total First: ${totalFirst.toFixed(2)}`, 14, startY);
-      doc.text(`Total Second: ${totalSecond.toFixed(2)}`, 84, startY);
-      doc.text(`Total: ${total.toFixed(2)}`, 154, startY);
+      doc.text(`Total First: ${totalFirst.toFixed(0)}`, 14, startY);
+      doc.text(`Total Second: ${totalSecond.toFixed(0)}`, 84, startY);
+      doc.text(`Total: ${total.toFixed(0)}`, 154, startY);
       startY += 5;
       });
         const pageHeight = doc.internal.pageSize.height;
@@ -799,9 +803,9 @@ const AddProductForm = ({userdata,draws, setProducts,products}) => {
   
     // Add totals outside the table at the end of the tables
     doc.setFontSize(10);
-    doc.text(`Total of First: ${totalFirst1.toFixed(2)}`, 14, startY);
-    doc.text(`Total of Second: ${totalSecond1.toFixed(2)}`, 84, startY);
-    doc.text(`Total: ${total1.toFixed(2)}`, 154, startY);
+    doc.text(`Total of First: ${totalFirst1.toFixed(0)}`, 14, startY);
+    doc.text(`Total of Second: ${totalSecond1.toFixed(0)}`, 84, startY);
+    doc.text(`Total: ${total1.toFixed(0)}`, 154, startY);
   
       // Calculate the maximum height of any part
       // const maxRows = Math.max(...parts.map(part => part.length));
@@ -882,8 +886,8 @@ const AddProductForm = ({userdata,draws, setProducts,products}) => {
     const doc = new jsPDF();
   
     doc.setFontSize(16);
-    doc.setTextColor(40);
-    doc.text('Total Sale Report', 14, 22);
+    doc.setTextColor(0,100,0);
+    doc.text(`Total Sale Report ${type}`, 14, 22);
   
     doc.setFontSize(10);
     if (userdata && userdata.username) {
@@ -961,7 +965,7 @@ const AddProductForm = ({userdata,draws, setProducts,products}) => {
             // Draw bundle block with grey background and dark blue/purplish border
             doc.setFillColor(211, 211, 211); // Grey background
             doc.setDrawColor(75, 0, 130); // Dark blue/purplish border
-            doc.setTextColor(0, 0, 0); // Black text
+            doc.setTextColor(0, 100, 0); // Black text
             doc.rect(startX, startY, blockWidth, blockHeight, 'FD');
             let  isFirstInRed=false;
             let isFSecondInRed=false
@@ -973,7 +977,7 @@ const AddProductForm = ({userdata,draws, setProducts,products}) => {
             if (isFirstInRed) {
                 doc.setTextColor(255, 0, 0); // Red text
             } else {
-                doc.setTextColor(0, 0, 0); // Black text
+                doc.setTextColor(0, 100, 0); // Black text
             }if (!(isFirstInRed) && isFSecondInRed) {
              doc.setTextColor(0, 0, 255); // Blue text
             } 
@@ -1010,9 +1014,9 @@ const AddProductForm = ({userdata,draws, setProducts,products}) => {
         // Move startY down for the next section
         startY += blockHeight + 10;
         doc.setFontSize(10);
-        doc.text(`Total First: ${totalFirst.toFixed(2)}`, 14, startY);
-        doc.text(`Total Second: ${totalSecond.toFixed(2)}`, 84, startY);
-        doc.text(`Total: ${total.toFixed(2)}`, 154, startY);
+        doc.text(`Total First: ${totalFirst.toFixed(0)}`, 14, startY);
+        doc.text(`Total Second: ${totalSecond.toFixed(0)}`, 84, startY);
+        doc.text(`Total: ${total.toFixed(0)}`, 154, startY);
         startY += 5;
     });
   
@@ -1028,9 +1032,9 @@ const AddProductForm = ({userdata,draws, setProducts,products}) => {
   
     // Add totals outside the table at the end of the tables
     doc.setFontSize(10);
-    doc.text(`Total of First: ${totalFirst1.toFixed(2)}`, 14, startY);
-    doc.text(`Total of Second: ${totalSecond1.toFixed(2)}`, 84, startY);
-    doc.text(`Total: ${total1.toFixed(2)}`, 154, startY);
+    doc.text(`Total of First: ${totalFirst1.toFixed(0)}`, 14, startY);
+    doc.text(`Total of Second: ${totalSecond1.toFixed(0)}`, 84, startY);
+    doc.text(`Total: ${total1.toFixed(0)}`, 154, startY);
     doc.save('admin_total_sale_report.pdf');
    };
   const convertObjectToArray = (obj) => {
@@ -1070,7 +1074,7 @@ const AddProductForm = ({userdata,draws, setProducts,products}) => {
           });
           if (response1.ok) {
             const userData1 = await response1.json();
-            downloadinvoice(tempobj,values,userData.limits,userData1)
+            downloadinvoice(tempobj,values,userData.limits,userData)
           // setSoldValues(userData)
           } else {
             const userData = await response.json();
@@ -1086,7 +1090,7 @@ const AddProductForm = ({userdata,draws, setProducts,products}) => {
           });
           if (response1.ok) {
             const userData1 = await response1.json();
-            downloadinvoice1(tempobj,values,userData.limits,userData1)
+            downloadinvoice1(tempobj,values,userData.limits,userData)
           // setSoldValues(userData)
           } else {
             const userData = await response.json();
@@ -1491,7 +1495,7 @@ else if (values.dealer==="allcombined"){
    doc.text(`Commission Amount: ${commissionAmount }`, 14, doc.autoTable.previous.finalY + 45);
     doc.text(`PC Percentage Amount: ${pcPercentageAmount}`, 14, doc.autoTable.previous.finalY + 50);
     doc.text(`Safi Total: ${(totalF + totalS)-pcPercentageAmount-commissionAmount}`, 14, doc.autoTable.previous.finalY + 55);
-    doc.text(`Net Total: ${((totalF + totalS)- Number(totalPrizes)-pcPercentageAmount-commissionAmount).toFixed(2)}`, 14, doc.autoTable.previous.finalY + 60);
+    doc.text(`Net Total: ${((totalF + totalS)- Number(totalPrizes)-pcPercentageAmount-commissionAmount).toFixed(0)}`, 14, doc.autoTable.previous.finalY + 60);
    
     footer(doc.internal.getNumberOfPages());
     doc.save('MajorsalesReport.pdf');

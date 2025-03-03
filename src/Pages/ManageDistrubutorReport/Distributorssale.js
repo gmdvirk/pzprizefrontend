@@ -163,9 +163,9 @@ const AddProductForm = ({ userdata,draws, setProducts, products }) => {
         // Move startY down for the next section
         startY += blockHeight + 10;
         doc.setFontSize(10);
-        doc.text(`Total First: ${totalFirst.toFixed(2)}`, 14, startY);
-        doc.text(`Total Second: ${totalSecond.toFixed(2)}`, 84, startY);
-        doc.text(`Total: ${total.toFixed(2)}`, 154, startY);
+        doc.text(`Total First: ${totalFirst.toFixed(0)}`, 14, startY);
+        doc.text(`Total Second: ${totalSecond.toFixed(0)}`, 84, startY);
+        doc.text(`Total: ${total.toFixed(0)}`, 154, startY);
         startY += 5;
       }
         });
@@ -181,9 +181,9 @@ const AddProductForm = ({ userdata,draws, setProducts, products }) => {
     
       // Add totals outside the table at the end of the tables
       doc.setFontSize(10);
-      doc.text(`Total of First: ${totalFirst1.toFixed(2)}`, 14, startY);
-      doc.text(`Total of Second: ${totalSecond1.toFixed(2)}`, 84, startY);
-      doc.text(`Total: ${total1.toFixed(2)}`, 154, startY);
+      doc.text(`Total of First: ${totalFirst1.toFixed(0)}`, 14, startY);
+      doc.text(`Total of Second: ${totalSecond1.toFixed(0)}`, 84, startY);
+      doc.text(`Total: ${total1.toFixed(0)}`, 154, startY);
     
         // Calculate the maximum height of any part
         // const maxRows = Math.max(...parts.map(part => part.length));

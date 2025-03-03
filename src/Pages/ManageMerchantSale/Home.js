@@ -290,6 +290,36 @@ const App = ({isOnline, userdata, setProducts,credit,upline, products,balance,se
       width: 50,
     },
   ];
+  const oversalemodalcolumns = [
+    {
+      title: '#',
+      dataIndex: 'total',
+      key: 'total',
+      width: 50,
+      render: (text) => <span style={{ color: 'red' }}>{text}</span>,
+    },
+    {
+      title: 'F',
+      dataIndex: 'f',
+      key: 'f',
+      width: 50,
+      render: (text) => <span style={{ color: 'red' }}>{text}</span>,
+    },
+    {
+      title: 'S',
+      dataIndex: 's',
+      key: 's',
+      width: 50,
+      render: (text) => <span style={{ color: 'red' }}>{text}</span>,
+    },
+    {
+      title: 'Total',
+      dataIndex: 't',
+      key: 't',
+      width: 50,
+      render: (text) => <span style={{ color: 'red' }}>{text}</span>,
+    },
+  ];
   const getLaptopFontSize = () => {
     return window.innerWidth >= 1024 ? 18 : 14;
   };
@@ -1069,7 +1099,7 @@ const App = ({isOnline, userdata, setProducts,credit,upline, products,balance,se
 
     }
     
-    doc.text(`Total: ${total1.toFixed(2)}`, 14, 42);
+    doc.text(`Total: ${total1.toFixed(0)}`, 14, 42);
     doc.setFontSize(10);
     if (userdata && userdata.username) {
       doc.text(`User: ${userdata.name}`, 14, 30);
@@ -1232,9 +1262,9 @@ const App = ({isOnline, userdata, setProducts,credit,upline, products,balance,se
     totalFirstf=totalFirst1+totalFirst2
     totalSecondf=totalSecond1+totalSecond2
     totalf=total1+total2
-    // doc.text(`Total of First: ${totalFirstf.toFixed(2)}`, 14, 42);
-    // doc.text(`Total of Second: ${totalSecondf.toFixed(2)}`, 84, 42);
-    doc.text(`Total: ${totalf.toFixed(2)}`, 14, 42);
+    // doc.text(`Total of First: ${totalFirstf.toFixed(0)}`, 14, 42);
+    // doc.text(`Total of Second: ${totalSecondf.toFixed(0)}`, 84, 42);
+    doc.text(`Total: ${totalf.toFixed(0)}`, 14, 42);
     for (let i=0;i<2;i++){
     let arr1 = filteredPayments.filter((obj) => obj.bundle.length === 1);
     let arr2 = filteredPayments.filter((obj) => obj.bundle.length === 2);
@@ -1278,9 +1308,9 @@ const App = ({isOnline, userdata, setProducts,credit,upline, products,balance,se
     // })
     
     doc.setFontSize(12);
-    doc.text(`Total of First: ${totalFirst1.toFixed(2)}`, 14, startY);
-    doc.text(`Total of Second: ${totalSecond1.toFixed(2)}`, 84, startY);
-    doc.text(`Total: ${total1.toFixed(2)}`, 154, startY);
+    doc.text(`Total of First: ${totalFirst1.toFixed(0)}`, 14, startY);
+    doc.text(`Total of Second: ${totalSecond1.toFixed(0)}`, 84, startY);
+    doc.text(`Total: ${total1.toFixed(0)}`, 154, startY);
     startY += 10; // Add some spacing before the totals
     temparr.forEach((filteredPayments, arrIndex) => {
       
@@ -1394,15 +1424,15 @@ const App = ({isOnline, userdata, setProducts,credit,upline, products,balance,se
     doc.setFontSize(12);
     doc.setFont(undefined, 'bold');
     if(i===0){
-      doc.text(`Total of First: ${totalFirst1.toFixed(2)}`, 14, startY);
-      doc.text(`Total of Second: ${totalSecond1.toFixed(2)}`, 84, startY);
-      doc.text(`Total: ${total1.toFixed(2)}`, 154, startY);
+      doc.text(`Total of First: ${totalFirst1.toFixed(0)}`, 14, startY);
+      doc.text(`Total of Second: ${totalSecond1.toFixed(0)}`, 84, startY);
+      doc.text(`Total: ${total1.toFixed(0)}`, 154, startY);
     }else{
       
       doc.setTextColor(255, 0, 0); // Red text
-      doc.text(`Total of First: ${totalFirst2.toFixed(2)}`, 14, startY);
-    doc.text(`Total of Second: ${totalSecond2.toFixed(2)}`, 84, startY);
-    doc.text(`Total: ${total2.toFixed(2)}`, 154, startY);
+      doc.text(`Total of First: ${totalFirst2.toFixed(0)}`, 14, startY);
+    doc.text(`Total of Second: ${totalSecond2.toFixed(0)}`, 84, startY);
+    doc.text(`Total: ${total2.toFixed(0)}`, 154, startY);
     }
     
     doc.setFont(undefined, 'normal');
@@ -2620,7 +2650,7 @@ onFinish();
               </Button>
               {selectedRowKeys1 && selectedRowKeys1.length > 0 && <Button onClick={() => setDeleteConfirmationVisible1(true)} type="primary" danger>Delete</Button>}{' '}
               <Table
-            columns={columns}
+            columns={oversalemodalcolumns}
             dataSource={oversaletotal}
             rowKey="_id"
             pagination={false}

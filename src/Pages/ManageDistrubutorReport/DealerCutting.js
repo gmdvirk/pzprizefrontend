@@ -15,6 +15,7 @@ const AddProductForm = ({userdata,draws,aloud, setProducts,adminaloud,products})
   const [errorModalVisible, setErrorModalVisible] = useState(false);
   const [drawdate,setDrawdate]=useState(null)
   const [loading, setLoading] = useState(false);
+  const [reporttype, setReportType] = useState("uplimit");
   const generateProductCode = () => {
     return `COLLECTION-${uuidv4()}`;
   };
@@ -70,7 +71,7 @@ const AddProductForm = ({userdata,draws,aloud, setProducts,adminaloud,products})
     // }
   
     doc.setFontSize(10);
-    doc.text('Total Sale Report', 14, 22);
+    doc.text(`Total Sale Report ${reporttype}`, 14, 22);
   
     doc.setFontSize(12);
     if (userdata && userdata.username) {
@@ -201,9 +202,9 @@ const AddProductForm = ({userdata,draws,aloud, setProducts,adminaloud,products})
       // Move startY down for the next section
       startY += blockHeight + 10;
       doc.setFontSize(10);
-      doc.text(`Total First: ${totalFirst.toFixed(2)}`, 14, startY);
-      doc.text(`Total Second: ${totalSecond.toFixed(2)}`, 84, startY);
-      doc.text(`Total: ${total.toFixed(2)}`, 154, startY);
+      doc.text(`Total First: ${totalFirst.toFixed(0)}`, 14, startY);
+      doc.text(`Total Second: ${totalSecond.toFixed(0)}`, 84, startY);
+      doc.text(`Total: ${total.toFixed(0)}`, 154, startY);
       startY += 5;
     }
       });
@@ -219,9 +220,9 @@ const AddProductForm = ({userdata,draws,aloud, setProducts,adminaloud,products})
   
     // Add totals outside the table at the end of the tables
     doc.setFontSize(10);
-    doc.text(`Total of First: ${totalFirst1.toFixed(2)}`, 14, startY);
-    doc.text(`Total of Second: ${totalSecond1.toFixed(2)}`, 84, startY);
-    doc.text(`Total: ${total1.toFixed(2)}`, 154, startY);
+    doc.text(`Total of First: ${totalFirst1.toFixed(0)}`, 14, startY);
+    doc.text(`Total of Second: ${totalSecond1.toFixed(0)}`, 84, startY);
+    doc.text(`Total: ${total1.toFixed(0)}`, 154, startY);
     doc.save('distributor_total_hadd_limit_report.pdf');
   };
   
@@ -244,7 +245,14 @@ const AddProductForm = ({userdata,draws,aloud, setProducts,adminaloud,products})
     }
   
     doc.setFontSize(10);
-    doc.text('Total Sale Report', 14, 22);
+    if(reporttype==="uplimit"){
+      doc.setTextColor(0,0,0);
+    }else{
+      doc.setTextColor(0,100,0);
+        
+    }
+    
+    doc.text(`Total Sale Report ${reporttype}`, 14, 22);
     if (userdata && userdata.username) {
       doc.text(`User: ${userdata.name}`, 14, 30);
       doc.text(`Username: ${userdata.username}`, 80, 30);
@@ -322,7 +330,13 @@ const AddProductForm = ({userdata,draws,aloud, setProducts,adminaloud,products})
             // Draw bundle block with grey background and dark blue/purplish border
             doc.setFillColor(211, 211, 211); // Grey background
             doc.setDrawColor(75, 0, 130); // Dark blue/purplish border
-            doc.setTextColor(0, 0, 0); // Black text
+            // doc.setTextColor(0, 0, 0); // Black text
+            if(reporttype==="uplimit"){
+              doc.setTextColor(0,0,0);
+            }else{
+              doc.setTextColor(0,100,0);
+                
+            }
             doc.rect(startX, startY, blockWidth, blockHeight, 'FD');
             let  isFirstInRed=false;
             let isFSecondInRed=false
@@ -334,7 +348,13 @@ const AddProductForm = ({userdata,draws,aloud, setProducts,adminaloud,products})
             if (isFirstInRed) {
                 doc.setTextColor(255, 0, 0); // Red text
             } else {
-                doc.setTextColor(0, 0, 0); // Black text
+                // doc.setTextColor(0, 0, 0); // Black text
+                if(reporttype==="uplimit"){
+                  doc.setTextColor(0,0,0);
+                }else{
+                  doc.setTextColor(0,100,0);
+                    
+                }
             }
             if (!(isFirstInRed) && isFSecondInRed) {
              doc.setTextColor(0, 0, 255); // Blue text
@@ -372,9 +392,9 @@ const AddProductForm = ({userdata,draws,aloud, setProducts,adminaloud,products})
         // Move startY down for the next section
         startY += blockHeight + 10;
         doc.setFontSize(10);
-        doc.text(`Total First: ${totalFirst.toFixed(2)}`, 14, startY);
-        doc.text(`Total Second: ${totalSecond.toFixed(2)}`, 84, startY);
-        doc.text(`Total: ${total.toFixed(2)}`, 154, startY);
+        doc.text(`Total First: ${totalFirst.toFixed(0)}`, 14, startY);
+        doc.text(`Total Second: ${totalSecond.toFixed(0)}`, 84, startY);
+        doc.text(`Total: ${total.toFixed(0)}`, 154, startY);
         startY += 5;
       }
         });
@@ -390,9 +410,9 @@ const AddProductForm = ({userdata,draws,aloud, setProducts,adminaloud,products})
     
       // Add totals outside the table at the end of the tables
       doc.setFontSize(10);
-      doc.text(`Total of First: ${totalFirst1.toFixed(2)}`, 14, startY);
-      doc.text(`Total of Second: ${totalSecond1.toFixed(2)}`, 84, startY);
-      doc.text(`Total: ${total1.toFixed(2)}`, 154, startY);
+      doc.text(`Total of First: ${totalFirst1.toFixed(0)}`, 14, startY);
+      doc.text(`Total of Second: ${totalSecond1.toFixed(0)}`, 84, startY);
+      doc.text(`Total: ${total1.toFixed(0)}`, 154, startY);
       doc.save('distributor_total_hadd_limit_report.pdf');
   
     };
@@ -411,7 +431,7 @@ const AddProductForm = ({userdata,draws,aloud, setProducts,adminaloud,products})
   
     doc.setFontSize(10);
     // doc.setTextColor(40);
-    doc.text('Total Sale Report', 14, 22);
+    doc.text(`Total Sale Report ${reporttype}`, 14, 22);
     // doc.setFontSize(12);
   
     
@@ -574,9 +594,9 @@ const AddProductForm = ({userdata,draws,aloud, setProducts,adminaloud,products})
       // Move startY down for the next section
       startY += blockHeight + 10;
       doc.setFontSize(10);
-      doc.text(`Total First: ${totalFirst.toFixed(2)}`, 14, startY);
-      doc.text(`Total Second: ${totalSecond.toFixed(2)}`, 84, startY);
-      doc.text(`Total: ${total.toFixed(2)}`, 154, startY);
+      doc.text(`Total First: ${totalFirst.toFixed(0)}`, 14, startY);
+      doc.text(`Total Second: ${totalSecond.toFixed(0)}`, 84, startY);
+      doc.text(`Total: ${total.toFixed(0)}`, 154, startY);
       startY += 5;
     }
       });
@@ -592,9 +612,9 @@ const AddProductForm = ({userdata,draws,aloud, setProducts,adminaloud,products})
   
     // Add totals outside the table at the end of the tables
     doc.setFontSize(10);
-    doc.text(`Total of First: ${totalFirst1.toFixed(2)}`, 14, startY);
-    doc.text(`Total of Second: ${totalSecond1.toFixed(2)}`, 84, startY);
-    doc.text(`Total: ${total1.toFixed(2)}`, 154, startY);
+    doc.text(`Total of First: ${totalFirst1.toFixed(0)}`, 14, startY);
+    doc.text(`Total of Second: ${totalSecond1.toFixed(0)}`, 84, startY);
+    doc.text(`Total: ${total1.toFixed(0)}`, 154, startY);
   
       // Calculate the maximum height of any part
       // const maxRows = Math.max(...parts.map(part => part.length));
@@ -623,8 +643,9 @@ const AddProductForm = ({userdata,draws,aloud, setProducts,adminaloud,products})
     const tableMargin = 10; // Margin between tables
   
     doc.setFontSize(10);
+    doc.setTextColor(0,100,0);
     // doc.setTextColor(40);
-    doc.text('Total Sale Report', 14, 22);
+    doc.text(`Total Sale Report ${reporttype}`, 14, 22);
     // doc.setFontSize(12);
   
     if (userdata && userdata.username) {
@@ -774,7 +795,8 @@ const AddProductForm = ({userdata,draws,aloud, setProducts,adminaloud,products})
           // Draw bundle block with grey background and dark blue/purplish border
           doc.setFillColor(211, 211, 211); // Grey background
           doc.setDrawColor(75, 0, 130); // Dark blue/purplish border
-          doc.setTextColor(0, 0, 0); // Black text
+          // doc.setTextColor(0, 0, 0); // Black text
+          doc.setTextColor(0,100,0);
           doc.rect(startX, startY, blockWidth, blockHeight, 'FD');
           let  isFirstInRed=false;
           let isFSecondInRed=false
@@ -786,7 +808,8 @@ const AddProductForm = ({userdata,draws,aloud, setProducts,adminaloud,products})
             if (isFirstInRed) {
                 doc.setTextColor(255, 0, 0); // Red text
             } else {
-                doc.setTextColor(0, 0, 0); // Black text
+                // doc.setTextColor(0, 0, 0); // Black text
+                doc.setTextColor(0,100,0);
             }
             if (!(isFirstInRed) && isFSecondInRed) {
              doc.setTextColor(0, 0, 255); // Blue text
@@ -824,9 +847,9 @@ const AddProductForm = ({userdata,draws,aloud, setProducts,adminaloud,products})
       // Move startY down for the next section
       startY += blockHeight + 10;
       doc.setFontSize(10);
-      doc.text(`Total First: ${totalFirst.toFixed(2)}`, 14, startY);
-      doc.text(`Total Second: ${totalSecond.toFixed(2)}`, 84, startY);
-      doc.text(`Total: ${total.toFixed(2)}`, 154, startY);
+      doc.text(`Total First: ${totalFirst.toFixed(0)}`, 14, startY);
+      doc.text(`Total Second: ${totalSecond.toFixed(0)}`, 84, startY);
+      doc.text(`Total: ${total.toFixed(0)}`, 154, startY);
       startY += 5;
     }
       });
@@ -842,9 +865,9 @@ const AddProductForm = ({userdata,draws,aloud, setProducts,adminaloud,products})
   
     // Add totals outside the table at the end of the tables
     doc.setFontSize(10);
-    doc.text(`Total of First: ${totalFirst1.toFixed(2)}`, 14, startY);
-    doc.text(`Total of Second: ${totalSecond1.toFixed(2)}`, 84, startY);
-    doc.text(`Total: ${total1.toFixed(2)}`, 154, startY);
+    doc.text(`Total of First: ${totalFirst1.toFixed(0)}`, 14, startY);
+    doc.text(`Total of Second: ${totalSecond1.toFixed(0)}`, 84, startY);
+    doc.text(`Total: ${total1.toFixed(0)}`, 154, startY);
   
       // Calculate the maximum height of any part
       // const maxRows = Math.max(...parts.map(part => part.length));
@@ -939,8 +962,8 @@ const AddProductForm = ({userdata,draws,aloud, setProducts,adminaloud,products})
     // }
   
     doc.setFontSize(10);
-    // doc.setTextColor(40);
-    doc.text('Total Sale Report', 14, 22);
+    doc.setTextColor(0,100,0);
+    doc.text(`Total Sale Report ${reporttype}`, 14, 22);
   
     // doc.setFontSize(12);
     if (userdata && userdata.username) {
@@ -1021,7 +1044,8 @@ const AddProductForm = ({userdata,draws,aloud, setProducts,adminaloud,products})
           // Draw bundle block with grey background and dark blue/purplish border
           doc.setFillColor(211, 211, 211); // Grey background
           doc.setDrawColor(75, 0, 130); // Dark blue/purplish border
-          doc.setTextColor(0, 0, 0); // Black text
+          // doc.setTextColor(0, 0, 0); // Black text
+          doc.setTextColor(0,100,0);
           doc.rect(startX, startY, blockWidth, blockHeight, 'FD');
           let  isFirstInRed=false;
             let isFSecondInRed=false
@@ -1033,7 +1057,8 @@ const AddProductForm = ({userdata,draws,aloud, setProducts,adminaloud,products})
             if (isFirstInRed) {
                 doc.setTextColor(255, 0, 0); // Red text
             } else {
-                doc.setTextColor(0, 0, 0); // Black text
+                // doc.setTextColor(0, 0, 0); // Black text
+                doc.setTextColor(0,100,0);
             }
             if (!(isFirstInRed) && isFSecondInRed) {
              doc.setTextColor(0, 0, 255); // Blue text
@@ -1071,9 +1096,9 @@ const AddProductForm = ({userdata,draws,aloud, setProducts,adminaloud,products})
       // Move startY down for the next section
       startY += blockHeight + 10;
       doc.setFontSize(10);
-      doc.text(`Total First: ${totalFirst.toFixed(2)}`, 14, startY);
-      doc.text(`Total Second: ${totalSecond.toFixed(2)}`, 84, startY);
-      doc.text(`Total: ${total.toFixed(2)}`, 154, startY);
+      doc.text(`Total First: ${totalFirst.toFixed(0)}`, 14, startY);
+      doc.text(`Total Second: ${totalSecond.toFixed(0)}`, 84, startY);
+      doc.text(`Total: ${total.toFixed(0)}`, 154, startY);
       startY += 5;
     }
       });
@@ -1089,9 +1114,9 @@ const AddProductForm = ({userdata,draws,aloud, setProducts,adminaloud,products})
 
   // Add totals outside the table at the end of the tables
   doc.setFontSize(10);
-  doc.text(`Total of First: ${totalFirst1.toFixed(2)}`, 14, startY);
-  doc.text(`Total of Second: ${totalSecond1.toFixed(2)}`, 84, startY);
-  doc.text(`Total: ${total1.toFixed(2)}`, 154, startY);
+  doc.text(`Total of First: ${totalFirst1.toFixed(0)}`, 14, startY);
+  doc.text(`Total of Second: ${totalSecond1.toFixed(0)}`, 84, startY);
+  doc.text(`Total: ${total1.toFixed(0)}`, 154, startY);
 
     doc.save('distributor_total_hadd_limit_report.pdf');
   };
@@ -1555,6 +1580,9 @@ else if (values.dealer==="allcombined"){
                        className="flex-item"
                        fieldKey={ 'limittype'}
                        initialValue={"uplimit"}
+                       onChange={(e)=>{
+                        setReportType(e)
+                       }}
                      >
                        <Select placeholder="Select limit type" >
                          <Option value={"uplimit"}>Up Limit</Option>

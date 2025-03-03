@@ -18,6 +18,7 @@ const navigate=useNavigate();
   const [userdata,setUserdata]=useState(null)
   const [completeuserdata,setCompleteUserdata]=useState(null)
   const [noaccess,setNoaccess]=useState(false)
+  const [distributoraloud,setDistributorAloud]=useState(false)
   const isMobile = useMedia('(max-width: 768px)'); // Adjust the breakpoint as needed
   let marginLeft=280
   let marginRight=10
@@ -34,6 +35,7 @@ const navigate=useNavigate();
         children: <AllUsers
         userdata={userdata}
         products={employees}
+        distributoraloud={distributoraloud}
         completeuserdata={completeuserdata}
         setProducts={setEmployees}
         />
@@ -86,6 +88,16 @@ const navigate=useNavigate();
         const userData1 = await response2.json();
         setCompleteUserdata(userData1)
       }
+      const response11 = await fetch(`${linkurl}/report/getDistributorHaddLimitAloudornot`, {
+                method: 'GET',
+                headers: {
+                  token: `${token}`,
+                },
+              });
+              if (response11.ok) {
+                const userData1 = await response11.json();
+                setDistributorAloud(userData1);
+              }
       
     } else {
       console.error('Failed to fetch user data:', response.statusText);

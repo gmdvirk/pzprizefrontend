@@ -90,8 +90,8 @@ setLoading(false)
   // Prepare table data with cell styles
   const tableData = data.map(sheet => [
     { content: sheet.sheetname || 'N/A', styles: { fontStyle: 'bold' } },
-    { content: sheet.total.toFixed(2), styles: { fontStyle: 'bold' } },
-    { content: sheet.prize.toFixed(2), styles: { fontStyle: 'bold' } }
+    { content: sheet.total.toFixed(0), styles: { fontStyle: 'bold' } },
+    { content: sheet.prize.toFixed(0), styles: { fontStyle: 'bold' } }
   ]);
 
   // Calculate totals
@@ -101,8 +101,8 @@ setLoading(false)
   // Add totals row with bold style
   tableData.push([
     { content: 'Total', styles: { fontStyle: 'bold' } },
-    { content: totalSale.toFixed(2), styles: { fontStyle: 'bold' } },
-    { content: totalPrize.toFixed(2), styles: { fontStyle: 'bold' } }
+    { content: totalSale.toFixed(0), styles: { fontStyle: 'bold' } },
+    { content: totalPrize.toFixed(0), styles: { fontStyle: 'bold' } }
   ]);
 
   // Configure and draw the table
@@ -143,9 +143,9 @@ setLoading(false)
   doc.text(`Total Summary`, 14, finalY);
   doc.setFontSize(10);
   doc.setTextColor(80, 80, 80);
-  doc.text(`Total Sale Amount: ${totalSale.toFixed(2)}`, 14, finalY + 7);
-  doc.text(`Total Prize Amount: ${totalPrize.toFixed(2)}`, 14, finalY + 14);
-  doc.text(`Net Amount: ${(totalSale - totalPrize).toFixed(2)}`, 14, finalY + 21);
+  doc.text(`Total Sale Amount: ${totalSale.toFixed(0)}`, 14, finalY + 7);
+  doc.text(`Total Prize Amount: ${totalPrize.toFixed(0)}`, 14, finalY + 14);
+  doc.text(`Net Amount: ${(totalSale - totalPrize).toFixed(0)}`, 14, finalY + 21);
 
   // Add timestamp and user info at the bottom
   const bottomY = doc.internal.pageSize.height - 20;
@@ -221,7 +221,7 @@ const generatePDFReport = (data) => {
       ],
       theme: 'grid',
       styles: {
-        fontSize: 10,
+        fontSize: 16,
         textColor: 80,
       },
       headStyles: {
@@ -279,20 +279,20 @@ doc.autoTable({
     ['Safa+Akra+tndola Sale', totalF + totalS],
     ['Pc Sale', totalFfour + totalSfour],
     ['Total Sale', totalSales],
-    ['Total Commission', totalCommission.toFixed(2)],
-    ['Safi Sale', safiSale.toFixed(2)],
-    ['Total Prizes', totalPrizes.toFixed(2)],
-    ['Bill', billAmount.toFixed(2)]
+    ['Total Commission', totalCommission.toFixed(0)],
+    ['Safi Sale', safiSale.toFixed(0)],
+    ['Total Prizes', totalPrizes.toFixed(0)],
+    ['Bill', billAmount.toFixed(0)]
   ],
   theme: 'striped',
   styles: {
-    fontSize: 12, // Increased from 10 to 12
+    fontSize: 18, // Increased from 10 to 12
     textColor: 80,
   },
   headStyles: {
     fillColor: [200, 200, 200],
     textColor: 40,
-    fontSize: 14, // Increased from 11 to 14
+    fontSize: 16, // Increased from 11 to 14
     halign: 'left',
   },
   columnStyles: {

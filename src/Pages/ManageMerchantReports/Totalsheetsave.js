@@ -65,9 +65,9 @@ const AddProductForm = ({draws,sheets,userdata, setProducts,products}) => {
     })
     
     doc.setFontSize(12);
-    // doc.text(`Total of First: ${totalFirst1.toFixed(2)}`, 14, startY);
-    // doc.text(`Total of Second: ${totalSecond1.toFixed(2)}`, 84, startY);
-    doc.text(`Total: ${total1.toFixed(2)}`, 14, startY);
+    // doc.text(`Total of First: ${totalFirst1.toFixed(0)}`, 14, startY);
+    // doc.text(`Total of Second: ${totalSecond1.toFixed(0)}`, 84, startY);
+    doc.text(`Total: ${total1.toFixed(0)}`, 14, startY);
     startY += 10; // Add some spacing before the totals
     temparr.forEach((filteredPayments, arrIndex) => {
       
@@ -187,9 +187,9 @@ const AddProductForm = ({draws,sheets,userdata, setProducts,products}) => {
     startY += 10; // Add some spacing before the totals
   
     // doc.setFontSize(8);
-    // doc.text(`Total of First: ${totalFirst1.toFixed(2)}`, 14, startY);
-    // doc.text(`Total of Second: ${totalSecond1.toFixed(2)}`, 84, startY);
-    // doc.text(`Total: ${total1.toFixed(2)}`, 154, startY);
+    // doc.text(`Total of First: ${totalFirst1.toFixed(0)}`, 14, startY);
+    // doc.text(`Total of Second: ${totalSecond1.toFixed(0)}`, 84, startY);
+    // doc.text(`Total: ${total1.toFixed(0)}`, 154, startY);
   
     if(values.report==="generalsale"){
       doc.save('merchant_save_sheet_general_report.pdf');
@@ -214,13 +214,13 @@ const AddProductForm = ({draws,sheets,userdata, setProducts,products}) => {
     doc.setFontSize(16);
     doc.setTextColor(40);
     
-    if(type==="sale"){
-      doc.text('Total General Sale Report', 14, 22);
-    } else {
+    if(type==="oversale"){
       doc.text('Total Over Sale Report', 14, 22);
+    } else {
+      doc.text('Total General Sale Report', 14, 22);
     }
     
-    doc.text(`Total: ${total1.toFixed(2)}`, 14, 42);
+    doc.text(`Total: ${total1.toFixed(0)}`, 14, 42);
     doc.setFontSize(10);
     
     if (userdata && userdata.username) {
@@ -237,9 +237,9 @@ const AddProductForm = ({draws,sheets,userdata, setProducts,products}) => {
     const blockHeight = 8;
   
     doc.setFontSize(12);
-    doc.text(`Total of First: ${totalFirst1.toFixed(2)}`, 14, startY);
-    doc.text(`Total of Second: ${totalSecond1.toFixed(2)}`, 84, startY);
-    doc.text(`Total: ${total1.toFixed(2)}`, 154, startY);
+    doc.text(`Total of First: ${totalFirst1.toFixed(0)}`, 14, startY);
+    doc.text(`Total of Second: ${totalSecond1.toFixed(0)}`, 84, startY);
+    doc.text(`Total: ${total1.toFixed(0)}`, 154, startY);
     
     startY += 10;
   
@@ -370,7 +370,7 @@ const AddProductForm = ({draws,sheets,userdata, setProducts,products}) => {
     // Add overall total to the document
     doc.setFontSize(12);
     doc.setFont(undefined, 'bold');
-    doc.text(`Total: ${totalf.toFixed(2)}`, 14, 42);
+    doc.text(`Total: ${totalf.toFixed(0)}`, 14, 42);
     doc.setFont(undefined, 'normal');
     if (userdata && userdata.username) {
       doc.text(`User: ${userdata.name}`, 14, 30);

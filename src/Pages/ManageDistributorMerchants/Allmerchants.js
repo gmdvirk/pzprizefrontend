@@ -270,7 +270,7 @@ const handleLoginasanother =(record)=>{
       key: 'role',
       render: (_, record) => (
         <span style={{color:record.payment.balanceupline>0?"green":'red'}}>
-          {record.payment.balanceupline.toFixed(2)}
+          {record.payment.balanceupline.toFixed(0)}
         </span>
      
       ),
@@ -296,7 +296,7 @@ const handleLoginasanother =(record)=>{
       render: (balanceupline) => (
         <span style={{ color: balanceupline < 0? 'red' : 'green' }}>
           
-          {balanceupline.toFixed(2)}
+          {balanceupline.toFixed(0)}
         </span>
       ),
     },
@@ -307,7 +307,7 @@ const handleLoginasanother =(record)=>{
       ...getColumnSearchProps('availablebalance'),
       render: (availablebalance) => (
         <span style={{ color: availablebalance < 0? 'red' : 'green' }}>
-          {availablebalance.toFixed(2)}
+          {availablebalance.toFixed(0)}
         </span>
       ),
     },
@@ -577,10 +577,10 @@ const response = await fetch(`${linkurl}/user/getLimitByUserId/${product._id}`, 
                 <p>Credit:{completeuserdata.payment.credit}</p>
               </Col>
               <Col xs={12} sm={12} md={6}>
-                <p style={{color:completeuserdata.payment.balanceupline>0?"green":'red'}}>Balance Upline: {completeuserdata.payment.balanceupline.toFixed(2)}</p>
+                <p style={{color:completeuserdata.payment.balanceupline>0?"green":'red'}}>Balance Upline: {completeuserdata.payment.balanceupline.toFixed(0)}</p>
               </Col>
               <Col xs={12} sm={12} md={6}>
-                <p>Available Balance:{completeuserdata.payment.availablebalance.toFixed(2)}</p>
+                <p>Available Balance:{completeuserdata.payment.availablebalance.toFixed(0)}</p>
               </Col>
             </Row>
             <h1>Users : {products.length}</h1>

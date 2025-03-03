@@ -288,6 +288,10 @@ const AddProductForm = ({ setProducts,draws,products}) => {
       dataIndex: 'username',
       key: 'username',
       ...getColumnSearchProps('username'),
+      render: (_, record) => (
+        <>{record.username+"("+record.name+")"}</>
+        
+      )
     },{
       title: 'Bundle',
       dataIndex: 'bundle',

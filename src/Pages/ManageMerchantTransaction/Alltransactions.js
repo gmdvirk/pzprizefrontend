@@ -300,7 +300,7 @@ const ProductTable = ({ payment, setPayment,userdata }) => {
       type: pay.type,
       cash: pay.cash,
       credit: pay.credit,
-      balanceupline: pay.balanceupline.toFixed(2),
+      balanceupline: pay.balanceupline.toFixed(0),
       date: `${pay.date} ${pay.time}`,
       description: pay.description,
     }));

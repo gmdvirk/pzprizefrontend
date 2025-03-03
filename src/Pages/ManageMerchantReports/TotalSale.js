@@ -67,9 +67,9 @@ const AddProductForm = ({userdata,draws, setProducts,products}) => {
     })
     
     doc.setFontSize(12);
-    // doc.text(`Total of First: ${totalFirst1.toFixed(2)}`, 14, startY);
-    // doc.text(`Total of Second: ${totalSecond1.toFixed(2)}`, 84, startY);
-    doc.text(`Total: ${total1.toFixed(2)}`, 14, startY);
+    // doc.text(`Total of First: ${totalFirst1.toFixed(0)}`, 14, startY);
+    // doc.text(`Total of Second: ${totalSecond1.toFixed(0)}`, 84, startY);
+    doc.text(`Total: ${total1.toFixed(0)}`, 14, startY);
     startY += 10; // Add some spacing before the totals
   
     temparr.forEach((filteredPayments, arrIndex) => {
@@ -189,9 +189,9 @@ const AddProductForm = ({userdata,draws, setProducts,products}) => {
   
     doc.setFontSize(12);
     // doc.setFont(undefined, 'bold');
-    // doc.text(`Total of First: ${totalFirst1.toFixed(2)}`, 14, startY);
-    // doc.text(`Total of Second: ${totalSecond1.toFixed(2)}`, 84, startY);
-    // doc.text(`Total: ${total1.toFixed(2)}`, 154, startY);
+    // doc.text(`Total of First: ${totalFirst1.toFixed(0)}`, 14, startY);
+    // doc.text(`Total of Second: ${totalSecond1.toFixed(0)}`, 84, startY);
+    // doc.text(`Total: ${total1.toFixed(0)}`, 154, startY);
     // doc.setFont(undefined, 'normal');
     if(values.saletype==="sale"){
       doc.save('merchant_total_genral_sale_report.pdf');
@@ -234,9 +234,9 @@ const AddProductForm = ({userdata,draws, setProducts,products}) => {
     totalFirstf=totalFirst1+totalFirst2
     totalSecondf=totalSecond1+totalSecond2
     totalf=total1+total2
-    // doc.text(`Total of First: ${totalFirstf.toFixed(2)}`, 14, 42);
-    // doc.text(`Total of Second: ${totalSecondf.toFixed(2)}`, 84, 42);
-    // doc.text(`Total: ${totalf.toFixed(2)}`, 14, 42);
+    // doc.text(`Total of First: ${totalFirstf.toFixed(0)}`, 14, 42);
+    // doc.text(`Total of Second: ${totalSecondf.toFixed(0)}`, 84, 42);
+    // doc.text(`Total: ${totalf.toFixed(0)}`, 14, 42);
     for (let i=0;i<1;i++){
     
     let arr1 = filteredPayments.filter((obj) => obj.bundle.length === 1);
@@ -267,9 +267,9 @@ const AddProductForm = ({userdata,draws, setProducts,products}) => {
   
     
     doc.setFontSize(12);
-    // doc.text(`Total of First: ${totalFirst1.toFixed(2)}`, 14, startY);
-    // doc.text(`Total of Second: ${totalSecond1.toFixed(2)}`, 84, startY);
-    // doc.text(`Total: ${total1.toFixed(2)}`, 154, startY);
+    // doc.text(`Total of First: ${totalFirst1.toFixed(0)}`, 14, startY);
+    // doc.text(`Total of Second: ${totalSecond1.toFixed(0)}`, 84, startY);
+    // doc.text(`Total: ${total1.toFixed(0)}`, 154, startY);
     startY += 10; // Add some spacing before the totals
   
     temparr.forEach((filteredPayments, arrIndex) => {
@@ -397,13 +397,13 @@ const AddProductForm = ({userdata,draws, setProducts,products}) => {
     }
     
     // if(i===0){
-    //   doc.text(`Total of First: ${totalFirst1.toFixed(2)}`, 14, startY);
-    //   doc.text(`Total of Second: ${totalSecond1.toFixed(2)}`, 84, startY);
-    //   doc.text(`Total: ${total1.toFixed(2)}`, 154, startY);
+    //   doc.text(`Total of First: ${totalFirst1.toFixed(0)}`, 14, startY);
+    //   doc.text(`Total of Second: ${totalSecond1.toFixed(0)}`, 84, startY);
+    //   doc.text(`Total: ${total1.toFixed(0)}`, 154, startY);
     // }else{
-    //   doc.text(`Total of First: ${totalFirst2.toFixed(2)}`, 14, startY);
-    // doc.text(`Total of Second: ${totalSecond2.toFixed(2)}`, 84, startY);
-    // doc.text(`Total: ${total2.toFixed(2)}`, 154, startY);
+    //   doc.text(`Total of First: ${totalFirst2.toFixed(0)}`, 14, startY);
+    // doc.text(`Total of Second: ${totalSecond2.toFixed(0)}`, 84, startY);
+    // doc.text(`Total: ${total2.toFixed(0)}`, 154, startY);
     // }
     
     doc.setFont(undefined, 'normal');

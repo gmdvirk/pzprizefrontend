@@ -128,6 +128,9 @@ const EditProductForm = (props) => {
   };
 
   const getExpiredOrNot=(users)=>{
+    if(!users){
+      return "active"
+    }
     // Parse the draw date and time from the users object
     
     const drawDateTime = new Date(`${users.date}T${users.time}Z`);
@@ -154,6 +157,8 @@ const EditProductForm = (props) => {
           </Spin>
       </div>):
      <Form form={form} onFinish={onFinish} layout="vertical">
+      <p>Username : {props.userdata.username}</p>
+      <p>Name : {props.userdata.name}</p>
        <Row gutter={16}>
        <Col xs={24} sm={8}>
        <Form.Item
@@ -192,7 +197,7 @@ const EditProductForm = (props) => {
                       {props.alldraws.draws.map((obj)=>{
                         return(
                           <>
-                            {getExpiredOrNot(obj)==="active"&&<Option style={{color:getExpiredOrNot(obj)==="active"?"green":'red'}} value={obj.date}>{obj.title+"---"+obj.date+"--"+getExpiredOrNot(obj)}</Option>}
+                            <Option style={{color:getExpiredOrNot(obj)==="active"?"green":'red'}} value={obj.date}>{obj.title+"---"+obj.date+"--"+getExpiredOrNot(obj)}</Option>
                           </>
                         
                         )
@@ -202,42 +207,42 @@ const EditProductForm = (props) => {
        </Col>
       <Col xs={12} sm={8}>
       <Form.Item name="hindsaa" label="Hindsy Ki Had (1st)" rules={[{ required: true, message: 'Please enter a number' }]}>
-        <Input type='number' placeholder="Enter number" />
+        <Input type='number' placeholder="Enter number" disabled={getExpiredOrNot(drawdate)!="active"}/>
       </Form.Item>
       </Col>
       <Col xs={12} sm={8}>
       <Form.Item name="hindsab" label="Hindsy Ki Had(2nd)" rules={[{ required: true, message: 'Please enter a number' }]}>
-      <Input type='number' placeholder="Enter number" />
+      <Input type='number' placeholder="Enter number" disabled={getExpiredOrNot(drawdate)!="active"}/>
       </Form.Item>
       </Col>
       <Col xs={12} sm={8}>
       <Form.Item name="akraa" label="Akra Ki Had (1st)" rules={[{ required: true, message: 'Please enter a number' }]}>
-      <Input type='number' placeholder="Enter number" />
+      <Input type='number' placeholder="Enter number" disabled={getExpiredOrNot(drawdate)!="active"}/>
       </Form.Item>
       </Col>
       <Col xs={12} sm={8}>
       <Form.Item name="akrab" label="Akra Ki Had (2nd)" rules={[{ required: true, message: 'Please enter a number' }]}>
-      <Input type='number' placeholder="Enter number" />
+      <Input type='number' placeholder="Enter number" disabled={getExpiredOrNot(drawdate)!="active"}/>
       </Form.Item>
       </Col>
       <Col xs={12} sm={8}>
       <Form.Item name="tendolaa" label="Tendola Ki Had(1st)" rules={[{ required: true, message: 'Please enter a number' }]}>
-      <Input type='number' placeholder="Enter number" />
+      <Input type='number' placeholder="Enter number" disabled={getExpiredOrNot(drawdate)!="active"}/>
       </Form.Item>
       </Col>
       <Col xs={12} sm={8}>
       <Form.Item name="tendolab" label="Tendola Ki Had(2nd)" rules={[{ required: true, message: 'Please enter a number' }]}>
-      <Input type='number' placeholder="Enter number" />
+      <Input type='number' placeholder="Enter number" disabled={getExpiredOrNot(drawdate)!="active"}/>
       </Form.Item>
       </Col>
       <Col xs={12} sm={8}>
       <Form.Item name="panogadaa" label="Pangoda Ki Had(1st)"  rules={[{ required: true, message: 'Please enter a number' }]}>
-      <Input type='number' placeholder="Enter number" />
+      <Input type='number' placeholder="Enter number" disabled={getExpiredOrNot(drawdate)!="active"}/>
       </Form.Item>
       </Col>
       <Col xs={12} sm={8}>
       <Form.Item name="panogadab" label="Pangoda Ki Had(2nd)" rules={[{ required: true, message: 'Please enter a number' }]}>
-      <Input type='number' placeholder="Enter number" />
+      <Input type='number' placeholder="Enter number" disabled={getExpiredOrNot(drawdate)!="active"} />
       </Form.Item>
       </Col>
      

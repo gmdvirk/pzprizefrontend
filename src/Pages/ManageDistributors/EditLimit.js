@@ -137,6 +137,8 @@ const EditProductForm = (props) => {
           </Spin>
       </div>):
      <Form form={form} onFinish={onFinish} layout="vertical">
+      <p>Username : {props.userdata.username}</p>
+      <p>Name : {props.userdata.name}</p>
        <Row gutter={16}>
        <Col xs={24} sm={8}>
        <Form.Item
@@ -175,7 +177,7 @@ const EditProductForm = (props) => {
                       {props.alldraws.draws.map((obj)=>{
                         return(
                           <>
-                          {getExpiredOrNot(obj)==="active"&&<Option style={{color:getExpiredOrNot(obj)==="active"?"green":'red'}} value={obj.date}>{obj.title+"---"+obj.date+"--"+getExpiredOrNot(obj)}</Option>}
+                          <Option style={{color:getExpiredOrNot(obj)==="active"?"green":'red'}} value={obj.date}>{obj.title+"---"+obj.date+"--"+getExpiredOrNot(obj)}</Option>
                         </>
                       
                         )

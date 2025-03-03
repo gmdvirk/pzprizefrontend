@@ -38,6 +38,7 @@ const AddProductForm = ({ userdata,draws,setProducts,products,limits}) => {
   const [drawdate,setDrawdate]=useState(null)
   const [type,setType]=useState("uplimit")
   const [loading, setLoading] = useState(false);
+    const [reporttype, setReportType] = useState("uplimit");
   const generateProductCode = () => {
     return `COLLECTION-${uuidv4()}`;
   };
@@ -110,7 +111,7 @@ const AddProductForm = ({ userdata,draws,setProducts,products,limits}) => {
   
     doc.setFontSize(10);
     doc.setTextColor(40);
-    doc.text('Total Sale Report', 14, 22);
+    doc.text(`Total Sale Report ${type}`, 14, 22);
   
     // doc.setFontSize(12);
     if (userdata && userdata.username) {
@@ -238,9 +239,9 @@ const AddProductForm = ({ userdata,draws,setProducts,products,limits}) => {
     // Move startY down for the next section
     startY += blockHeight + 10;
     doc.setFontSize(10);
-    doc.text(`Total First: ${totalFirst.toFixed(2)}`, 14, startY);
-    doc.text(`Total Second: ${totalSecond.toFixed(2)}`, 84, startY);
-    doc.text(`Total: ${total.toFixed(2)}`, 154, startY);
+    doc.text(`Total First: ${totalFirst.toFixed(0)}`, 14, startY);
+    doc.text(`Total Second: ${totalSecond.toFixed(0)}`, 84, startY);
+    doc.text(`Total: ${total.toFixed(0)}`, 154, startY);
     startY += 5;
     });
     const pageHeight = doc.internal.pageSize.height;
@@ -255,9 +256,9 @@ const AddProductForm = ({ userdata,draws,setProducts,products,limits}) => {
   
     // Add totals outside the table at the end of the tables
     doc.setFontSize(10);
-    doc.text(`Total of First: ${totalFirst1.toFixed(2)}`, 14, startY);
-    doc.text(`Total of Second: ${totalSecond1.toFixed(2)}`, 84, startY);
-    doc.text(`Total: ${total1.toFixed(2)}`, 154, startY);
+    doc.text(`Total of First: ${totalFirst1.toFixed(0)}`, 14, startY);
+    doc.text(`Total of Second: ${totalSecond1.toFixed(0)}`, 84, startY);
+    doc.text(`Total: ${total1.toFixed(0)}`, 154, startY);
 
   
     doc.save('admin_total_sale_report.pdf');
@@ -408,8 +409,8 @@ const AddProductForm = ({ userdata,draws,setProducts,products,limits}) => {
     //   { title: 'Second', dataKey: 's' },
     // ];
     doc.setFontSize(10);
-    // doc.setTextColor(40);
-    doc.text('Total Sale Report', 14, 22);
+    doc.setTextColor(0,100,0);
+    doc.text(`Total Sale Report ${type}`, 14, 22);
   
     // doc.setFontSize(12);
     if (userdata && userdata.username) {
@@ -499,7 +500,7 @@ const AddProductForm = ({ userdata,draws,setProducts,products,limits}) => {
             if (isFirstInRed) {
                 doc.setTextColor(255, 0, 0); // Red text
             } else {
-                doc.setTextColor(0, 0, 0); // Black text
+                doc.setTextColor(0, 100, 0); // Black text
             }
             if (!(isFirstInRed) && isFSecondInRed) {
              doc.setTextColor(0, 0, 255); // Blue text
@@ -537,9 +538,9 @@ const AddProductForm = ({ userdata,draws,setProducts,products,limits}) => {
       // Move startY down for the next section
       startY += blockHeight + 10;
       doc.setFontSize(10);
-      doc.text(`Total First: ${totalFirst.toFixed(2)}`, 14, startY);
-      doc.text(`Total Second: ${totalSecond.toFixed(2)}`, 84, startY);
-      doc.text(`Total: ${total.toFixed(2)}`, 154, startY);
+      doc.text(`Total First: ${totalFirst.toFixed(0)}`, 14, startY);
+      doc.text(`Total Second: ${totalSecond.toFixed(0)}`, 84, startY);
+      doc.text(`Total: ${total.toFixed(0)}`, 154, startY);
       startY += 5;
       });
     const pageHeight = doc.internal.pageSize.height;
@@ -554,9 +555,9 @@ const AddProductForm = ({ userdata,draws,setProducts,products,limits}) => {
   
     // Add totals outside the table at the end of the tables
     doc.setFontSize(10);
-    doc.text(`Total of First: ${totalFirst1.toFixed(2)}`, 14, startY);
-    doc.text(`Total of Second: ${totalSecond1.toFixed(2)}`, 84, startY);
-    doc.text(`Total: ${total1.toFixed(2)}`, 154, startY);
+    doc.text(`Total of First: ${totalFirst1.toFixed(0)}`, 14, startY);
+    doc.text(`Total of Second: ${totalSecond1.toFixed(0)}`, 84, startY);
+    doc.text(`Total: ${total1.toFixed(0)}`, 154, startY);
 
     
     doc.save('admin_total_sale_report.pdf');
@@ -858,7 +859,7 @@ const AddProductForm = ({ userdata,draws,setProducts,products,limits}) => {
         ],
         theme: 'grid',
         styles: {
-          fontSize: 10,
+          fontSize: 16,
           textColor: 80,
         },
         headStyles: {
@@ -882,7 +883,7 @@ const AddProductForm = ({ userdata,draws,setProducts,products,limits}) => {
         ],
         theme: 'grid',
         styles: {
-          fontSize: 10,
+          fontSize: 18,
           textColor: 80,
         },
         headStyles: {
@@ -905,14 +906,14 @@ const AddProductForm = ({ userdata,draws,setProducts,products,limits}) => {
       const pcPercentageAmount = report.comission.pcpercentage===0?report.comission.pcpercentage:(((totalFfour + totalSfour)*Number(report.comission.pcpercentage))/100);
       const pcPercentageValue = report.comission.pcpercentage;
       
-      doc.setFontSize(12);
+      doc.setFontSize(16);
       doc.setTextColor(60, 60, 60);
       doc.setTextColor(80, 80, 80);
       doc.text(`Total Sale: ${totalF + totalS+totalFfour+totalSfour}`, 14, doc.autoTable.previous.finalY + 25);
-      doc.text(`Total Comsission: ${pcPercentageAmount+commissionAmount}`, 14, doc.autoTable.previous.finalY + 30);
+      doc.text(`Total Comsission: ${pcPercentageAmount+commissionAmount}`, 14, doc.autoTable.previous.finalY + 31);
       const safeSale=(totalF + totalS+totalFfour+totalSfour)-pcPercentageAmount-commissionAmount
-      doc.text(`Safi Sale: ${safeSale.toFixed(0)}`, 14, doc.autoTable.previous.finalY + 35);
-      doc.text(`Total Prizes: ${totalPrizes.toFixed(0)}`, 14, doc.autoTable.previous.finalY + 40);
+      doc.text(`Safi Sale: ${safeSale.toFixed(0)}`, 14, doc.autoTable.previous.finalY + 37);
+      doc.text(`Total Prizes: ${totalPrizes.toFixed(0)}`, 14, doc.autoTable.previous.finalY + 43);
    // Calculate the numeric bill value
 const billValue = (totalF + totalS + totalFfour + totalSfour) - Number(totalPrizes) - pcPercentageAmount - commissionAmount;
 
@@ -929,7 +930,7 @@ if (billValue < 0) {
 }
 
 // Add the text to the document
-doc.text(`Bill: ${Bill}`, 14, doc.autoTable.previous.finalY + 45);
+doc.text(`Bill: ${Bill}`, 14, doc.autoTable.previous.finalY + 50);
 
 // Optionally, reset text color to default if needed later in the document
 doc.setTextColor(0);

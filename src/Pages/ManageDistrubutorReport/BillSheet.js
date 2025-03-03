@@ -68,15 +68,15 @@ const AddProductForm = ({draws,userdata, setProducts,products}) => {
 
         dataarr.push({
             commissionValue,
-            commissionAmount: commissionAmount.toFixed(2),
-            pcPercentageAmount: pcPercentageAmount.toFixed(2),
-            commissionAmountTotal: (Number(commissionAmount.toFixed(2)) + Number(pcPercentageAmount.toFixed(2))).toFixed(2),
+            commissionAmount: commissionAmount.toFixed(0),
+            pcPercentageAmount: pcPercentageAmount.toFixed(0),
+            commissionAmountTotal: (Number(commissionAmount.toFixed(0)) + Number(pcPercentageAmount.toFixed(0))).toFixed(0),
             pcPercentageValue,
-            grandTotal: grandTotal.toFixed(2),
-            safitotal: safitotal.toFixed(2),
-            nettotal: nettotal.toFixed(2),
+            grandTotal: grandTotal.toFixed(0),
+            safitotal: safitotal.toFixed(0),
+            nettotal: nettotal.toFixed(0),
             name,
-            totalPrizes: totalPrizes.toFixed(2),
+            totalPrizes: totalPrizes.toFixed(0),
             username
         });
     });
@@ -177,8 +177,8 @@ doc.autoTable({
     doc.setFontSize(12);
     doc.setTextColor(0);
     doc.text(`Party Bill: ${dataarr[0].nettotal }`, 14, doc.lastAutoTable.finalY + 10);
-    doc.text(`All Dealers Bill: ${totalNetTotal.toFixed(2)}`, 14, doc.lastAutoTable.finalY + 15);
-    doc.text(`Profit/Loss: ${totalNetTotal.toFixed(2) - Number(dataarr[0].nettotal).toFixed(2)}`, 14, doc.lastAutoTable.finalY + 20);
+    doc.text(`All Dealers Bill: ${totalNetTotal.toFixed(0)}`, 14, doc.lastAutoTable.finalY + 15);
+    doc.text(`Profit/Loss: ${totalNetTotal.toFixed(0) - Number(dataarr[0].nettotal).toFixed(0)}`, 14, doc.lastAutoTable.finalY + 20);
 
     // Save the PDF
     doc.save('Bill_Sheet_Report.pdf');
@@ -225,19 +225,18 @@ setLoading(false)
   const generatePDFReport = (data) => {
     const doc = new jsPDF();
   
-    // Define header and footer
+    // Define header and footer with increased font sizes
     const header = () => {
-      doc.setFontSize(18);
+      doc.setFontSize(28); // Increased header font size
       doc.setTextColor(40, 40, 40);
-      doc.text('Bill Sheet Report', 14, 22);
-      doc.setFontSize(10);
+      doc.text('Bill Sheet Report', 14, 32);
+      doc.setFontSize(14); // Increased date font size
       doc.setTextColor(100);
-      doc.text(`Generated on: ${new Date().toLocaleDateString()}`, 84, 28);
+      doc.text(`Generated on: ${new Date().toLocaleDateString()}`, 84, 38);
     };
   
-  
     const footer = (pageNumber) => {
-      doc.setFontSize(10);
+      doc.setFontSize(14); // Increased footer font size
       doc.setTextColor(150);
       doc.text(`Page ${pageNumber}`, doc.internal.pageSize.width - 20, doc.internal.pageSize.height - 10);
     };
@@ -250,13 +249,13 @@ setLoading(false)
       // Header
       header();
   
-      // Draw Information
-      doc.setFontSize(10);
-      doc.text(`Draw: ${drawdate.date}`, 150, 30);
-      doc.text(`Draw Title: ${drawdate.title}`, 14, 35);
+      // Draw Information with larger font size
+      doc.setFontSize(14); // Increased from 10 to 14
+      doc.text(`Draw: ${drawdate.date}`, 150, 40);
+      doc.text(`Draw Title: ${drawdate.title}`, 14, 45);
   
-      // Report Title with Conditional Coloring
-      doc.setFontSize(14);
+      // Report Title with Conditional Coloring and increased size
+      doc.setFontSize(20); // Increased from 14 to 20
       if (report.id === userdata._id) {
         doc.setTextColor(0, 0, 255); // Blue text
       } else if (report.role === "merchant") {
@@ -266,12 +265,12 @@ setLoading(false)
       } else {
         doc.setTextColor(40, 40, 40); // Default color
       }
-      doc.text(`Report ${index + 1}`, 14, 40);
+      doc.text(`Report ${index + 1}`, 14, 55);
       doc.setTextColor(40, 40, 40); // Reset to default color
   
-      // Second Prizes Table
+      // Second Prizes Table with larger fonts
       doc.autoTable({
-        startY: 50,
+        startY: 70, // Adjusted startY for spacing
         head: [['First Prize', 'Second Prize 1', 'Second Prize 2', 'Second Prize 3', 'Second Prize 4', 'Second Prize 5']],
         body: [
           [
@@ -285,19 +284,19 @@ setLoading(false)
         ],
         theme: 'grid',
         styles: {
-          fontSize: 10,
+          fontSize: 14, // Increased from 10
           textColor: 80,
         },
         headStyles: {
           fillColor: [240, 240, 240],
           textColor: 40,
-          fontSize: 11,
+          fontSize: 16, // Increased from 11
         }
       });
   
-      // User Information Table
+      // User Information Table with larger fonts
       doc.autoTable({
-        startY: 80,
+        startY: 100, // Adjusted startY for spacing
         head: [['Name', 'Username', 'Commission', 'PC Percentage']],
         body: [
           [
@@ -309,17 +308,17 @@ setLoading(false)
         ],
         theme: 'grid',
         styles: {
-          fontSize: 10,
+          fontSize: 14, // Increased from 10
           textColor: 80,
         },
         headStyles: {
           fillColor: [240, 240, 240],
           textColor: 40,
-          fontSize: 11,
+          fontSize: 16, // Increased from 11
         }
       });
   
-      // Calculations
+      // Calculations (unchanged)
       const { prize, comission } = report;
       const totalFp = Number(prize.tempobj.f) || 0;
       const totalSs = Number(prize.tempobj.s) || 0;
@@ -336,33 +335,33 @@ setLoading(false)
       const safiSale = totalSales - totalCommission;
       const billAmount = safiSale - totalPrizes;
   
-      // Summary Table with Conditional Coloring for 'Bill'
+      // Summary Table with larger fonts and increased spacing
       doc.autoTable({
-        startY: doc.autoTable.previous.finalY + 10,
+        startY: doc.autoTable.previous.finalY + 20, // Increased spacing
         head: [['Description', 'Amount']],
         body: [
           ['Safa+Akra+tndola Sale', totalF + totalS],
           ['Pc Sale', totalFfour + totalSfour],
           ['Total Sale', totalSales],
-          ['Total Commission', totalCommission.toFixed(2)],
-          ['Safi Sale', safiSale.toFixed(2)],
-          ['Total Prizes', totalPrizes.toFixed(2)],
-          ['Bill', billAmount.toFixed(2)]
+          ['Total Commission', totalCommission.toFixed(0)],
+          ['Safi Sale', safiSale.toFixed(0)],
+          ['Total Prizes', totalPrizes.toFixed(0)],
+          ['Bill', billAmount.toFixed(0)]
         ],
         theme: 'striped',
         styles: {
-          fontSize: 10,
+          fontSize: 14, // Increased from 10
           textColor: 80,
         },
         headStyles: {
           fillColor: [200, 200, 200],
           textColor: 40,
-          fontSize: 11,
+          fontSize: 18, // Increased from 11
           halign: 'left',
         },
         columnStyles: {
-          0: { halign: 'left', fontStyle: 'bold',cellWidth: 50  },
-          1: { halign: 'left',cellWidth: 50  }
+          0: { halign: 'left', fontStyle: 'bold', cellWidth: 60 },
+          1: { halign: 'left', cellWidth: 60 }
         },
         tableWidth: 'auto',
         didParseCell: function (data) {
@@ -376,20 +375,14 @@ setLoading(false)
               } else {
                 data.cell.styles.textColor = [0, 128, 0]; // Green
               }
-            }else{
-              if(report.id===userdata._id){
-                // doc.setTextColor(0, 0, 255); // Blue text
-                data.cell.styles.textColor=[0,0,255]
+            } else {
+              if (report.id === userdata._id) {
+                data.cell.styles.textColor = [0, 0, 255];
+              } else if (report.role === "merchant") {
+                data.cell.styles.textColor = [0, 0, 0];
+              } else if (report.role === "distributor" || report.role === "subdistributor") {
+                data.cell.styles.textColor = [255, 0, 0];
               }
-              else if(report.role==="merchant"){
-                // doc.setTextColor(0, 0, 0); // Blue text
-                data.cell.styles.textColor=[0,0,0]
-              }
-              else if(report.role==="distributor" ||report.role==="subdistributor" ){
-                // doc.setTextColor(255, 0, 0); // Blue text
-                data.cell.styles.textColor=[255,0,0]
-              }
-        
             }
           }
         }
@@ -402,6 +395,7 @@ setLoading(false)
     // Save the PDF
     doc.save('MajorsalesReport.pdf');
   };
+  
   
   const onFinish = async (values) => {
     setLoading(true)

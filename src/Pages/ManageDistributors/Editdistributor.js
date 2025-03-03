@@ -148,7 +148,7 @@ const EditProductForm = (props) => {
                      </Col>
                      <Col xs={24} sm={8}>
       <Form.Item
-      label={"Hadd limit allowed"}
+      label={"Admin Cutting"}
                     name={ 'haddaloud'}
                       rules={[{ required: true, message: 'Please select Status' }]}
                       className="flex-item"
@@ -162,7 +162,7 @@ const EditProductForm = (props) => {
                     </Col>
                     <Col xs={24} sm={8}>
       <Form.Item
-      label={"Distributor Hadd limit allowed"}
+      label={"Dealer Cutting"}
                     name={ 'distributorhaddaloud'}
                       rules={[{ required: true, message: 'Please select Status' }]}
                       className="flex-item"
