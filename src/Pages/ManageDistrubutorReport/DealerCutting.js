@@ -1580,11 +1580,11 @@ else if (values.dealer==="allcombined"){
                        className="flex-item"
                        fieldKey={ 'limittype'}
                        initialValue={"uplimit"}
+                     >
+                       <Select placeholder="Select limit type" 
                        onChange={(e)=>{
                         setReportType(e)
-                       }}
-                     >
-                       <Select placeholder="Select limit type" >
+                       }}>
                          <Option value={"uplimit"}>Up Limit</Option>
                          <Option value={"downlimit"}>Down Limit</Option>
                        </Select>
