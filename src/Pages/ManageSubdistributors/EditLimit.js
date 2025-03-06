@@ -140,8 +140,8 @@ const EditProductForm = (props) => {
           </Spin>
       </div>):
      <Form form={form} onFinish={onFinish} layout="vertical">
-      <p>Username : {props.userdata.username}</p>
-      <p>Name : {props.userdata.name}</p>
+      <p>Username : {props.initialValues.username}</p>
+      <p>Name : {props.initialValues.name}</p>
        <Row gutter={16}>
        <Col xs={24} sm={8}>
        <Form.Item
